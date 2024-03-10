@@ -28,10 +28,12 @@ class AuthTextFormField extends StatelessWidget {
     return Column(
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Icon(
               iconData,
               color: Colors.black,
+              size: 30.0,
             ),
             const Gap(10),
             Expanded(
