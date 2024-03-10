@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -8,10 +9,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Social ',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: getLightTheme(),
       home: const LoginScreen(),
     );
   }
