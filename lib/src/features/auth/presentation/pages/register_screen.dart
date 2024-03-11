@@ -6,16 +6,52 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
+import 'package:social_app/src/features/auth/presentation/widgets/register_steps_widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _repeatPasswordController = TextEditingController();
+  final _userNameController = TextEditingController();
+  final _emailFormKey = GlobalKey();
+  final _passwordFormKey = GlobalKey();
+  final _repeatPasswordFormKey = GlobalKey();
+  final _userNameFormKey = GlobalKey();
 
+  
+  
   @override
   Widget build(BuildContext context) {
-    // var emailController = TextEditingController();
-    // var passwordController = TextEditingController();
+    final List<Widget> pages = [
+      RegisterPage(
+        icon: Icons.email_outlined,
+        title: 'Enter your email address',
+        controller: _emailController,
+        globalKey: _emailFormKey,
+      ),
+      RegisterPage(
+        icon: Icons.lock_outline_rounded,
+        title: 'Enter your password',
+        controller: _passwordController,
+        globalKey: _passwordFormKey,
+      ),
+      RegisterPage(
+        icon: Icons.person_outline_rounded,
+        title: 'Enter your user name',
+        controller: _userNameController,
+        globalKey: _userNameFormKey,
+      ),
+      RegisterPage(
+        icon: Icons.person_outline_rounded,
+        title: 'Enter your user name',
+        controller: _userNameController,
+        globalKey: _userNameFormKey,
+      ),
+    ];
+
     var pageController = PageController();
-    bool last = false;
+    int currentPage = 0;
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -27,15 +63,11 @@ class RegisterScreen extends StatelessWidget {
             Expanded(
               child: PageView.builder(
                 onPageChanged: (value) {
-                  if (value == 3) {
-                    last = true;
-                  }
+                  currentPage = value;
                 },
                 physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
-                itemBuilder: (context, index) => EmailPage(
-                  index: index,
-                ),
+                itemBuilder: (context, index) => pages[index],
                 itemCount: 4,
               ),
             ),
@@ -49,14 +81,26 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    if (last) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
+                    if (currentPage == 3) {
+                      print('********************');
+                      print(_emailController.text);
+                      print('********************');
+                      print(_passwordController.text);
+                      print('********************');
+                      print(_userNameController.text);
+                      print('********************');
+                      print(_userNameController.text);
+                      print('********************');
+                      // print(emailController.text);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const LoginScreen(),
+                      //   ),
+                      // );
                     } else {
+                      // print()
+                      // FocusManager.instance.primaryFocus?.unfocus();
                       pageController.nextPage(
                         duration: const Duration(milliseconds: 750),
                         curve: Curves.fastLinearToSlowEaseIn,
@@ -70,30 +114,6 @@ class RegisterScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class EmailPage extends StatelessWidget {
-  const EmailPage({super.key, required this.index});
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(' Enter yout email $index'),
-        AuthTextFormField(
-          controller: TextEditingController(),
-          iconData: Icons.email_outlined,
-          txt: '',
-          validator: (p0) {
-            return null;
-          },
-        ),
-      ],
     );
   }
 }

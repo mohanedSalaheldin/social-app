@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'Social ',
       debugShowCheckedModeBanner: false,
       theme: getLightTheme(),
-      home: const RegisterScreen(),
+      home:  RegisterScreen(),
     );
   }
 }
