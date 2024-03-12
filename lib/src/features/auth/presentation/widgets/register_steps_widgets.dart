@@ -5,12 +5,15 @@ class RegisterPage extends StatelessWidget {
   const RegisterPage({
     super.key,
     required this.icon,
-    required this.title, required this.controller, required this.globalKey,
+    required this.title,
+    required this.controller,
+    required this.globalKey, required this.validator,
   });
   final IconData icon;
   final String title;
   final TextEditingController controller;
   final GlobalKey globalKey;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +28,7 @@ class RegisterPage extends StatelessWidget {
             controller: controller,
             iconData: icon,
             txt: '',
-            validator: (p0) {
-              return null;
-            },
+            validator: validator,
           ),
         ],
       ),
