@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/register_steps_widgets.dart';
@@ -14,40 +18,58 @@ class RegisterScreen extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
   final _userNameController = TextEditingController();
-  final _emailFormKey = GlobalKey();
-  final _passwordFormKey = GlobalKey();
-  final _repeatPasswordFormKey = GlobalKey();
-  final _userNameFormKey = GlobalKey();
+  final _emailFormKey = GlobalKey<FormState>();
+  final _passwordFormKey = GlobalKey<FormState>();
+  final _repeatPasswordFormKey = GlobalKey<FormState>();
+  final _userNameFormKey = GlobalKey<FormState>();
 
-  
-  
   @override
   Widget build(BuildContext context) {
+    List<GlobalKey<FormState>> keys = [
+      _emailFormKey,
+      _passwordFormKey,
+      // _repeatPasswordFormKey,
+      _userNameFormKey,
+      _userNameFormKey,
+    ];
     final List<Widget> pages = [
       RegisterPage(
         icon: Icons.email_outlined,
         title: 'Enter your email address',
         controller: _emailController,
         globalKey: _emailFormKey,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "can't be empty";
+          }
+          return null;
+        },
       ),
       RegisterPage(
         icon: Icons.lock_outline_rounded,
         title: 'Enter your password',
         controller: _passwordController,
         globalKey: _passwordFormKey,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "can't be empty";
+          }
+          return null;
+        },
       ),
       RegisterPage(
         icon: Icons.person_outline_rounded,
         title: 'Enter your user name',
         controller: _userNameController,
         globalKey: _userNameFormKey,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "can't be empty";
+          }
+          return null;
+        },
       ),
-      RegisterPage(
-        icon: Icons.person_outline_rounded,
-        title: 'Enter your user name',
-        controller: _userNameController,
-        globalKey: _userNameFormKey,
-      ),
+      const FilePickScreen()
     ];
 
     var pageController = PageController();
@@ -98,13 +120,23 @@ class RegisterScreen extends StatelessWidget {
                       //     builder: (context) => const LoginScreen(),
                       //   ),
                       // );
+                    } else if (currentPage == 2) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      if (keys[currentPage].currentState!.validate()) {
+                        pageController.nextPage(
+                          duration: const Duration(milliseconds: 750),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                        );
+                      }
                     } else {
                       // print()
                       // FocusManager.instance.primaryFocus?.unfocus();
-                      pageController.nextPage(
-                        duration: const Duration(milliseconds: 750),
-                        curve: Curves.fastLinearToSlowEaseIn,
-                      );
+                      if (keys[currentPage].currentState!.validate()) {
+                        pageController.nextPage(
+                          duration: const Duration(milliseconds: 750),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                        );
+                      }
                     }
                   },
                   child: const Icon(Icons.arrow_forward_sharp),
@@ -114,6 +146,45 @@ class RegisterScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class FilePickScreen extends StatefulWidget {
+  const FilePickScreen({super.key});
+
+  @override
+  State<FilePickScreen> createState() => _FilePickScreenState();
+}
+
+class _FilePickScreenState extends State<FilePickScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const CircleAvatar(),
+        DefaultButton(
+            txt: 'Pick File',
+            onPressed: () async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles(
+                type: FileType.custom,
+                allowedExtensions: [
+                  'jpg',
+                  'jpeg',
+                  'png',
+                ],
+              );
+
+              if (result != null) {
+                File file = File(result.files.single.path!);
+                print('-------------------------------');
+                print(file.path);
+                print('-------------------------------');
+              } else {
+                // User canceled the picker
+              }
+            }),
+      ],
     );
   }
 }
