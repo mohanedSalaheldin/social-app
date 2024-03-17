@@ -8,3 +8,21 @@ sealed class AuthState extends Equatable {
 }
 
 final class AuthInitial extends AuthState {}
+
+final class AuthLoginLoading extends AuthState {}
+
+final class AuthLoginSuccess extends AuthState {}
+
+final class AuthLoginError extends AuthState {}
+
+final class AuthRegisterLoading extends AuthState {}
+
+final class AuthRegisterSuccess extends AuthState {}
+
+final class AuthRegisterError extends AuthState {}
+
+final class AuthSetupProfileLoading extends AuthState {}
+
+final class AuthSetupProfileSuccess extends AuthState {}
+
+final class AuthSetupProfileError extends AuthState {}
