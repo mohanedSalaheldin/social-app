@@ -1,15 +1,9 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:gap/gap.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
-import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
-import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/register_steps_widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
