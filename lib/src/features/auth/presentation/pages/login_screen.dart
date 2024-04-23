@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/presentation/pages/register_screen.dart';
+import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'Social ',
       debugShowCheckedModeBanner: false,
       theme: getLightTheme(),
-      home:  RegisterScreen(),
+      home: const HomeScreen(),
     );
   }
 }
