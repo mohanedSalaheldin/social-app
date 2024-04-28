@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
+import 'package:social_app/src/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:social_app/src/features/auth/domain/usecases/login_usecase.dart';
+import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:social_app/src/features/auth/presentation/pages/register_screen.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -34,7 +38,11 @@ class LoginScreen extends StatelessWidget {
                   iconData: Icons.email_outlined,
                   txt: 'your email',
                   validator: (p0) {
-                    return null;
+                    if (p0!.isEmpty) {
+                      return 'can\'t be empty';
+                    } else {
+                      return null;
+                    }
                   },
                 ),
                 const Gap(20.0),
@@ -43,14 +51,22 @@ class LoginScreen extends StatelessWidget {
                   iconData: Icons.lock_outline_rounded,
                   txt: 'password',
                   validator: (p0) {
-                    return null;
+                    if (p0!.isEmpty) {
+                      return 'can\'t be empty';
+                    } else {
+                      return null;
+                    }
                   },
                 ),
                 const Gap(
                   20.0,
                 ),
                 DefaultButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<AuthCubit>().login(
+                        email: emailController.text.toLowerCase().trim(),
+                        password: passwordController.text.toLowerCase().trim());
+                  },
                   txt: 'sign in',
                 ),
               ],
@@ -65,7 +81,18 @@ class LoginScreen extends StatelessWidget {
                       ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    var Bloc = context.read<AuthCubit>();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                          value: Bloc,
+                          child: RegisterScreen(),
+                        ),
+                      ),
+                    );
+                  },
                   child: const Text('data'),
                 ),
               ],

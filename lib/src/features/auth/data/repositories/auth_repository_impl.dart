@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -11,6 +12,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   AuthRepositoryImpl(
       {required this.authRemoteDataSource, required this.networkInfo});
+
+  var state = AuthRemoteDataSourceImpl();
 
   @override
   Future<Either<Failure, Unit>> login(
@@ -48,5 +51,23 @@ class AuthRepositoryImpl implements AuthRepository {
     } else {
       return Left(OfflineFailure());
     }
+  }
+
+  @override
+  void logout() async {
+    if (await networkInfo.isConnected) {
+      try {
+        await authRemoteDataSource.logout();
+      } on Exception {
+        // return LeftServerFailure();
+      }
+    } else {
+      // return Left(OfflineFailure());
+    }
+  }
+
+  @override
+  User? getUser() {
+    return authRemoteDataSource.getUser();
   }
 }
