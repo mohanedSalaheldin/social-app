@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
+import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/register_steps_widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -16,6 +18,7 @@ class RegisterScreen extends StatelessWidget {
   final _passwordFormKey = GlobalKey<FormState>();
   final _repeatPasswordFormKey = GlobalKey<FormState>();
   final _userNameFormKey = GlobalKey<FormState>();
+  String? imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +101,14 @@ class RegisterScreen extends StatelessWidget {
                 FloatingActionButton(
                   onPressed: () {
                     if (currentPage == 3) {
+                      context.read<AuthCubit>().register(
+                            email: _emailController.text.toLowerCase().trim(),
+                            password:
+                                _passwordController.text.toLowerCase().trim(),
+                            userName:
+                                _userNameController.text.toLowerCase().trim(),
+                            imagePath: imagePath,
+                          );
                       print('********************');
                       print(_emailController.text);
                       print('********************');
@@ -114,6 +125,7 @@ class RegisterScreen extends StatelessWidget {
                       //     builder: (context) => const LoginScreen(),
                       //   ),
                       // );
+                      Navigator.pop(context);
                     } else if (currentPage == 2) {
                       FocusManager.instance.primaryFocus?.unfocus();
                       if (keys[currentPage].currentState!.validate()) {

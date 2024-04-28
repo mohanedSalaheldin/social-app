@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
 
 abstract class AuthRemoteDataSource {
   Future<Unit> emailLogin({required String email, required String password});
+  Future<void> logout();
+  User? getUser();
   Future<Unit> emailRegister({
     required String email,
     required String password,
@@ -17,7 +19,17 @@ abstract class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _store = FirebaseFirestore.instance;
+  final FirebaseStorage _bucket = FirebaseStorage.instance;
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
+  Stream<User?> auto() {
+    return _auth.authStateChanges().asBroadcastStream();
+  }
+
+  @override
+  User? getUser() {
+    return _auth.currentUser;
+  }
+
   @override
   Future<Unit> emailLogin(
       {required String email, required String password}) async {
@@ -39,8 +51,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     _saveUserDataInFireStore(
         userCredential: userCredential,
         userName: userName,
-        profileImageURL: '');
+        profileImageURL: prfileImagePath);
+
     return Future.value(unit);
+  }
+
+  Future<void> logout() {
+    return _auth.signOut();
   }
 
   void _saveUserDataInFireStore(
