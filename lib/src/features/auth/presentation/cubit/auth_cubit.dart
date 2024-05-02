@@ -22,7 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit get(context) => BlocProvider.of(context);
 
   User? getUser() {
-    return getUserUseCase(
+    return GetUserUseCase(
             repository: AuthRepositoryImpl(
                 authRemoteDataSource: AuthRemoteDataSourceImpl(),
                 networkInfo: NetworkInfoImpl()))
