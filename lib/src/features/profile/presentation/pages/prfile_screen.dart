@@ -1,16 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/home/presentation/widgets/post_widget.dart';
+import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
+import 'package:social_app/src/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
+import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: const ProfileWidget(),
+    return BlocProvider<ProfileCubit>(
+      create: (BuildContext context) => ProfileCubit(
+        getProfileInfoUseCase: GetProfileInfoUseCase(
+          repository: ProfileRepositoryImpl(
+            networkInfo: NetworkInfoImpl(),
+            profileRemoteDatasource: ProfileRemoteDatasourceImpl(),
+          ),
+        ),
+      )..getProfileInfo(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: const ProfileWidget(),
+          );
+        },
+      ),
     );
   }
 }
@@ -123,14 +147,12 @@ class ProfileWidget extends StatelessWidget {
           ],
         ),
         const Gap(20),
-        Expanded(
-          child: ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) => const PostWidget(),
-            separatorBuilder: (context, index) => const Gap(20),
-            itemCount: 5,
-          ),
+        ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) => const PostWidget(),
+          separatorBuilder: (context, index) => const Gap(20),
+          itemCount: 5,
         ),
       ],
     );

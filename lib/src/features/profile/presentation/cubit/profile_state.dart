@@ -8,3 +8,15 @@ abstract class ProfileState extends Equatable {
 }
 
 class ProfileInitial extends ProfileState {}
+
+class ProfileLoadedState extends ProfileState {
+  final UserInfoEntity userInfoEntity;
+  const ProfileLoadedState({required this.userInfoEntity});
+}
+
+class ProfileLoadingState extends ProfileState {}
+
+class ProfileErrorState extends ProfileState {
+  final Failure failure;
+  const ProfileErrorState({required this.failure});
+}

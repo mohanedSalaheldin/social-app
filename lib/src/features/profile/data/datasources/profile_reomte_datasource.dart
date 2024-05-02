@@ -7,8 +7,8 @@ import 'package:social_app/src/core/models/user_info_model.dart';
 
 abstract class ProfileRemoteDatasource {
   Future<Unit> deletePost({required String postId});
-  Future<List<PostEntity>> getPosts({required String userId});
-  Future<UserInfoEntity> getProfileInfo({required String userId});
+  Future<List<PostModel>> getPosts({required String userId});
+  Future<UserInfoModel> getProfileInfo({required String userId});
   Future<Unit> updateProfile({required String userId});
 }
 
@@ -46,12 +46,14 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   }
 
   @override
-  Future<UserInfoModel> getProfileInfo({required String userId}) {
+  Future<UserInfoModel> getProfileInfo({required String userId}) async {
+    DocumentSnapshot documentSnapshot =
+        await firestoreStore.collection('users').doc(userId).get();
+    print(
+        '-----------------------(in datasource)-----------------------------');
+    print(documentSnapshot.data());
+    print('----------------------------------------------------');
     UserInfoModel userInfoModel = UserInfoModel.fromJson({});
-    firestoreStore.collection('users').doc(userId).get().then((value) {
-      userInfoModel = UserInfoModel.fromJson(value.data()!);
-    });
-
     return Future.value(userInfoModel);
   }
 
