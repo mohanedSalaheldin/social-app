@@ -82,18 +82,18 @@ class LoginScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    var Bloc = context.read<AuthCubit>();
+                    var bloc = context.read<AuthCubit>();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => BlocProvider.value(
-                          value: Bloc,
+                          value: bloc,
                           child: RegisterScreen(),
                         ),
                       ),
                     );
                   },
-                  child: const Text('data'),
+                  child: const Text('register'),
                 ),
               ],
             ),

@@ -24,16 +24,20 @@ class MyApp extends StatelessWidget {
             stream: AuthRemoteDataSourceImpl().auto(),
             builder: (context, snapshot) {
               // AuthRemoteDataSourceImpl().logout();
-              if (snapshot.hasData) {
-                return const Profile();
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  return const Profile();
+                }
+                return const LoginScreen();
               }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  color: Colors.white,
-                  child: const Center(child: CircularProgressIndicator()),
-                );
-              }
-              return const LoginScreen();
+
+              return Container(
+                color: Colors.white,
+                child: const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.purple,
+                )),
+              );
             },
           )),
     );

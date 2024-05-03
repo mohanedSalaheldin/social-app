@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_app/src/core/errors/error.dart';
@@ -35,7 +37,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
     required String userName,
-    String? prfileImagePath,
+    File? prfileImagePath,
   }) async {
     if (await networkInfo.isConnected) {
       try {
@@ -43,7 +45,7 @@ class AuthRepositoryImpl implements AuthRepository {
             email: email,
             password: password,
             userName: userName,
-            prfileImagePath: prfileImagePath);
+            profileImagePath: prfileImagePath);
         return const Right(unit);
       } on Exception {
         return Left(ServerFailure());

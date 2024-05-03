@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,7 @@ import 'package:social_app/src/features/auth/domain/usecases/register_usecase.da
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  File? profileImage;
   Stream<User?> auto = const Stream.empty();
   AuthCubit(super.initialState) {
     auto = AuthRemoteDataSourceImpl().auto();
@@ -70,7 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
         userName: userName,
-        prfileImagePath: imagePath);
+        prfileImagePath: profileImage);
     response.fold((Failure failure) {
       emit(AuthRegisterError(error: failure));
     }, (Unit unit) {
