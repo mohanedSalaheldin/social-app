@@ -3,6 +3,7 @@ import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/core/errors/execptions.dart';
+import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/core/models/user_info_model.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
@@ -18,15 +19,35 @@ class ProfileRepositoryImpl implements ProfileRepository {
   });
 
   @override
-  Future<Either<Failure, Unit>> deletePost({required String postId}) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> deletePost(
+      {required String postId, required String userId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        await profileRemoteDatasource.deletePost(
+            postId: postId, userId: userId);
+        return const Right(unit);
+      } on ServerExecption {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getPosts({required String userId}) {
-    // TODO: implement getPosts
-    throw UnimplementedError();
+  Future<Either<Failure, List<PostEntity>>> getPosts(
+      {required String userId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        List<PostModel> posts =
+            await profileRemoteDatasource.getPosts(userId: userId);
+        return Right(posts);
+      } on ServerExecption {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 
   @override

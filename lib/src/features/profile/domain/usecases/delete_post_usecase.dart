@@ -5,7 +5,7 @@ import 'package:social_app/src/features/profile/domain/repositories/prfile_repos
 class DeletePostUseCase {
   final ProfileRepository repository;
   DeletePostUseCase({required this.repository});
-  Future<Either<Failure, Unit>> call({required String postId}) {
-    return repository.deletePost(postId: postId);
+  Future<Either<Failure, Unit>> call({required String postId,required String userId}) {
+    return repository.deletePost(postId: postId, userId: userId);
   }
 }

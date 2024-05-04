@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/execptions.dart';
@@ -7,7 +8,7 @@ import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/core/models/user_info_model.dart';
 
 abstract class ProfileRemoteDatasource {
-  Future<Unit> deletePost({required String postId});
+  Future<Unit> deletePost({required String postId, required String userId});
   Future<List<PostModel>> getPosts({required String userId});
   Future<UserInfoModel> getProfileInfo({required String userId});
   Future<Unit> updateProfile(
@@ -17,18 +18,18 @@ abstract class ProfileRemoteDatasource {
 class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   final FirebaseFirestore firestoreStore = FirebaseFirestore.instance;
   @override
-  Future<Unit> deletePost({required String postId}) {
-    /// Deletes a post with the given [postId].
-    ///
-    /// Throws an [UnimplementedError] if the function is not implemented.
-    ///
-    /// Parameters:
-    ///   - [postId]: The ID of the post to be deleted.
-    ///
-    /// Returns:
-    ///   A [Future] that completes with a [Unit] when the post is successfully deleted.
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<Unit> deletePost({required String postId, required String userId}) {
+    try {
+      firestoreStore
+          .collection('users')
+          .doc(userId)
+          .collection('posts')
+          .doc(postId)
+          .delete();
+      return Future.value(unit);
+    } on FirebaseException {
+      throw (ServerExecption());
+    }
   }
 
   @override
@@ -41,7 +42,11 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
         .get()
         .then((value) {
       for (var element in value.docs) {
-        posts.add(PostModel.fromJson(element.data()));
+        print(
+            '-----------------------(in datasource)-----------------------------');
+        print(element.data());
+        print('----------------------------------------------------');
+        // posts.add(PostModel.fromJson(element.data()));
       }
     });
     return Future.value(posts);

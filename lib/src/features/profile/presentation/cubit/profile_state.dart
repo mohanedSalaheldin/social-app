@@ -9,24 +9,45 @@ abstract class ProfileState extends Equatable {
 
 class ProfileInitial extends ProfileState {}
 
-class ProfileLoadedState extends ProfileState {
+class ProfileInfoSucessState extends ProfileState {
   final UserInfoEntity userInfoEntity;
-  const ProfileLoadedState({required this.userInfoEntity});
+  const ProfileInfoSucessState({required this.userInfoEntity});
 }
 
-class ProfileLoadingState extends ProfileState {}
+class ProfileInfoLoadingState extends ProfileState {}
 
-class ProfileErrorState extends ProfileState {
+class ProfileInfoErrorState extends ProfileState {
   final Failure failure;
-  const ProfileErrorState({required this.failure});
-}
-class UpdateProfileLoadedState extends ProfileState {
-
+  const ProfileInfoErrorState({required this.failure});
 }
 
-class UpdateProfileLoadingState extends ProfileState {}
+class ProfileUpdateInfoSuccessState extends ProfileState {}
 
-class UpdateProfileErrorState extends ProfileState {
+class ProfileUpdateInfoLoadingState extends ProfileState {}
+
+class ProfileUpdateInfoErrorState extends ProfileState {
   final Failure failure;
-  const UpdateProfileErrorState({required this.failure});
+  const ProfileUpdateInfoErrorState({required this.failure});
+}
+
+class ProfileGetPostsSuccessState extends ProfileState {
+  final List<PostEntity> posts;
+
+  const ProfileGetPostsSuccessState({required this.posts});
+}
+
+class ProfileGetPostsLoadingState extends ProfileState {}
+
+class ProfileGetPostsErrorState extends ProfileState {
+  final Failure failure;
+  const ProfileGetPostsErrorState({required this.failure});
+}
+
+class ProfileDeletePostSuccessState extends ProfileState {}
+
+class ProfileDeletePostLoadingState extends ProfileState {}
+
+class ProfileDeletePostErrorState extends ProfileState {
+  final Failure failure;
+  const ProfileDeletePostErrorState({required this.failure});
 }

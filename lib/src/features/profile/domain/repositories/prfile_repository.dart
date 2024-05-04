@@ -9,5 +9,5 @@ abstract class ProfileRepository {
   Future<Either<Failure, UserInfoEntity>> getProfileInfo(
       {required String userId});
   Future<Either<Failure, List<PostEntity>>> getPosts({required String userId});
-  Future<Either<Failure, Unit>> deletePost({required String postId});
+  Future<Either<Failure, Unit>> deletePost({required String postId,required String userId});
 }

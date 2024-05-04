@@ -8,6 +8,8 @@ import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/home/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
 import 'package:social_app/src/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:social_app/src/features/profile/domain/usecases/delete_post_usecase.dart';
+import 'package:social_app/src/features/profile/domain/usecases/get_posts_usecase.dart';
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
 import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
@@ -19,6 +21,18 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ProfileCubit>(
       create: (BuildContext context) => ProfileCubit(
+        deletePostUseCase: DeletePostUseCase(
+          repository: ProfileRepositoryImpl(
+            networkInfo: NetworkInfoImpl(),
+            profileRemoteDatasource: ProfileRemoteDatasourceImpl(),
+          ),
+        ),
+        getPostsUseCase: GetPostsUseCase(
+          repository: ProfileRepositoryImpl(
+            networkInfo: NetworkInfoImpl(),
+            profileRemoteDatasource: ProfileRemoteDatasourceImpl(),
+          ),
+        ),
         updateProfileUseCase: UpdateProfileUseCase(
           repository: ProfileRepositoryImpl(
             networkInfo: NetworkInfoImpl(),
@@ -31,7 +45,8 @@ class ProfileScreen extends StatelessWidget {
             profileRemoteDatasource: ProfileRemoteDatasourceImpl(),
           ),
         ),
-      )..getProfileInfo(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
+      ),
+      // ..getProfileInfo(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
       child: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           // TODO: implement listener
@@ -42,19 +57,25 @@ class ProfileScreen extends StatelessWidget {
             body: const ProfileWidget(),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                ProfileCubit.get(context).updateProfileInfo(
-                  userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
-                  model: UserInfoEntity(
+                // ProfileCubit.get(context)
+                //     .getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1');
+                ProfileCubit.get(context).deletePost(
                     userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
-                    userName: 'Ayman salah',
-                    email: 'whiteshadow2ppp2@gmail.com',
-                    profileImageURL: 'https://loremflickr.com/640/640',
-                    address: 'Cairo, Egypt',
-                    followers: 1,
-                    following: 1,
-                    bio: 'bio',
-                  ),
-                );
+                    postId: 'be5iAkz3RkgBc5xYCWwV');
+
+                // ProfileCubit.get(context).updateProfileInfo(
+                //   userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+                //   model: UserInfoEntity(
+                //     userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+                //     userName: 'Ayman salah',
+                //     email: 'whiteshadow2ppp2@gmail.com',
+                //     profileImageURL: 'https://loremflickr.com/640/640',
+                //     address: 'Cairo, Egypt',
+                //     followers: 1,
+                //     following: 1,
+                //     bio: 'bio',
+                //   ),
+                // );
               },
               child: const Icon(Icons.add),
             ),
