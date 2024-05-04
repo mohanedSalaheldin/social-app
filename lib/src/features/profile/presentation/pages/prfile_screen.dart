@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/home/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
 import 'package:social_app/src/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
+import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -17,6 +19,12 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ProfileCubit>(
       create: (BuildContext context) => ProfileCubit(
+        updateProfileUseCase: UpdateProfileUseCase(
+          repository: ProfileRepositoryImpl(
+            networkInfo: NetworkInfoImpl(),
+            profileRemoteDatasource: ProfileRemoteDatasourceImpl(),
+          ),
+        ),
         getProfileInfoUseCase: GetProfileInfoUseCase(
           repository: ProfileRepositoryImpl(
             networkInfo: NetworkInfoImpl(),
@@ -32,6 +40,24 @@ class ProfileScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(),
             body: const ProfileWidget(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                ProfileCubit.get(context).updateProfileInfo(
+                  userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+                  model: UserInfoEntity(
+                    userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+                    userName: 'Ayman salah',
+                    email: 'whiteshadow2ppp2@gmail.com',
+                    profileImageURL: 'https://loremflickr.com/640/640',
+                    address: 'Cairo, Egypt',
+                    followers: 1,
+                    following: 1,
+                    bio: 'bio',
+                  ),
+                );
+              },
+              child: const Icon(Icons.add),
+            ),
           );
         },
       ),

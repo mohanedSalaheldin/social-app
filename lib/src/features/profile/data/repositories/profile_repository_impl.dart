@@ -46,8 +46,29 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updateProfile({required String userId}) {
-    // TODO: implement updateProfile
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> updateProfile(
+      {required String userId, required UserInfoEntity model}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        UserInfoModel userInfo = UserInfoModel(
+            userId: model.userId,
+            userName: model.userName,
+            email: model.email,
+            profileImageURL: model.profileImageURL,
+            address: model.address,
+            followers: model.followers,
+            following: model.following,
+            bio: model.bio);
+        await profileRemoteDatasource.updateProfile(
+            userId: userId, model: userInfo);
+        return const Right(unit);
+      } on ServerExecption {
+        return Left(ServerFailure());
+      } on Exception {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
 }
