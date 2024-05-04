@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
@@ -107,7 +108,7 @@ class RegisterScreen extends StatelessWidget {
                                 _passwordController.text.toLowerCase().trim(),
                             userName:
                                 _userNameController.text.toLowerCase().trim(),
-                            imagePath: imagePath,
+                            imagePath: context.read<AuthCubit>().profileImage,
                           );
                       print('********************');
                       print(_emailController.text);
@@ -164,31 +165,52 @@ class FilePickScreen extends StatefulWidget {
 }
 
 class _FilePickScreenState extends State<FilePickScreen> {
+  // var profileImage;
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        const CircleAvatar(),
+        CircleAvatar(
+          minRadius: 120,
+          backgroundImage:
+              const AssetImage('assets/images/default-profile.jpg'),
+          foregroundImage: context.read<AuthCubit>().profileImage == null
+              ? null
+              : FileImage(context.read<AuthCubit>().profileImage!),
+        ),
         DefaultButton(
             txt: 'Pick File',
             onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                type: FileType.custom,
-                allowedExtensions: [
-                  'jpg',
-                  'jpeg',
-                  'png',
-                ],
+              final ImagePicker picker = ImagePicker();
+// Pick an image.
+              final XFile? image = await picker.pickImage(
+                source: ImageSource.gallery,
+                imageQuality: 50,
               );
 
-              if (result != null) {
-                File file = File(result.files.single.path!);
-                print('-------------------------------');
-                print(file.path);
-                print('-------------------------------');
-              } else {
-                // User canceled the picker
+              if (image != null) {
+                setState(() {
+                  context.read<AuthCubit>().profileImage = File(image.path);
+                });
               }
+
+              // FilePickerResult? result = await FilePicker.platform.pickFiles(
+              //   type: FileType.custom,
+              //   allowedExtensions: [
+              //     'jpg',
+              //     'jpeg',
+              //     'png',
+              //   ],
+              // );
+              // if (result != null) {
+              //   File file = File(result.files.single.path!);
+              //   print('-------------------------------');
+              //   print(file.path);
+              //   print('-------------------------------');
+              // } else {
+              //   // User canceled the picker
+              // }
             }),
       ],
     );

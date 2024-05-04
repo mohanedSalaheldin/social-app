@@ -22,28 +22,28 @@ class MyApp extends StatelessWidget {
       title: 'Social ',
       debugShowCheckedModeBanner: false,
       theme: getLightTheme(),
+      home: MultiBlocProvider(
+          providers: [BlocProvider(create: (_) => AuthCubit(AuthInitial()))],
+          child: StreamBuilder(
+            stream: AuthRemoteDataSourceImpl().auto(),
+            builder: (context, snapshot) {
+              // AuthRemoteDataSourceImpl().logout();
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  return const Profile();
+                }
+                return const LoginScreen();
+              }
 
-      home: const ProfileScreen(),
-      //  MultiBlocProvider(
-      //   providers: [BlocProvider(create: (_) => AuthCubit(AuthInitial()))],
-      //   child: StreamBuilder(
-      //     stream: AuthRemoteDataSourceImpl().auto(),
-      //     builder: (context, snapshot) {
-      //       // AuthRemoteDataSourceImpl().logout();
-      //       if (snapshot.hasData) {
-      //         return const Profile();
-      //       }
-      //       if (snapshot.connectionState == ConnectionState.waiting) {
-      //         return Container(
-      //           color: Colors.white,
-      //           child: const Center(child: CircularProgressIndicator()),
-      //         );
-      //       }
-      //       return const LoginScreen();
-      //     },
-      //   ),
-      // ),
-
+              return Container(
+                color: Colors.white,
+                child: const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.purple,
+                )),
+              );
+            },
+          )),
 
     );
   }

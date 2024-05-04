@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/features/auth/domain/repositories/auth_repository.dart';
@@ -10,7 +12,7 @@ class RegisterUseCase {
     required String email,
     required String password,
     required String userName,
-    String? prfileImagePath,
+    File? prfileImagePath,
   }) {
     return repository.register(
         email: email,
