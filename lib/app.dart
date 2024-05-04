@@ -5,7 +5,11 @@ import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart'
 import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
 import 'package:social_app/src/features/auth/presentation/pages/register_screen.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
 
+
+import 'package:social_app/src/features/auth/presentation/widgets/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
 import 'src/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'src/features/auth/presentation/pages/login_screen.dart';
 
@@ -40,6 +44,7 @@ class MyApp extends StatelessWidget {
               );
             },
           )),
+
     );
   }
 }
