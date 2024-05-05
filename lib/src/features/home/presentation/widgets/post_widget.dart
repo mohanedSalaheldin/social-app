@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -46,7 +45,7 @@ class PostWidget extends StatelessWidget {
               const Spacer(),
               IconButton(
                 onPressed: () {},
-                icon: const Icon(Icons.more_vert_outlined),
+                icon: const Icon(Icons.bookmark_outline),
               ),
             ],
           ),

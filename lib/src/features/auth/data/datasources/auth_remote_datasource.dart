@@ -65,6 +65,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return Future.value(unit);
   }
 
+  @override
   Future<void> logout() {
     return _auth.signOut();
   }
@@ -80,16 +81,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         )
         .set(
       {
-        'uID': userCredential.user!.uid,
-        'username': userName ?? userCredential.user!.displayName,
+        'userId': userCredential.user!.uid,
+        'userName': userName ?? userCredential.user!.displayName,
         'email': userCredential.user!.email,
-        'profileImageURL': profileImageURL
-        //     'prfileImagePath'
-
-        //       required String email,
-        // required String password,
-        // required String userName,
-        // String? prfileImagePath,
+        'profileImageURL': profileImageURL,
+        'address': ' ',
+        'followers': 0,
+        'following': 0,
+        'bio': '',
       },
     );
   }
@@ -108,3 +107,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return url;
   }
 }
+/**
+ {
+      'userId': userId,
+      'userName': userName,
+      'email': email,
+      'profileImageURL': profileImageURL,
+      'address': address,
+      'followers': followers,
+      'following': following,
+      'bio': bio,
+    }
+ */
