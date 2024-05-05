@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
+import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/features/home/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
 import 'package:social_app/src/features/profile/data/repositories/profile_repository_impl.dart';
@@ -13,6 +15,7 @@ import 'package:social_app/src/features/profile/domain/usecases/get_posts_usecas
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
 import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:social_app/src/features/profile/presentation/pages/profile_edit_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -53,15 +56,28 @@ class ProfileScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    navigateToScreen(context, const ProfileInfoEditScreen());
+                    // FirebaseAuth.instance.signOut();
+                  },
+                  icon: const Icon(
+                    Icons.edit,
+                  ),
+                )
+              ],
+            ),
             body: const ProfileWidget(),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 // ProfileCubit.get(context)
                 //     .getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1');
                 ProfileCubit.get(context).deletePost(
-                    userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
-                    postId: 'be5iAkz3RkgBc5xYCWwV');
+                  userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+                  postId: 'be5iAkz3RkgBc5xYCWwV',
+                );
 
                 // ProfileCubit.get(context).updateProfileInfo(
                 //   userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
@@ -153,25 +169,9 @@ class ProfileWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
+            MyCustomizedElevatedButton(
+              text: 'Follow',
               onPressed: () {},
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
-                  HexColor('#7737ff'),
-                ),
-                padding: const MaterialStatePropertyAll(
-                  EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 20,
-                  ),
-                ),
-              ),
-              child: const Text(
-                'Follow',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
             ),
             const Gap(10),
             ElevatedButton(
