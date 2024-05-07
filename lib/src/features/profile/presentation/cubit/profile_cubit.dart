@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +16,8 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   final GetProfileInfoUseCase getProfileInfoUseCase;
   final UpdateProfileUseCase updateProfileUseCase;
-  final DeletePostUseCase deletePostUseCase;
-  final GetPostsUseCase getPostsUseCase;
+  final DeleteProfilePostUseCase deletePostUseCase;
+  final GetProfilePostsUseCase getPostsUseCase;
 
   ProfileCubit({
     required this.getProfileInfoUseCase,
@@ -24,6 +26,21 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.getPostsUseCase,
   }) : super(ProfileInitial());
   static ProfileCubit get(context) => BlocProvider.of(context);
+  List<PostEntity> _posts = [];
+
+  List<PostEntity> get posts => _posts;
+  UserInfoEntity _userInfo = UserInfoEntity(
+    userName: '',
+    email: '',
+    profileImageURL: '',
+    userId: '',
+    address: '',
+    followers: 0,
+    following: 0,
+    bio: '',
+  );
+
+  UserInfoEntity get userInfo => _userInfo;
 
   void getProfileInfo({required String userId}) async {
     emit(ProfileInfoLoadingState());
@@ -31,25 +48,29 @@ class ProfileCubit extends Cubit<ProfileState> {
         await getProfileInfoUseCase.call(userId: userId);
     result.fold(
       (failure) {
-        emit(ProfileInfoErrorState(failure: failure));
+        emit(ProfileInfoErrorState());
       },
       (userInfoEntity) {
-        emit(ProfileInfoSucessState(userInfoEntity: userInfoEntity));
+        _userInfo = userInfoEntity;
+        emit(ProfileInfoSucessState());
       },
     );
   }
 
   void updateProfileInfo(
-      {required String userId, required UserInfoEntity model}) async {
+      {required String userId,
+      required UserInfoEntity model,
+      required String oldImageUrl}) async {
     emit(ProfileUpdateInfoLoadingState());
-    Either<Failure, Unit> result =
-        await updateProfileUseCase.call(userId: userId, model: model);
+    Either<Failure, Unit> result = await updateProfileUseCase.call(
+        userId: userId, model: model, oldImageUrl: _userInfo.profileImageURL);
     result.fold(
       (failure) {
-        emit(ProfileUpdateInfoErrorState(failure: failure));
+        emit(ProfileUpdateInfoErrorState());
       },
       (_) {
-        emit(ProfileUpdateInfoSuccessState());
+        getProfileInfo(userId: userId);
+        // emit(ProfileUpdateInfoSuccessState());
       },
     );
   }
@@ -58,15 +79,25 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String userId,
   }) async {
     emit(ProfileGetPostsLoadingState());
-    Either<Failure, List<PostEntity>> result = await getPostsUseCase.call(
+    Either<Failure, Stream<List<PostEntity>>> result =
+        await getPostsUseCase.call(
       userId: userId,
     );
     result.fold(
       (failure) {
-        emit(ProfileGetPostsErrorState(failure: failure));
+        print('_-------------------(in cubit)-----------------------------');
+        emit(ProfileGetPostsErrorState());
+        print('_-------------------(in cubit)-----------------------------');
       },
       (posts) {
-        emit(ProfileGetPostsSuccessState(posts: posts));
+        posts.listen(
+          (posts) {
+            _posts = posts;
+            emit(ProfileGetPostsSuccessState());
+          },
+        );
+
+        
       },
     );
   }
@@ -77,7 +108,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         await deletePostUseCase.call(userId: userId, postId: postId);
     result.fold(
       (failure) {
-        emit(ProfileDeletePostErrorState(failure: failure));
+        emit(ProfileDeletePostErrorState());
       },
       (_) {
         emit(ProfileDeletePostSuccessState());

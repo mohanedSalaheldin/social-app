@@ -5,9 +5,9 @@ import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
 
 abstract class ProfileRepository {
-  Future<Either<Failure, Unit>> updateProfile({required String userId,required UserInfoEntity model});
+  Future<Either<Failure, Unit>> updateProfile({required String userId,required UserInfoEntity model, required String oldImageUrl});
   Future<Either<Failure, UserInfoEntity>> getProfileInfo(
       {required String userId});
-  Future<Either<Failure, List<PostEntity>>> getPosts({required String userId});
+Future<Either<Failure, Stream<List<PostEntity>>>>getPosts({required String userId});
   Future<Either<Failure, Unit>> deletePost({required String postId,required String userId});
 }

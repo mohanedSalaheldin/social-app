@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:social_app/src/core/entites/post_entity.dart';
+import 'package:social_app/src/core/utls/methods/screen_sizes.dart';
 
 class PostWidget extends StatelessWidget {
   const PostWidget({
     super.key,
+    required this.post,
+    required this.onDeletePost,
   });
+  final PostEntity post;
+  final Function onDeletePost;
 
   @override
   Widget build(BuildContext context) {
@@ -15,26 +21,27 @@ class PostWidget extends StatelessWidget {
       //   // color: const Color.fromARGB(255, 242, 243, 245),
       // ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 30.0,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+                backgroundImage: NetworkImage(post.imageUrl.toString()),
               ),
               const Gap(10.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'username',
-                    style: TextStyle(
+                  Text(
+                    post.writtenBy.toString(),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0,
                     ),
                   ),
                   Text(
-                    'time',
+                    post.time.toString(),
                     style: TextStyle(
                       fontSize: 15.0,
                       color: Colors.grey[700],
@@ -43,21 +50,51 @@ class PostWidget extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.bookmark_outline),
+              PopupMenuButton<int>(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                onSelected: (item) {
+                  if (item == 0) {}
+                  if (item == 1) {
+                    onDeletePost();
+                  }
+                },
+                position: PopupMenuPosition.under,
+                itemBuilder: (context) => const [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: Text(
+                      'Update',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           const Gap(10.0),
-          const Text(
-            'lorem ipsum dolor sit amet lorem ipsum dolor sit ametlorem ipsum dolor sit amet',
+          Text(
+            post.text.toString(),
           ),
           const Gap(10.0),
           Image.network(
-            'https://i.pravatar.cc/700',
+            post.imageUrl.toString(),
             fit: BoxFit.cover,
             width: double.infinity,
+            height: ScreenSizes.width(context),
           ),
           const Gap(10.0),
           Row(
@@ -81,96 +118,40 @@ class PostWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.bookmark_outline),
-              ),
-            ],
-          ),
-          const Gap(10.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Stack(
+              Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0),
-                        border: Border.all(
-                          width: 3.0,
-                          color: Colors.white,
+                  RichText(
+                    text: const TextSpan(
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '100k ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      child: const CircleAvatar(
-                        radius: 15.0,
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/300'),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 15.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0),
-                        border: Border.all(
-                          width: 3.0,
-                          color: Colors.white,
+                        TextSpan(
+                          text: 'Likes ',
                         ),
-                      ),
-                      child: const CircleAvatar(
-                        radius: 15.0,
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/500'),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(start: 30.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0),
-                        border: Border.all(
-                          width: 3.0,
-                          color: Colors.white,
+                        TextSpan(
+                          text: '200k ',
                         ),
-                      ),
-                      child: const CircleAvatar(
-                        radius: 15.0,
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/400'),
-                      ),
+                        TextSpan(
+                          text: 'Comments',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              const Gap(10.0),
-              RichText(
-                text: const TextSpan(
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'liked by ',
-                    ),
-                    TextSpan(
-                      text: 'Joe Hoe',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' and 1.5k',
-                    ),
-                  ],
-                ),
-              ),
             ],
-          )
+          ),
         ],
       ),
     );

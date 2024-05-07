@@ -1,50 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/src/config/themes/light_theme.dart';
+import 'package:social_app/src/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
 import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
-import 'package:social_app/src/features/auth/presentation/pages/register_screen.dart';
-import 'package:social_app/src/features/auth/presentation/widgets/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
-
-
-import 'package:social_app/src/features/auth/presentation/widgets/presentation/cubit/home_cubit.dart';
-import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
-import 'src/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'src/features/auth/presentation/pages/login_screen.dart';
+import 'package:social_app/injection_container.dart' as di;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Social ',
-      debugShowCheckedModeBanner: false,
-      theme: getLightTheme(),
-      home: MultiBlocProvider(
-          providers: [BlocProvider(create: (_) => AuthCubit(AuthInitial()))],
-          child: StreamBuilder(
-            stream: AuthRemoteDataSourceImpl().auto(),
-            builder: (context, snapshot) {
-              // AuthRemoteDataSourceImpl().logout();
-              if (snapshot.connectionState == ConnectionState.active) {
-                if (snapshot.hasData) {
-                  return const Profile();
-                }
-                return const LoginScreen();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => AuthCubit(
+            AuthInitial(),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => di.sl<ProfileCubit>()
+            ..getProfileInfo(
+              userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+            )
+            ..getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Social ',
+        debugShowCheckedModeBanner: false,
+        theme: getLightTheme(),
+        home:
+            // const ProfileScreen(),
+
+            StreamBuilder(
+          stream: AuthRemoteDataSourceImpl().auto(),
+          builder: (context, snapshot) {
+            // AuthRemoteDataSourceImpl().logout();
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                return const ProfileScreen();
               }
+              return const ProfileScreen();
+            }
 
-              return Container(
-                color: Colors.white,
-                child: const Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.purple,
-                )),
-              );
-            },
-          )),
-
+            return Container(
+              color: Colors.white,
+              child: const Center(
+                  child: CircularProgressIndicator(
+                color: Colors.purple,
+              )),
+            );
+          },
+        ),
+      ),
     );
   }
 }

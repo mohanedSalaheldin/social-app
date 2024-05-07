@@ -4,13 +4,17 @@ class PostModel extends PostEntity {
   PostModel(
       {required super.imageUrl,
       required super.id,
+      required super.userProfileImage,
       required super.text,
       required super.time,
       required super.likes,
-      required super.comments});
+      required super.comments,
+      required super.writtenBy});
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
+        userProfileImage: json['userProfileImage'],
+        writtenBy: json['writtenBy'],
         imageUrl: json['imageUrl'],
         id: json['id'],
         text: json['text'],

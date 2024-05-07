@@ -1,13 +1,17 @@
 class PostEntity {
+  final String userProfileImage;
   final String? imageUrl;
   final String id;
   final String text;
+  final String writtenBy;
   final String time;
   final int likes;
   final int comments;
 
   PostEntity(
-      {required this.imageUrl,
+      {required this.writtenBy,
+      required this.imageUrl,
+      required this.userProfileImage,
       required this.id,
       required this.text,
       required this.time,

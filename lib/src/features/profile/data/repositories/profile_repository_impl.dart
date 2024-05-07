@@ -35,11 +35,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getPosts(
+  Future<Either<Failure, Stream<List<PostModel>>>> getPosts(
       {required String userId}) async {
     if (await networkInfo.isConnected) {
       try {
-        List<PostModel> posts =
+        Stream<List<PostModel>> posts =
             await profileRemoteDatasource.getPosts(userId: userId);
         return Right(posts);
       } on ServerExecption {
@@ -68,7 +68,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<Either<Failure, Unit>> updateProfile(
-      {required String userId, required UserInfoEntity model}) async {
+      {required String userId,
+      required UserInfoEntity model,
+      required String oldImageUrl}) async {
     if (await networkInfo.isConnected) {
       try {
         UserInfoModel userInfo = UserInfoModel(
@@ -81,7 +83,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
             following: model.following,
             bio: model.bio);
         await profileRemoteDatasource.updateProfile(
-            userId: userId, model: userInfo);
+            userId: userId, model: userInfo, oldImageUrl: oldImageUrl);
         return const Right(unit);
       } on ServerExecption {
         return Left(ServerFailure());

@@ -8,7 +8,7 @@ class UpdateProfileUseCase {
 
   UpdateProfileUseCase({required this.repository});
 
-  Future<Either<Failure, Unit>> call({required String userId,required UserInfoEntity model}) {
-    return repository.updateProfile(userId: userId,model: model);
+  Future<Either<Failure, Unit>> call({required String userId,required UserInfoEntity model, required String oldImageUrl}) {
+    return repository.updateProfile(userId: userId,model: model,oldImageUrl: oldImageUrl);
   }
 }
