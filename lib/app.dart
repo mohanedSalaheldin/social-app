@@ -8,6 +8,8 @@ import 'package:social_app/src/features/auth/presentation/pages/profile_screen.d
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
 import 'package:social_app/injection_container.dart' as di;
+import 'package:social_app/src/features/search/presentation/cubit/search_cubit.dart';
+import 'package:social_app/src/features/search/presentation/pages/search_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -28,34 +30,34 @@ class MyApp extends StatelessWidget {
             )
             ..getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
         ),
+        BlocProvider(create: (_) => di.sl<SearchCubit>()),
       ],
       child: MaterialApp(
         title: 'Social ',
         debugShowCheckedModeBanner: false,
         theme: getLightTheme(),
-        home:
-            // const ProfileScreen(),
+        home: const SearchScreen(),
 
-            StreamBuilder(
-          stream: AuthRemoteDataSourceImpl().auto(),
-          builder: (context, snapshot) {
-            // AuthRemoteDataSourceImpl().logout();
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                return const ProfileScreen();
-              }
-              return const ProfileScreen();
-            }
+        //     StreamBuilder(
+        //   stream: AuthRemoteDataSourceImpl().auto(),
+        //   builder: (context, snapshot) {
+        //     // AuthRemoteDataSourceImpl().logout();
+        //     if (snapshot.connectionState == ConnectionState.active) {
+        //       if (snapshot.hasData) {
+        //         return const SearchScreen();
+        //       }
+        //       return const LoginScreen();
+        //     }
 
-            return Container(
-              color: Colors.white,
-              child: const Center(
-                  child: CircularProgressIndicator(
-                color: Colors.purple,
-              )),
-            );
-          },
-        ),
+        //     return Container(
+        //       color: Colors.white,
+        //       child: const Center(
+        //           child: CircularProgressIndicator(
+        //         color: Colors.purple,
+        //       )),
+        //     );
+        //   },
+        // ),
       ),
     );
   }

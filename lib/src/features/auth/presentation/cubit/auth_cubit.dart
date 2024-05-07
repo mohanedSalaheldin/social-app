@@ -26,10 +26,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   User? getUser() {
     return GetUserUseCase(
-            repository: AuthRepositoryImpl(
-                authRemoteDataSource: AuthRemoteDataSourceImpl(),
-                networkInfo: NetworkInfoImpl()))
-        .call();
+      repository: AuthRepositoryImpl(
+        authRemoteDataSource: AuthRemoteDataSourceImpl(),
+        networkInfo: NetworkInfoImpl(),
+      ),
+    ).call();
   }
 
   Future<void> login({

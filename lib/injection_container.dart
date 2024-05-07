@@ -8,6 +8,11 @@ import 'package:social_app/src/features/profile/domain/usecases/get_posts_usecas
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
 import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:social_app/src/features/search/data/datasources/search_remote_datasource.dart';
+import 'package:social_app/src/features/search/data/repositories/search_repository_impl.dart';
+import 'package:social_app/src/features/search/domain/repositories/search_repository.dart';
+import 'package:social_app/src/features/search/domain/usecases/search_for_user_usecase.dart';
+import 'package:social_app/src/features/search/presentation/cubit/search_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -23,6 +28,11 @@ Future<void> init() async {
       updateProfileUseCase: sl(),
     ),
   );
+  sl.registerFactory(
+    () => SearchCubit(
+      searchForUserUseCase: sl(),
+    ),
+  );
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(
@@ -31,18 +41,29 @@ Future<void> init() async {
       networkInfo: sl(),
     ),
   );
+  sl.registerLazySingleton<SearchRepository>(
+    () => SearchRepositoryImpl(
+      searchRemoteDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
 
   // UseCases
-  // -------------------------------(Auth)--------------------------------
+  // -------------------------------(Profile)--------------------------------
   sl.registerLazySingleton(() => UpdateProfileUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProfileInfoUseCase(repository: sl()));
   sl.registerLazySingleton(() => DeleteProfilePostUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProfilePostsUseCase(repository: sl()));
+  // -------------------------------(Search)--------------------------------
+  sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
 
 /* --------------------Core-------------------- */
-  // -------------------------------(Auth)--------------------------------
+  // -------------------------------(Profile)--------------------------------
   sl.registerLazySingleton<ProfileRemoteDatasource>(
       () => ProfileRemoteDatasourceImpl());
+  // -------------------------------(Search)--------------------------------
+  sl.registerLazySingleton<SearchRemoteDataSource>(
+      () => SearchRemoteDataSourceImpl());
 /* --------------------External-------------------- */
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 }
