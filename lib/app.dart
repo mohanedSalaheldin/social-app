@@ -4,7 +4,8 @@ import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
-import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
+import 'package:social_app/src/features/posts/presentation/pages/add_post_screen.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
 import 'package:social_app/injection_container.dart' as di;
@@ -31,12 +32,13 @@ class MyApp extends StatelessWidget {
             ..getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
         ),
         BlocProvider(create: (_) => di.sl<SearchCubit>()),
+        BlocProvider(create: (_) => di.sl<PostsCubit>()),
       ],
       child: MaterialApp(
         title: 'Social ',
         debugShowCheckedModeBanner: false,
         theme: getLightTheme(),
-        home: const SearchScreen(),
+        home: const AddPostScreen(),
 
         //     StreamBuilder(
         //   stream: AuthRemoteDataSourceImpl().auto(),

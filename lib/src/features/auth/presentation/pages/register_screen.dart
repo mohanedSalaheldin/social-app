@@ -110,22 +110,7 @@ class RegisterScreen extends StatelessWidget {
                                 _userNameController.text.toLowerCase().trim(),
                             imagePath: context.read<AuthCubit>().profileImage,
                           );
-                      print('********************');
-                      print(_emailController.text);
-                      print('********************');
-                      print(_passwordController.text);
-                      print('********************');
-                      print(_userNameController.text);
-                      print('********************');
-                      print(_userNameController.text);
-                      print('********************');
-                      // print(emailController.text);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const LoginScreen(),
-                      //   ),
-                      // );
+                     
                       Navigator.pop(context);
                     } else if (currentPage == 2) {
                       FocusManager.instance.primaryFocus?.unfocus();
@@ -194,23 +179,6 @@ class _FilePickScreenState extends State<FilePickScreen> {
                   context.read<AuthCubit>().profileImage = File(image.path);
                 });
               }
-
-              // FilePickerResult? result = await FilePicker.platform.pickFiles(
-              //   type: FileType.custom,
-              //   allowedExtensions: [
-              //     'jpg',
-              //     'jpeg',
-              //     'png',
-              //   ],
-              // );
-              // if (result != null) {
-              //   File file = File(result.files.single.path!);
-              //   print('-------------------------------');
-              //   print(file.path);
-              //   print('-------------------------------');
-              // } else {
-              //   // User canceled the picker
-              // }
             }),
       ],
     );

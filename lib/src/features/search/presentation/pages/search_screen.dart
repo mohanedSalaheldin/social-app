@@ -56,27 +56,15 @@ class _SearchScreenState extends State<SearchScreen> {
                             decoration: const InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
-                              // border: OutlineInputBorder(),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
-                              // errorBorder: OutlineInputBorder(
-                              //   borderRadius: BorderRadius.all(
-                              //     Radius.circular(30),
-                              //   ),
-                              // ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30))),
                               hintText: 'Search',
                               prefixIcon: Icon(Icons.search),
                             ),
