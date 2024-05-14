@@ -91,6 +91,10 @@ class PostWidget extends StatelessWidget {
           ),
           const Gap(10.0),
           Image.network(
+            errorBuilder: (context, error, stackTrace) => SizedBox(
+                width: double.infinity,
+                height: ScreenSizes.width(context),
+                child: Center(child: Text('😢 we are sory $error'))),
             post.imageUrl.toString(),
             fit: BoxFit.cover,
             width: double.infinity,
@@ -121,9 +125,10 @@ class PostWidget extends StatelessWidget {
               Row(
                 children: [
                   RichText(
+                    // overflow: ,
                     text: const TextSpan(
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                         color: Colors.black,
                       ),
                       children: [
