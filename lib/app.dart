@@ -4,8 +4,12 @@ import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
+import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
+import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/pages/add_post_screen.dart';
+
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
 import 'package:social_app/injection_container.dart' as di;
@@ -18,27 +22,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => AuthCubit(
-            AuthInitial(),
+        providers: [
+          BlocProvider(
+            create: (_) => AuthCubit(
+              AuthInitial(),
+            ),
           ),
-        ),
-        BlocProvider(
-          create: (_) => di.sl<ProfileCubit>()
-            ..getProfileInfo(
-              userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
-            )
-            ..getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
-        ),
-        BlocProvider(create: (_) => di.sl<SearchCubit>()),
-        BlocProvider(create: (_) => di.sl<PostsCubit>()),
-      ],
-      child: MaterialApp(
-        title: 'Social ',
-        debugShowCheckedModeBanner: false,
-        theme: getLightTheme(),
-        home: const AddPostScreen(),
+          BlocProvider(
+            create: (_) => di.sl<ProfileCubit>()
+              ..getProfileInfo(
+                userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
+              )
+              ..getPosts(userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1'),
+          ),
+          BlocProvider(create: (_) => di.sl<SearchCubit>()),
+          BlocProvider(create: (_) => di.sl<HomeCubit>()),
+        ],
+        child: MaterialApp(
+          title: 'Social ',
+          debugShowCheckedModeBanner: false,
+          theme: getLightTheme(),
+          home: const HomeScreen(),
+        )
+
 
         //     StreamBuilder(
         //   stream: AuthRemoteDataSourceImpl().auto(),
@@ -60,8 +66,8 @@ class MyApp extends StatelessWidget {
         //     );
         //   },
         // ),
-      ),
-    );
+
+        );
   }
 }
 

@@ -1,6 +1,10 @@
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/home/presentation/widgets/post_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,10 +24,24 @@ class HomeScreen extends StatelessWidget {
               icon: const Icon(Icons.email_outlined),
             ),
           ]),
-      body: ListView.separated(
-        itemBuilder: (context, index) => const RootWidget(),
-        separatorBuilder: (context, index) => const Gap(10.0),
-        itemCount: 5,
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder(
+                stream: BlocProvider.of<HomeCubit>(context).getPosts(),
+                builder: (context, snapshot) {
+                  print(snapshot.error);
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) => PostWidget(
+                          post: snapshot.data![index], onDeletePost: () {}),
+                    );
+                  }
+                  return CircularProgressIndicator();
+                }),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => {},

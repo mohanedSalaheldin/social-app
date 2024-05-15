@@ -8,13 +8,14 @@ class PostEntity {
   final int likes;
   final int comments;
 
-  PostEntity(
-      {required this.writtenBy,
-      required this.imageUrl,
-      required this.userProfileImage,
-      required this.id,
-      required this.text,
-      required this.time,
-      required this.likes,
-      required this.comments});
+  PostEntity({
+    required this.writtenBy,
+    required this.imageUrl,
+    required this.userProfileImage,
+    required this.id,
+    required this.text,
+    required this.time,
+    required this.likes,
+    required this.comments,
+  });
 }

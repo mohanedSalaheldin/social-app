@@ -13,8 +13,8 @@ class PostModel extends PostEntity {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-        userProfileImage: json['userProfileImage'],
-        writtenBy: json['writtenBy'],
+        userProfileImage: '',
+        writtenBy: 'json[]',
         imageUrl: json['imageUrl'],
         id: json['id'],
         text: json['text'],
