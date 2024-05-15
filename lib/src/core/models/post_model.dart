@@ -33,4 +33,16 @@ class PostModel extends PostEntity {
       'comments': comments,
     };
   }
+
+  factory PostModel.forEntity(PostEntity entity) {
+    return PostModel(
+        userProfileImage: entity.userProfileImage,
+        writtenBy: entity.writtenBy,
+        imageUrl: entity.imageUrl,
+        id: entity.id,
+        text: entity.text,
+        time: entity.time,
+        likes: entity.likes,
+        comments: entity.comments);
+  }
 }

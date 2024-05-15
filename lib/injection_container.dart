@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
-
 import 'package:social_app/src/features/home/data/datasoures/home_remote_datasource.dart';
 import 'package:social_app/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:social_app/src/features/home/domain/repositories/home_repository.dart';
@@ -8,6 +7,11 @@ import 'package:social_app/src/features/home/domain/usecasese/comment_post_useca
 import 'package:social_app/src/features/home/domain/usecasese/get_posts_usecase.dart';
 import 'package:social_app/src/features/home/domain/usecasese/like_post_usecase.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/posts/data/datasources/posts_remote_datasource.dart';
+import 'package:social_app/src/features/posts/data/repositories/posts_repository_impl.dart';
+import 'package:social_app/src/features/posts/domain/repositories/posts_repository.dart';
+import 'package:social_app/src/features/posts/domain/usecases/posts_add_usecase.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
 import 'package:social_app/src/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:social_app/src/features/profile/domain/repositories/prfile_repository.dart';
@@ -42,12 +46,20 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
+    () => PostsCubit(
+      postsAddPostUsecase: sl(),
+    ),
+  );
+  
+    sl.registerFactory(
     () => HomeCubit(
       commentPostsUseCase: sl(),
       getPostsUseCase: sl(),
-      likePostsUseCase: sl(),
-    ),
+      likePostsUseCase: sl(),),
   );
+  
+  
+  
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(
@@ -66,6 +78,11 @@ Future<void> init() async {
   sl.registerLazySingleton<HomeRepository>(
     () => HomeRpositoryImpl(
       homeRemoteDataSource: sl(),
+       networkInfo: sl(),
+      ),);
+  sl.registerLazySingleton<PostsRepository>(
+    () => PostsRepositoryImpl(
+      postsRemoteDataSource: sl(),
       networkInfo: sl(),
     ),
   );
@@ -82,6 +99,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPostsUseCase(repository: sl()));
   sl.registerLazySingleton(() => LikePostsUseCase(repository: sl()));
   sl.registerLazySingleton(() => CommentPostsUseCase(repository: sl()));
+  // -------------------------------(Posts)--------------------------------
+  sl.registerLazySingleton(() => PostsAddPostUsecase(repository: sl()));
 
 /* --------------------Core-------------------- */
   // -------------------------------(Profile)--------------------------------
@@ -93,6 +112,10 @@ Future<void> init() async {
   // -------------------------------(home)-----------------------------------
   sl.registerLazySingleton<HomeRemoteDataSource>(
       () => HomeRemoteDataSourceImpl());
+
+  // -------------------------------(Posts)--------------------------------
+  sl.registerLazySingleton<PostsRemoteDatasSource>(
+      () => PostsRemoteDatasSourceImpl());
 /* --------------------External-------------------- */
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 }

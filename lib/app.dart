@@ -7,6 +7,9 @@ import 'package:social_app/src/features/auth/presentation/pages/login_screen.dar
 import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
+import 'package:social_app/src/features/posts/presentation/pages/add_post_screen.dart';
+
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
 import 'package:social_app/injection_container.dart' as di;
@@ -41,6 +44,7 @@ class MyApp extends StatelessWidget {
           theme: getLightTheme(),
           home: const HomeScreen(),
         )
+
 
         //     StreamBuilder(
         //   stream: AuthRemoteDataSourceImpl().auto(),
