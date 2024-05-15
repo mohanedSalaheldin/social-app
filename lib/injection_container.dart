@@ -1,5 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
+import 'package:social_app/src/features/posts/data/datasources/posts_remote_datasource.dart';
+import 'package:social_app/src/features/posts/data/repositories/posts_repository_impl.dart';
+import 'package:social_app/src/features/posts/domain/repositories/posts_repository.dart';
+import 'package:social_app/src/features/posts/domain/usecases/posts_add_usecase.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/profile/data/datasources/profile_reomte_datasource.dart';
 import 'package:social_app/src/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:social_app/src/features/profile/domain/repositories/prfile_repository.dart';
@@ -33,6 +38,11 @@ Future<void> init() async {
       searchForUserUseCase: sl(),
     ),
   );
+  sl.registerFactory(
+    () => PostsCubit(
+      postsAddPostUsecase: sl(),
+    ),
+  );
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(
@@ -47,6 +57,12 @@ Future<void> init() async {
       networkInfo: sl(),
     ),
   );
+  sl.registerLazySingleton<PostsRepository>(
+    () => PostsRepositoryImpl(
+      postsRemoteDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
 
   // UseCases
   // -------------------------------(Profile)--------------------------------
@@ -56,6 +72,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProfilePostsUseCase(repository: sl()));
   // -------------------------------(Search)--------------------------------
   sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
+  // -------------------------------(Posts)--------------------------------
+  sl.registerLazySingleton(() => PostsAddPostUsecase(repository: sl()));
 
 /* --------------------Core-------------------- */
   // -------------------------------(Profile)--------------------------------
@@ -64,6 +82,9 @@ Future<void> init() async {
   // -------------------------------(Search)--------------------------------
   sl.registerLazySingleton<SearchRemoteDataSource>(
       () => SearchRemoteDataSourceImpl());
+  // -------------------------------(Posts)--------------------------------
+  sl.registerLazySingleton<PostsRemoteDatasSource>(
+      () => PostsRemoteDatasSourceImpl());
 /* --------------------External-------------------- */
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 }

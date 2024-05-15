@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class MyCustomizedElevatedButton extends StatelessWidget {
   const MyCustomizedElevatedButton({
     super.key,
-   required this.onPressed,
+    required this.onPressed,
     required this.text,
   });
   final Function() onPressed;
@@ -21,8 +20,8 @@ class MyCustomizedElevatedButton extends StatelessWidget {
         ),
         padding: const MaterialStatePropertyAll(
           EdgeInsets.symmetric(
-            horizontal: 30,
-            vertical: 20,
+            horizontal: 10,
+            vertical: 5,
           ),
         ),
       ),

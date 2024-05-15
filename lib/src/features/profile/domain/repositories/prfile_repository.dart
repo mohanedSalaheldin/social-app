@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
-import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
 
 abstract class ProfileRepository {
   Future<Either<Failure, Unit>> updateProfile({required String userId,required UserInfoEntity model, required String oldImageUrl});

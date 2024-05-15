@@ -40,7 +40,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     if (await networkInfo.isConnected) {
       try {
         Stream<List<PostModel>> posts =
-            await profileRemoteDatasource.getPosts(userId: userId);
+            profileRemoteDatasource.getPosts(userId: userId);
         return Right(posts);
       } on ServerExecption {
         return Left(ServerFailure());
