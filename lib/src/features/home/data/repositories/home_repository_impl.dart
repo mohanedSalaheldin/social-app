@@ -50,9 +50,18 @@ class HomeRpositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> likeUnlikePost({required String postId}) {
-    // TODO: implement likeUnlikePost
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> likeOrDisLikePost(
+      {required String postId, required String userId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        homeRemoteDataSource.likeOrDislikePost(postId: postId, userId: userId);
+        return Future.value(const Right(unit));
+      } catch (e) {
+        return Future.value(Left(ServerFailure()));
+      }
+    } else {
+      return Future.value(Left(OfflineFailure()));
+    }
   }
 
   @override

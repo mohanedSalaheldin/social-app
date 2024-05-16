@@ -35,9 +35,12 @@ class HomeScreen extends StatelessWidget {
               //   ),
               // );
 
-              BlocProvider.of<HomeCubit>(context).removeComment(
-                  commentID: 'eULLkWs78HkWAo7XoxJE',
-                  postId: 'SVYir6lbUPuym1sj9x2Q');
+              // BlocProvider.of<HomeCubit>(context).removeComment(
+              //     commentID: 'eULLkWs78HkWAo7XoxJE',
+              //     postId: 'SVYir6lbUPuym1sj9x2Q');
+
+              BlocProvider.of<HomeCubit>(context).likeOrDislikePost(
+                  postId: 'SVYir6lbUPuym1sj9x2Q', userId: 'hassan');
             },
             child: const Icon(Icons.add),
           ),
