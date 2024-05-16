@@ -4,7 +4,6 @@ import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
-import 'package:social_app/src/features/auth/presentation/pages/profile_screen.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
