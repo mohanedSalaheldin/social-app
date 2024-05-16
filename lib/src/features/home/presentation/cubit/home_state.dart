@@ -8,3 +8,20 @@ sealed class HomeState extends Equatable {
 }
 
 class InitalState extends HomeState {}
+
+class HomeAddCommentLoadingState extends HomeState {}
+
+class HomeAddCommentErrorState extends HomeState {}
+
+class HomeAddCommentSuccessState extends HomeState {}
+class HomeRemoveCommentLoadingState extends HomeState {}
+
+class HomeRemoveCommentErrorState extends HomeState {}
+
+class HomeRemoveCommentSuccessState extends HomeState {}
+
+class HomeGetCommentLoadingState extends HomeState {}
+
+class HomeGetCommentErrorState extends HomeState {}
+
+class HomeGetCommentSuccessState extends HomeState {}

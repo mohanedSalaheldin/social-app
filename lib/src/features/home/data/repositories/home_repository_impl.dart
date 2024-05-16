@@ -1,6 +1,9 @@
+import 'package:dartz/dartz.dart';
+import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
-import 'package:social_app/src/features/home/data/datasoures/home_remote_datasource.dart';
+import 'package:social_app/src/features/home/data/datasources/home_remote_datasource.dart';
+import 'package:social_app/src/features/home/domain/entities/comment_entity.dart';
 import 'package:social_app/src/features/home/domain/repositories/home_repository.dart';
 
 class HomeRpositoryImpl implements HomeRepository {
@@ -11,17 +14,60 @@ class HomeRpositoryImpl implements HomeRepository {
       {required this.homeRemoteDataSource, required this.networkInfo});
 
   @override
-  void comment(String postId, String comment) {
-    // TODO: implement comment
-  }
-
-  @override
   Stream<List<PostModel>> getPosts() {
     return homeRemoteDataSource.getPosts();
   }
 
   @override
-  void likePost(String postId) {
-    // TODO: implement likePost
+  Future<Either<Failure, Unit>> addComment(
+      {required CommentEntity comment}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        homeRemoteDataSource.addComment(comment: comment);
+        return Future.value(const Right(unit));
+      } catch (e) {
+        return Future.value(Left(ServerFailure()));
+      }
+    } else {
+      return Future.value(Left(OfflineFailure()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Stream<List<CommentEntity>>>> getComments(
+      {required String postId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        Stream<List<CommentEntity>> comments =
+            homeRemoteDataSource.getComments(postId: postId);
+        return Right(comments);
+      } catch (e) {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> likeUnlikePost({required String postId}) {
+    // TODO: implement likeUnlikePost
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> removeComment(
+      {required String postId, required String commentID}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        homeRemoteDataSource.removeComment(
+            commentID: commentID, postId: postId);
+        return Future.value(const Right(unit));
+      } catch (e) {
+        return Future.value(Left(ServerFailure()));
+      }
+    } else {
+      return Future.value(Left(OfflineFailure()));
+    }
   }
 }
