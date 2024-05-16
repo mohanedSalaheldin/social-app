@@ -15,15 +15,17 @@ class HomeCubit extends Cubit<HomeState> {
   HomeAddCommentUseCase addCommentUseCase;
   HomeRemoveCommentUseCase removeCommentUseCase;
   HomeGetAllCommentUseCase getAllCommentUseCase;
+  HomeLikeOrDisLikePostUseCase likeOrDisLikePostUseCase;
   GetPostsUseCase getPostsUseCase;
-  LikePostsUseCase likePostsUseCase;
+  // HomeLikeOrDisLikePostUseCase likePostsUseCase;
 
   HomeCubit({
+    required this.likeOrDisLikePostUseCase,
     required this.removeCommentUseCase,
     required this.getAllCommentUseCase,
     required this.addCommentUseCase,
     required this.getPostsUseCase,
-    required this.likePostsUseCase,
+    // required this.likePostsUseCase,
   }) : super(InitalState());
   static HomeCubit get(context) => BlocProvider.of(context);
 
@@ -45,7 +47,8 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void removeComment({required String commentID, required String postId}) async {
+  void removeComment(
+      {required String commentID, required String postId}) async {
     emit(HomeRemoveCommentLoadingState());
     Either<Failure, Unit> result =
         await removeCommentUseCase.call(commentID: commentID, postId: postId);
@@ -82,5 +85,20 @@ class HomeCubit extends Cubit<HomeState> {
       }
     });
     return comments;
+  }
+
+  void likeOrDislikePost(
+      {required String postId, required String userId}) async {
+    emit(HomeLikeOrDislikeLoadingState());
+    Either<Failure, Unit> result =
+        await likeOrDisLikePostUseCase.call(postId: postId, userId: userId);
+    result.fold(
+      (failure) {
+        emit(HomeLikeOrDislikeErrorState());
+      },
+      (_) {
+        emit(HomeLikeOrDislikeSuccessState());
+      },
+    );
   }
 }

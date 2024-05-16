@@ -58,7 +58,8 @@ Future<void> init() async {
       removeCommentUseCase: sl(),
       addCommentUseCase: sl(),
       getPostsUseCase: sl(),
-      likePostsUseCase: sl(),
+      likeOrDisLikePostUseCase: sl(),
+      // likePostsUseCase: sl(),
       getAllCommentUseCase: sl(),
     ),
   );
@@ -102,7 +103,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
   // -------------------------------(home)----------------------------------
   sl.registerLazySingleton(() => GetPostsUseCase(repository: sl()));
-  sl.registerLazySingleton(() => LikePostsUseCase(repository: sl()));
+  sl.registerLazySingleton(
+      () => HomeLikeOrDisLikePostUseCase(repository: sl()));
   sl.registerLazySingleton(() => HomeAddCommentUseCase(repository: sl()));
   sl.registerLazySingleton(() => HomeGetAllCommentUseCase(repository: sl()));
   sl.registerLazySingleton(() => HomeRemoveCommentUseCase(repository: sl()));

@@ -8,7 +8,8 @@ import 'package:social_app/src/features/home/domain/entities/comment_entity.dart
 
 abstract class HomeRemoteDataSource {
   Stream<List<PostModel>> getPosts();
-  Future<Unit> likeUnlikePost({required String postId});
+  Future<Unit> likeOrDislikePost(
+      {required String postId, required String userId});
   Future<Unit> addComment({required CommentEntity comment});
   Future<Unit> removeComment(
       {required String postId, required String commentID});
@@ -81,9 +82,23 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<Unit> likeUnlikePost({required String postId}) {
-    // TODO: implement likeUnlikePost
-    throw UnimplementedError();
+  Future<Unit> likeOrDislikePost(
+      {required String postId, required String userId}) {
+    DocumentReference<Map<String, dynamic>> doc =
+        _store.collection('posts').doc(postId);
+    doc.get().then((value) {
+      if (value.data()!['likes'].contains(userId)) {
+        doc.update({
+          'likes': FieldValue.arrayRemove([userId])
+        });
+      } else {
+        doc.update({
+          'likes': FieldValue.arrayUnion([userId])
+        });
+      }
+    });
+
+    return Future.value(unit);
   }
 
   @override
