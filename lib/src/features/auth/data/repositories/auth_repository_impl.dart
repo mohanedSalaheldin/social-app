@@ -24,8 +24,9 @@ class AuthRepositoryImpl implements AuthRepository {
       try {
         await authRemoteDataSource.emailLogin(email: email, password: password);
         return const Right(unit);
-      } on Exception {
-        return Left(ServerFailure());
+      } catch (e) {
+        print(e.toString());
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -37,7 +38,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
     required String userName,
-    File? prfileImagePath,
+    required String prfileImagePath,
   }) async {
     if (await networkInfo.isConnected) {
       try {
@@ -47,8 +48,9 @@ class AuthRepositoryImpl implements AuthRepository {
             userName: userName,
             profileImagePath: prfileImagePath);
         return const Right(unit);
-      } on Exception {
-        return Left(ServerFailure());
+      } catch (e) {
+        print(e.toString());
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());

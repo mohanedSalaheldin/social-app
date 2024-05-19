@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 ThemeData getLightTheme() => ThemeData(
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: Colors.white,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: HexColor('#191b1c'),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
@@ -57,6 +57,11 @@ ThemeData getLightTheme() => ThemeData(
 
       // *******( Start inputDecorationTheme )******
       inputDecorationTheme: const InputDecorationTheme(
+        errorStyle: TextStyle(
+          // color: Colors.red,
+          fontSize: 16.0,
+          // fontWeight: FontWeigh,
+        ),
         contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         prefixIconColor: Colors.black,
         labelStyle: TextStyle(
@@ -82,22 +87,22 @@ ThemeData getLightTheme() => ThemeData(
       primarySwatch: mainAppColorLight,
 
       // *******( Start TextTheme )*******
-      // textTheme: const TextTheme(
-      //   bodyLarge: TextStyle(
-      //     fontSize: 47,
-      //     fontWeight: FontWeight.bold,
-      //     color: Colors.black,
-      //   ),
-      //   bodySmall: TextStyle(
-      //     fontSize: 20,
-      //     color: Colors.black,
-      //   ),
-      //   displaySmall: TextStyle(
-      //     fontSize: 20,
-      //     fontWeight: FontWeight.bold,
-      //     color: Colors.white,
-      //   ),
-      // ),
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(
+          fontSize: 47,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),
+        displaySmall: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
       // *******( End TextTheme )*******
 
       // *******( Start filledButtonTheme )*******

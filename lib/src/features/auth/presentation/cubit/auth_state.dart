@@ -14,8 +14,8 @@ final class AuthLoginLoading extends AuthState {}
 final class AuthLoginSuccess extends AuthState {}
 
 final class AuthLoginError extends AuthState {
-  final Failure error;
-  AuthLoginError({required this.error});
+  final String error;
+  const AuthLoginError({required this.error});
 }
 
 final class AuthRegisterLoading extends AuthState {}
@@ -24,7 +24,7 @@ final class AuthRegisterSuccess extends AuthState {}
 
 final class AuthRegisterError extends AuthState {
   final Failure error;
-  AuthRegisterError({required this.error});
+  const AuthRegisterError({required this.error});
 }
 
 final class AuthSetupProfileLoading extends AuthState {}
