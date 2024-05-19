@@ -48,7 +48,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         id: '',
                         text: postCaption.text,
                         time: DateTime.now().toString(),
-                        likes: 0,
+                        likes: [],
                         comments: 0,
                       ));
                 },
