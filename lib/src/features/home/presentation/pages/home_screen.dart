@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:dartz/dartz_unsafe.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:social_app/src/features/home/domain/entities/comment_entity.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
@@ -20,27 +24,33 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              // BlocProvider.of<HomeCubit>(context)
-              //     .getComments(postId: 'SVYir6lbUPuym1sj9x2Q');
-
-              // BlocProvider.of<HomeCubit>(context).addComment(
-              //   comment: CommentEntity(
-              //     replayTo: '',
-              //     comment: 'hello',
-              //     time: DateTime.now(),
-              //     writerImageUrl: 'https://i.pravatar.cc/300',
-              //     writerName: 'ahmed',
-              //     postId: 'SVYir6lbUPuym1sj9x2Q',
-              //   ),
-              // );
-
-              // BlocProvider.of<HomeCubit>(context).removeComment(
-              //     commentID: 'eULLkWs78HkWAo7XoxJE',
-              //     postId: 'SVYir6lbUPuym1sj9x2Q');
-
-              BlocProvider.of<HomeCubit>(context).likeOrDislikePost(
-                  postId: 'SVYir6lbUPuym1sj9x2Q', userId: 'hassan');
+            onPressed: () async {
+              // File file = File(path);
+              final ImagePicker picker = ImagePicker();
+// Pick an image.
+              final XFile? image = await picker
+                  .pickImage(
+                source: ImageSource.gallery,
+                // imageQuality: 50,
+              )
+                  .then((value) async {
+                print('*******************************************');
+                print(value!.path);
+                print('*******************************************');
+                final extension = value.path.split('/').last;
+                final task = FirebaseStorage.instance
+                    .ref()
+                    .child('tests/images/profiles/profile.$extension')
+                    .putFile(File(value.path));
+                final snapshot = await task.whenComplete(() => null);
+                final url = await snapshot.ref.getDownloadURL();
+                print(
+                    '*********************(IMAGE UPLOADED)**********************');
+                print(url);
+                print(
+                    '*********************(IMAGE UPLOADED)**********************');
+                return null;
+              });
             },
             child: const Icon(Icons.add),
           ),

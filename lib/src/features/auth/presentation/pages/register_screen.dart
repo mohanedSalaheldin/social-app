@@ -1,186 +1,105 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:social_app/src/core/utls/widgets/default_button.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:social_app/src/config/routes/routes_name.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:social_app/src/features/auth/presentation/widgets/register_steps_widgets.dart';
+import 'package:social_app/src/features/auth/presentation/widgets/auth_text_button.dart';
+import 'package:social_app/src/features/auth/presentation/widgets/register_form_widget.dart';
 
-class RegisterScreen extends StatelessWidget {
-  RegisterScreen({super.key});
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _repeatPasswordController = TextEditingController();
-  final _userNameController = TextEditingController();
-  final _emailFormKey = GlobalKey<FormState>();
-  final _passwordFormKey = GlobalKey<FormState>();
-  final _repeatPasswordFormKey = GlobalKey<FormState>();
-  final _userNameFormKey = GlobalKey<FormState>();
-  String? imagePath;
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      _showRegisterRulesDialog();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<GlobalKey<FormState>> keys = [
-      _emailFormKey,
-      _passwordFormKey,
-      // _repeatPasswordFormKey,
-      _userNameFormKey,
-      _userNameFormKey,
-    ];
-    final List<Widget> pages = [
-      RegisterPage(
-        icon: Icons.email_outlined,
-        title: 'Enter your email address',
-        controller: _emailController,
-        globalKey: _emailFormKey,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "can't be empty";
-          }
-          return null;
-        },
-      ),
-      RegisterPage(
-        icon: Icons.lock_outline_rounded,
-        title: 'Enter your password',
-        controller: _passwordController,
-        globalKey: _passwordFormKey,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "can't be empty";
-          }
-          return null;
-        },
-      ),
-      RegisterPage(
-        icon: Icons.person_outline_rounded,
-        title: 'Enter your user name',
-        controller: _userNameController,
-        globalKey: _userNameFormKey,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "can't be empty";
-          }
-          return null;
-        },
-      ),
-      const FilePickScreen()
-    ];
-
-    var pageController = PageController();
-    int currentPage = 0;
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: PageView.builder(
-                onPageChanged: (value) {
-                  currentPage = value;
-                },
-                physics: const NeverScrollableScrollPhysics(),
-                controller: pageController,
-                itemBuilder: (context, index) => pages[index],
-                itemCount: 4,
-              ),
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthRegisterSuccess) {
+          Navigator.pushReplacementNamed(context, RoutesName.layout);
+        }
+        if (state is AuthRegisterError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.redAccent,
+              content: Text(state.error.toString(),
+                  style: const TextStyle(color: Colors.white)),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SmoothPageIndicator(
-                  controller: pageController,
-                  count: 4,
-                  effect: const ExpandingDotsEffect(),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const RegisterFormWidget(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Have an account?',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(fontSize: 17.0)),
+                              DefaultTextButton(
+                                txt: 'Login',
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, RoutesName.login);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                FloatingActionButton(
-                  onPressed: () {
-                    if (currentPage == 3) {
-                      context.read<AuthCubit>().register(
-                            email: _emailController.text.toLowerCase().trim(),
-                            password:
-                                _passwordController.text.toLowerCase().trim(),
-                            userName:
-                                _userNameController.text.toLowerCase().trim(),
-                            imagePath: context.read<AuthCubit>().profileImage,
-                          );
-                     
-                      Navigator.pop(context);
-                    } else if (currentPage == 2) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      if (keys[currentPage].currentState!.validate()) {
-                        pageController.nextPage(
-                          duration: const Duration(milliseconds: 750),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                        );
-                      }
-                    } else {
-                      // print()
-                      // FocusManager.instance.primaryFocus?.unfocus();
-                      if (keys[currentPage].currentState!.validate()) {
-                        pageController.nextPage(
-                          duration: const Duration(milliseconds: 750),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                        );
-                      }
-                    }
-                  },
-                  child: const Icon(Icons.arrow_forward_sharp),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
-}
-
-class FilePickScreen extends StatefulWidget {
-  const FilePickScreen({super.key});
-
-  @override
-  State<FilePickScreen> createState() => _FilePickScreenState();
-}
-
-class _FilePickScreenState extends State<FilePickScreen> {
-  // var profileImage;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        CircleAvatar(
-          minRadius: 120,
-          backgroundImage:
-              const AssetImage('assets/images/default-profile.jpg'),
-          foregroundImage: context.read<AuthCubit>().profileImage == null
-              ? null
-              : FileImage(context.read<AuthCubit>().profileImage!),
-        ),
-        DefaultButton(
-            txt: 'Pick File',
-            onPressed: () async {
-              final ImagePicker picker = ImagePicker();
-// Pick an image.
-              final XFile? image = await picker.pickImage(
-                source: ImageSource.gallery,
-                imageQuality: 50,
-              );
-
-              if (image != null) {
-                setState(() {
-                  context.read<AuthCubit>().profileImage = File(image.path);
-                });
-              }
-            }),
-      ],
+// Momo123123@g.com
+  Future<void> _showRegisterRulesDialog() async {
+    QuickAlert.show(
+      backgroundColor: HexColor('#191b1c'),
+      titleColor: HexColor('ffc947'),
+      textColor: Colors.white,
+      confirmBtnColor: HexColor('ffc947'),
+      confirmBtnTextStyle: const TextStyle(
+          fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black),
+      confirmBtnText: 'I understand',
+      context: context,
+      type: QuickAlertType.info,
+      textAlignment: TextAlign.start,
+      text:
+          'Registeration Quick Rules: \n1. Ensure you add your profile image \n2.Password should be: \n \t - 8 characters long \n \t - 1 digit \n \t - 1 lowercase \n \t - 1 uppercase \n \t - 1 special character',
     );
   }
 }

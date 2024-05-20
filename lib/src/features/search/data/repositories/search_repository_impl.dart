@@ -21,8 +21,8 @@ class SearchRepositoryImpl implements SearchRepository {
         List<UserInfoModel> users =
             await searchRemoteDataSource.searchForUser(keyword: keyword);
         return Right(users);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());

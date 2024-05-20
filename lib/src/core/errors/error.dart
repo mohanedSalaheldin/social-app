@@ -9,7 +9,9 @@ class OfflineFailure extends Failure {
 }
 
 class ServerFailure extends Failure {
-  final String error = 'uknown problem with the server';
+  final String error;
+
+  ServerFailure({required this.error});
 
   @override
   List<Object?> get props => [];

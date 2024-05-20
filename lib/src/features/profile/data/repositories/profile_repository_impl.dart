@@ -26,8 +26,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         await profileRemoteDatasource.deletePost(
             postId: postId, userId: userId);
         return const Right(unit);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -42,8 +42,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         Stream<List<PostModel>> posts =
             profileRemoteDatasource.getPosts(userId: userId);
         return Right(posts);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -58,8 +58,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         UserInfoModel userInfo =
             await profileRemoteDatasource.getProfileInfo(userId: userId);
         return Right(userInfo);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -85,10 +85,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         await profileRemoteDatasource.updateProfile(
             userId: userId, model: userInfo, oldImageUrl: oldImageUrl);
         return const Right(unit);
-      } on ServerExecption {
-        return Left(ServerFailure());
-      } on Exception {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());

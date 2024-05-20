@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,13 +14,12 @@ import 'package:social_app/src/features/auth/domain/usecases/register_usecase.da
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  File? profileImage;
   Stream<User?> auto = const Stream.empty();
   AuthCubit(super.initialState) {
     auto = AuthRemoteDataSourceImpl().auto();
   }
 
-  AuthCubit get(context) => BlocProvider.of(context);
+  static AuthCubit get(context) => BlocProvider.of(context);
 
   User? getUser() {
     return GetUserUseCase(
@@ -45,7 +42,11 @@ class AuthCubit extends Cubit<AuthState> {
       ),
     ).call(email: email, password: password);
     response.fold((Failure failure) {
-      emit(AuthLoginError(error: failure));
+      if (failure is ServerFailure) {
+        emit(AuthLoginError(error: failure.error));
+      } else if (failure is OfflineFailure) {
+        emit(AuthLoginError(error: failure.error));
+      }
     }, (Unit unit) {
       emit(AuthLoginSuccess());
     });
@@ -60,10 +61,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> register(
-      {required email,
-      required password,
-      required userName,
-      required imagePath}) async {
+      {required String email,
+      required String password,
+      required String userName,
+      required String imagePath}) async {
     emit(AuthRegisterLoading());
     var response = await RegisterUseCase(
       repository: AuthRepositoryImpl(
@@ -74,8 +75,10 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
         userName: userName,
-        prfileImagePath: profileImage);
+        prfileImagePath: imagePath);
     response.fold((Failure failure) {
+      print(failure.toString());
+
       emit(AuthRegisterError(error: failure));
     }, (Unit unit) {
       emit(AuthRegisterSuccess());
