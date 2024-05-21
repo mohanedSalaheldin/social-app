@@ -83,6 +83,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
         model = UserInfoModel(
             userId: model.userId,
             userName: model.userName,
+            fcmToken: model.fcmToken,
             email: model.email,
             profileImageURL: url,
             address: model.address,

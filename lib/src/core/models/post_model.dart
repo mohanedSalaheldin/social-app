@@ -13,14 +13,15 @@ class PostModel extends PostEntity {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-        userProfileImage: '',
-        writtenBy: 'json[]',
-        imageUrl: json['imageUrl'],
-        id: json['id'],
-        text: json['text'],
-        time: json['time'],
-        likes: json['likes'],
-        comments: json['comments']);
+      userProfileImage: '',
+      writtenBy: 'json[]',
+      imageUrl: json['imageUrl'],
+      id: json['id'],
+      text: json['text'],
+      time: json['time'],
+      likes: List<String>.from(json['likes']),
+      comments: json['comments'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -29,8 +30,10 @@ class PostModel extends PostEntity {
       'id': id,
       'text': text,
       'time': time,
-      'likes': likes,
+      'likes': likes.toString(),
       'comments': comments,
+      'writtenBy': writtenBy,
+      'userProfileImage': userProfileImage
     };
   }
 

@@ -28,6 +28,7 @@ class SearchCubit extends Cubit<SearchState> {
         emit(SearchForUserErrorState());
       },
       (searchResults) {
+        print('${searchResults.length}');
         _searchResultUsers = [];
         _searchResultUsers = searchResults;
         emit(SearchForUserSuccessState());

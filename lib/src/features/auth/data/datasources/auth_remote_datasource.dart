@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -80,6 +81,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       required String userId,
       required String email,
       required String profileImageURL}) async {
+    String token = await FirebaseMessaging.instance.getToken() ?? '';
     await _store.collection('users').doc(userId).set(
       {
         'userId': userId,
@@ -89,6 +91,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'address': ' ',
         'followers': 0,
         'following': 0,
+        'fcmToken': '',
         'bio': '',
       },
     ).then((value) {
@@ -115,15 +118,3 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return url;
   }
 }
-/**
- {
-      'userId': userId,
-      'userName': userName,
-      'email': email,
-      'profileImageURL': profileImageURL,
-      'address': address,
-      'followers': followers,
-      'following': following,
-      'bio': bio,
-    }
- */

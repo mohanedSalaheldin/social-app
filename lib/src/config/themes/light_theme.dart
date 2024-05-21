@@ -1,3 +1,5 @@
+import 'package:social_app/src/core/utls/constants/constants.dart';
+
 import 'theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,18 +40,21 @@ ThemeData getLightTheme() => ThemeData(
       // // *******( End TabBarTheme )******
 
       // *******( Start AppBarTheme )******
-      appBarTheme: const AppBarTheme(
-        iconTheme: IconThemeData(
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        backgroundColor: HexColor('#191b1c'),
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
         elevation: 0.0,
-        titleTextStyle: TextStyle(
-          fontSize: 28,
-          color: Colors.black,
-          fontWeight: FontWeight.w800,
+        titleTextStyle: const TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'poppins',
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.black,
+          statusBarColor: HexColor('#191b1c'),
           statusBarIconBrightness: Brightness.light,
         ),
       ),
@@ -127,15 +132,17 @@ ThemeData getLightTheme() => ThemeData(
 
       // *******( Start bottomNavigationBarTheme )*******
 
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        elevation: 0.0,
+        backgroundColor: HexColor('#191b1c'),
         unselectedItemColor: Colors.grey,
-        selectedItemColor: Colors.black,
+        selectedItemColor: mainColor,
         showUnselectedLabels: false,
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),

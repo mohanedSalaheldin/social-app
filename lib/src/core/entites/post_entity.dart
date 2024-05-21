@@ -5,7 +5,7 @@ class PostEntity {
   final String text;
   final String writtenBy;
   final String time;
-  final int likes;
+  final List<String> likes;
   final int comments;
 
   PostEntity({

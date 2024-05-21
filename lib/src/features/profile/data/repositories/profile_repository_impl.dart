@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
-import 'package:social_app/src/core/errors/execptions.dart';
 import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/core/models/user_info_model.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
@@ -59,6 +57,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
             await profileRemoteDatasource.getProfileInfo(userId: userId);
         return Right(userInfo);
       } catch (e) {
+        print(e.toString());
         return Left(ServerFailure(error: e.toString()));
       }
     } else {
@@ -75,6 +74,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       try {
         UserInfoModel userInfo = UserInfoModel(
             userId: model.userId,
+            fcmToken: model.fcmToken,
             userName: model.userName,
             email: model.email,
             profileImageURL: model.profileImageURL,

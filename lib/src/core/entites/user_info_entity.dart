@@ -1,5 +1,6 @@
 class UserInfoEntity {
   final String userId;
+  final String fcmToken;
   final String userName;
   final String email;
   final String profileImageURL;
@@ -10,6 +11,7 @@ class UserInfoEntity {
 
   UserInfoEntity(
       {required this.userId,
+      required this.fcmToken,
       required this.userName,
       required this.email,
       required this.profileImageURL,

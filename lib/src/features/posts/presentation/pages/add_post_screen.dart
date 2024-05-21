@@ -1,14 +1,21 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
+import 'package:social_app/src/core/entites/user_info_entity.dart';
+import 'package:social_app/src/core/models/user_info_model.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/methods/screen_sizes.dart';
 import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
+import 'package:social_app/src/features/home/presentation/pages/cubit/layout_cubit_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
+import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -24,33 +31,31 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<PostsCubit, PostsState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is PostsAddPostSuccessState) {
+          context.read<LayoutCubit>().setCurrentScreen(0);
+        }
       },
       builder: (context, state) {
+        UserInfoEntity userInfo = context.read<ProfileCubit>().userInfo;
         return Scaffold(
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-
-          //   },
-          //   child: const Icon(Icons.add),
-          // ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              print('--------------------------------');
+              print(await FirebaseMessaging.instance.getToken());
+              print('--------------------------------');
+            },
+            child: const Icon(Icons.add),
+          ),
           appBar: AppBar(
+            title: const Text('Add Post'),
             actions: [
               MyCustomizedElevatedButton(
                 onPressed: () {
                   PostsCubit.get(context).addPost(
-                      userID: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
-                      postEntity: PostEntity(
-                        writtenBy: 'Ayman Ahmed',
-                        imageUrl: imagePath == '' ? null : imagePath,
-                        userProfileImage:
-                            'https://www.nme.com/wp-content/uploads/2021/08/Zool-Redimensioned-Cover-Art.jpg',
-                        id: '',
-                        text: postCaption.text,
-                        time: DateTime.now().toString(),
-                        likes: 0,
-                        comments: 0,
-                      ));
+                    userInfo: userInfo,
+                    imagePath: imagePath,
+                    postCaption: postCaption.text,
+                  );
                 },
                 text: 'Post',
               ),
@@ -65,62 +70,54 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     (state is PostsAddPostLoadingState)
-                        ? const LinearProgressIndicator()
+                        ? LinearProgressIndicator(
+                            color: mainColor,
+                          )
                         : const SizedBox(),
-                    TextFormField(
-                      controller: postCaption,
-                      validator: (value) {
-                        if (value!.isEmpty || value == '') {
-                          return 'Tell about your post';
-                        }
-                        return null;
-                      },
-                      minLines: 4,
-                      maxLines: 6,
-                      // expands: true,
-                      decoration: const InputDecoration(
-                        // hintMaxLines: 3,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        hintText: 'What\'s on your mind?',
-                      ),
-                      onFieldSubmitted: (value) {},
+                    CaptionAreaWidget(
+                      postCaption: postCaption,
                     ),
                     const Gap(20),
-                    ElevatedButton(
-                        onPressed: () async {
-                          final ImagePicker picker = ImagePicker();
-                          final XFile? image = await picker.pickImage(
-                              source: ImageSource.gallery, imageQuality: 50);
-                          if (image != null) {
-                            setState(() {
-                              imagePath = image.path;
-                            });
-                          }
-                        },
-                        child: const Icon(Icons.image)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Add Image',
+                          style: TextStyle(
+                            // color: mainColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              final XFile? image = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  imageQuality: 50);
+                              if (image != null) {
+                                setState(() {
+                                  imagePath = image.path;
+                                });
+                              }
+                            },
+                            child: Icon(
+                              Icons.image,
+                              color: mainColor,
+                            )),
+                      ],
+                    ),
                     const Gap(20),
                     Container(
                       height: ScreenSizes.width(context) * .9,
                       width: double.infinity,
                       decoration: BoxDecoration(
+                        // color: Colors.white,
                         border: Border.all(width: 1, color: Colors.black),
                         image: DecorationImage(
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           image: imagePath != ''
                               ? Image.file(File(imagePath)).image
-                              : const NetworkImage(
-                                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3gpZSb_Y8zMJevdd9E2ZxI4doS3D4BMsus5ltKAyKydLH-zxnGIQQ3Dx7sNWcnZvFea4',
-                                ),
+                              : const AssetImage('assets/images/gallery.png'),
                         ),
                       ),
                     ),
@@ -131,6 +128,53 @@ class _AddPostScreenState extends State<AddPostScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+class CaptionAreaWidget extends StatelessWidget {
+  const CaptionAreaWidget({
+    super.key,
+    required this.postCaption,
+  });
+
+  final TextEditingController postCaption;
+
+  final outlineInputBorder = const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+      borderRadius: BorderRadius.all(Radius.circular(10)));
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: postCaption,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 14.0,
+      ),
+      validator: (value) {
+        if (value!.isEmpty || value == '') {
+          return 'Tell about your post';
+        }
+        return null;
+      },
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
+      minLines: 3,
+      maxLines: 4,
+      // expands: true,
+      decoration: InputDecoration(
+        // hintMaxLines: 3,
+
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        enabledBorder: outlineInputBorder,
+        border: outlineInputBorder,
+        focusedBorder: outlineInputBorder,
+        hintText: 'What\'s on your mind?',
+      ),
+      onFieldSubmitted: (value) {},
     );
   }
 }

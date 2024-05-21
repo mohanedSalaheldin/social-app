@@ -9,7 +9,7 @@ class Routes {
     switch (settings.name) {
       case RoutesName.layout:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const HomeScreen());
+            builder: (BuildContext context) => const LayoutScreen());
       case RoutesName.login:
         return MaterialPageRoute(
             builder: (BuildContext context) => const LoginScreen());

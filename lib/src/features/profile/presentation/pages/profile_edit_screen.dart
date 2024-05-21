@@ -135,6 +135,7 @@ class _ProfileInfoEditScreenState extends State<ProfileInfoEditScreen> {
       model: UserInfoEntity(
         userName: _userNameController.text,
         address: _addressController.text,
+        fcmToken: userInfo.fcmToken,
         bio: _bioController.text,
         profileImageURL: imagePath == '' ? userInfo.profileImageURL : imagePath,
         userId: 'Lw6kL5VqyTWIgMxuAN9dNnAGRZz1',
