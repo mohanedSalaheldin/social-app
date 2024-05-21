@@ -20,8 +20,10 @@ class SearchRepositoryImpl implements SearchRepository {
       try {
         List<UserInfoModel> users =
             await searchRemoteDataSource.searchForUser(keyword: keyword);
+        print(users.length);
         return Right(users);
       } catch (e) {
+        print(e.toString());
         return Left(ServerFailure(error: e.toString()));
       }
     } else {

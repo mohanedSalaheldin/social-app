@@ -32,6 +32,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   UserInfoEntity _userInfo = UserInfoEntity(
     userName: '',
     email: '',
+    fcmToken: '',
     profileImageURL: '',
     userId: '',
     address: '',
@@ -96,8 +97,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             emit(ProfileGetPostsSuccessState());
           },
         );
-
-        
       },
     );
   }

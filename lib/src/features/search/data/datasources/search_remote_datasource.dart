@@ -7,35 +7,22 @@ abstract class SearchRemoteDataSource {
 
 class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
   final FirebaseFirestore firestoreStore = FirebaseFirestore.instance;
-
   @override
   Future<List<UserInfoModel>> searchForUser({required String keyword}) async {
     CollectionReference<Map<String, dynamic>> collectionReference =
         firestoreStore.collection('users');
 
-    var startSearch = keyword;
-    var endSearch = '$keyword\uf7ff';
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await collectionReference.get();
+    List<UserInfoModel> allUsers = querySnapshot.docs
+        .map((doc) => UserInfoModel.fromJson(doc.data()))
+        .toList();
 
-    Stream<List<UserInfoModel>> searchUsers = collectionReference
-        .where('userName', isGreaterThanOrEqualTo: startSearch)
-        .where('userName', isLessThanOrEqualTo: endSearch)
-        .snapshots()
-        .map((querySnapshot) {
-      List<UserInfoModel> users = [];
-      for (var doc in querySnapshot.docs) {
-        print(doc.data());
-        users.add(UserInfoModel.fromJson(doc.data()));
-      }
-      return users;
-    });
-    print('-----------------------');
-    searchUsers.first.then((value) {
-      for (var element in value) {
-        print(element.bio);
-      }
-    });
-    // print(searchUsers.first);
-    print('-----------------------');
-    return searchUsers.first;
+    String lowerCaseKeyword = keyword.toLowerCase();
+    List<UserInfoModel> filteredUsers = allUsers.where((user) {
+      return user.userName.toLowerCase().contains(lowerCaseKeyword);
+    }).toList();
+
+    return filteredUsers;
   }
 }

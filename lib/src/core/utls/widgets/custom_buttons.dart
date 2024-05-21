@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 
 class MyCustomizedElevatedButton extends StatelessWidget {
   const MyCustomizedElevatedButton({
@@ -16,7 +17,7 @@ class MyCustomizedElevatedButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(
-          HexColor('#7737ff'),
+          mainColor,
         ),
         padding: const MaterialStatePropertyAll(
           EdgeInsets.symmetric(
@@ -28,7 +29,7 @@ class MyCustomizedElevatedButton extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
     );
