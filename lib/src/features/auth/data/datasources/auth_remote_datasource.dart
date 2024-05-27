@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
     required String userName,
-    File? profileImagePath,
+    required String profileImagePath,
   });
 }
 
@@ -48,19 +49,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String password,
     required String userName,
-    File? profileImagePath,
+    required String profileImagePath,
   }) async {
-    var profileUrl;
+    print('profileImagePath: $profileImagePath');
+    String profileUrl;
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
-    if (profileImagePath != null) {
-      profileUrl = await _uploadProfileImage(
-          image: profileImagePath, userId: userCredential.user!.uid);
-    }
-    _saveUserDataInFireStore(
-        userCredential: userCredential,
-        userName: userName,
-        profileImageURL: profileUrl);
+    print('*********************(USER CREATED)**********************');
+    _uploadProfileImage(
+      image: File(profileImagePath),
+      userId: userCredential.user!.uid,
+    ).then((value) {
+      _saveUserDataInFireStore(
+          email: email,
+          userId: userCredential.user!.uid,
+          userName: userName,
+          profileImageURL: value);
+    });
 
     return Future.value(unit);
   }
@@ -70,52 +75,46 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return _auth.signOut();
   }
 
+// motese12@teat.com
   void _saveUserDataInFireStore(
-      {required UserCredential userCredential,
-      String? userName,
-      String? profileImageURL}) async {
-    await _store
-        .collection('users')
-        .doc(
-          userCredential.user!.uid,
-        )
-        .set(
+      {required String userName,
+      required String userId,
+      required String email,
+      required String profileImageURL}) async {
+    String token = await FirebaseMessaging.instance.getToken() ?? '';
+    await _store.collection('users').doc(userId).set(
       {
-        'userId': userCredential.user!.uid,
-        'userName': userName ?? userCredential.user!.displayName,
-        'email': userCredential.user!.email,
+        'userId': userId,
+        'userName': userName,
+        'email': email,
         'profileImageURL': profileImageURL,
         'address': ' ',
         'followers': 0,
         'following': 0,
+        'fcmToken': '',
         'bio': '',
       },
-    );
+    ).then((value) {
+      print('*********************(USER DATA UPLOADED)**********************');
+    });
   }
 
   @override
   Future<String> _uploadProfileImage(
       {required File image, required userId}) async {
     // File file = File(path);
-    final extension = image.path.split('/').last.split('.').last;
+    print('*******************************************');
+    print(image.path);
+    print('*******************************************');
+    final extension = image.path.split('/').last;
     final task = _bucket
         .ref()
         .child('$userId/images/profiles/profile.$extension')
         .putFile(image);
     final snapshot = await task.whenComplete(() => null);
     final url = await snapshot.ref.getDownloadURL();
+    print('*********************(IMAGE UPLOADED)**********************');
+
     return url;
   }
 }
-/**
- {
-      'userId': userId,
-      'userName': userName,
-      'email': email,
-      'profileImageURL': profileImageURL,
-      'address': address,
-      'followers': followers,
-      'following': following,
-      'bio': bio,
-    }
- */

@@ -14,6 +14,6 @@ abstract class AuthRepository {
     required String email,
     required String password,
     required String userName,
-    File? prfileImagePath,
+    required String prfileImagePath,
   });
 }

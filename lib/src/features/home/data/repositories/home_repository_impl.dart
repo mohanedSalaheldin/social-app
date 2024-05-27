@@ -26,7 +26,7 @@ class HomeRpositoryImpl implements HomeRepository {
         homeRemoteDataSource.addComment(comment: comment);
         return Future.value(const Right(unit));
       } catch (e) {
-        return Future.value(Left(ServerFailure()));
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Future.value(Left(OfflineFailure()));
@@ -42,7 +42,7 @@ class HomeRpositoryImpl implements HomeRepository {
             homeRemoteDataSource.getComments(postId: postId);
         return Right(comments);
       } catch (e) {
-        return Left(ServerFailure());
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -52,12 +52,14 @@ class HomeRpositoryImpl implements HomeRepository {
   @override
   Future<Either<Failure, Unit>> likeOrDisLikePost(
       {required String postId, required String userId}) async {
+    print("postId in repo: $postId");
+    print("userId in repo: $userId");
     if (await networkInfo.isConnected) {
       try {
         homeRemoteDataSource.likeOrDislikePost(postId: postId, userId: userId);
         return Future.value(const Right(unit));
       } catch (e) {
-        return Future.value(Left(ServerFailure()));
+        return Future.value(Left(ServerFailure(error: e.toString())));
       }
     } else {
       return Future.value(Left(OfflineFailure()));
@@ -73,7 +75,7 @@ class HomeRpositoryImpl implements HomeRepository {
             commentID: commentID, postId: postId);
         return Future.value(const Right(unit));
       } catch (e) {
-        return Future.value(Left(ServerFailure()));
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Future.value(Left(OfflineFailure()));

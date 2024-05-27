@@ -12,7 +12,7 @@ class RegisterUseCase {
     required String email,
     required String password,
     required String userName,
-    File? prfileImagePath,
+     prfileImagePath,
   }) {
     return repository.register(
         email: email,

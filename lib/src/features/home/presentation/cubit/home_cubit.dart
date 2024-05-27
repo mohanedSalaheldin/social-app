@@ -89,6 +89,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   void likeOrDislikePost(
       {required String postId, required String userId}) async {
+    print("postId cubit: $postId");
+    print("userId cubit: $userId");
     emit(HomeLikeOrDislikeLoadingState());
     Either<Failure, Unit> result =
         await likeOrDisLikePostUseCase.call(postId: postId, userId: userId);

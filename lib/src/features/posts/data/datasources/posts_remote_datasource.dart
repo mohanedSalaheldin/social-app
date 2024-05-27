@@ -16,11 +16,7 @@ class PostsRemoteDatasSourceImpl implements PostsRemoteDatasSource {
   @override
   Future<Unit> addPost(
       {required String userID, required PostModel postModel}) async {
-    final value = await firestore
-        .collection('users')
-        .doc(userID)
-        .collection('posts')
-        .add({});
+    final value = await firestore.collection('posts').add({});
     String imageURL = '';
     if (postModel.imageUrl != null) {
       imageURL = await _uploadProfileImage(
@@ -29,12 +25,7 @@ class PostsRemoteDatasSourceImpl implements PostsRemoteDatasSource {
     Map<String, dynamic> modifiedMap = postModel.toJson();
     modifiedMap['imageUrl'] = imageURL;
     modifiedMap['id'] = value.id;
-    firestore
-        .collection('users')
-        .doc(userID)
-        .collection('posts')
-        .doc(value.id)
-        .set(modifiedMap);
+    firestore.collection('posts').doc(value.id).set(modifiedMap);
 
     return Future.value(unit);
   }
