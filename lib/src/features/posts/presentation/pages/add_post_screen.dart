@@ -38,18 +38,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
       builder: (context, state) {
         UserInfoEntity userInfo = context.read<ProfileCubit>().userInfo;
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              print('--------------------------------');
-              print(await FirebaseMessaging.instance.getToken());
-              print('--------------------------------');
-            },
-            child: const Icon(Icons.add),
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () async {
+          //     print('--------------------------------');
+          //     print(await FirebaseMessaging.instance.getToken());
+          //     print('--------------------------------');
+          //   },
+          //   child: const Icon(Icons.add),
+          // ),
           appBar: AppBar(
             title: const Text('Add Post'),
             actions: [
-              MyCustomizedElevatedButton(
+              MyCustomizedElevatedButtonSmall(
                 onPressed: () {
                   PostsCubit.get(context).addPost(
                     userInfo: userInfo,

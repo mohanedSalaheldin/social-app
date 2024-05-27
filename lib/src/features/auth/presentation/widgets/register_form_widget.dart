@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/methods/methods.dart';
+import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
+import 'package:social_app/src/core/utls/widgets/default_form_field.dart';
 import 'package:social_app/src/features/auth/presentation/widgets/profile_image_with_picker_widget.dart';
 
 class RegisterFormWidget extends StatefulWidget {
@@ -46,7 +46,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
               ProfileImageWithPickerWidget(
                   profileImagePathController: profileImagePathController),
               const Gap(20.0),
-              AuthTextFormField(
+              DefaultTextFormField(
                 controller: usernameController,
                 iconData: Icons.person_2_outlined,
                 txt: 'username',
@@ -59,7 +59,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 },
               ),
               const Gap(20.0),
-              AuthTextFormField(
+              DefaultTextFormField(
                 controller: emailController,
                 iconData: Icons.alternate_email,
                 keyboard: TextInputType.emailAddress,
@@ -73,7 +73,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 },
               ),
               const Gap(20.0),
-              AuthTextFormField(
+              DefaultTextFormField(
                 controller: passwordController,
                 iconData: Icons.lock_outline_rounded,
                 txt: 'password',
@@ -87,7 +87,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 },
               ),
               const Gap(20.0),
-              AuthTextFormField(
+              DefaultTextFormField(
                 controller: passwordAgainController,
                 iconData: Icons.lock_outline_rounded,
                 txt: 'password again',
@@ -108,11 +108,11 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                   ? CircularProgressIndicator(
                       color: mainColor,
                     )
-                  : DefaultButton(
+                  : MyCustomizedElevatedButton(
+                      text: 'Register',
                       onPressed: () {
                         _onSignInButtonPressed(context);
                       },
-                      txt: 'sign in',
                     ),
             ],
           ),

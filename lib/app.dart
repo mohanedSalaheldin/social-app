@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
               ..getProfileInfo(
                 userId: userId,
               )
-              // ..getPosts(userId: userId),
+              ..getPosts(userId: userId),
           ),
           BlocProvider(create: (_) => di.sl<SearchCubit>()),
           BlocProvider(create: (_) => di.sl<PostsCubit>()),

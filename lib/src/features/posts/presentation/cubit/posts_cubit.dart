@@ -17,6 +17,7 @@ class PostsCubit extends Cubit<PostsState> {
       required String imagePath,
       required String postCaption}) {
     PostEntity postEntity = PostEntity(
+      writerId: userInfo.userId,
       writtenBy: userInfo.userName,
       imageUrl: imagePath == '' ? null : imagePath,
       userProfileImage: userInfo.profileImageURL,

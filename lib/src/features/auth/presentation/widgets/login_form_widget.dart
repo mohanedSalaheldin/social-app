@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:social_app/src/config/routes/routes_name.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/methods/methods.dart';
+import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:social_app/src/features/auth/presentation/widgets/auth_form_field.dart';
+import 'package:social_app/src/core/utls/widgets/default_form_field.dart';
 
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({
@@ -50,7 +51,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   image: AssetImage('assets/images/auth_illustration.png'),
                 ))),
             const Gap(20.0),
-            AuthTextFormField(
+            DefaultTextFormField(
                 controller: emailController,
                 iconData: Icons.alternate_email,
                 keyboard: TextInputType.emailAddress,
@@ -63,7 +64,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   }
                 }),
             const Gap(20.0),
-            AuthTextFormField(
+            DefaultTextFormField(
                 controller: passwordController,
                 iconData: Icons.lock_outline_rounded,
                 txt: 'password',
@@ -75,16 +76,17 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     return null;
                   }
                 }),
-            const Gap(20.0),
+            const Gap(30.0),
             state is AuthLoginLoading
                 ? CircularProgressIndicator(color: mainColor)
-                : DefaultButton(
+                : MyCustomizedElevatedButton(
+                    text: 'Login',
                     onPressed: () {
                       AuthCubit.get(context).login(
                           email: emailController.text.toLowerCase().trim(),
                           password: passwordController.text.trim());
                     },
-                    txt: 'sign in')
+                  ),
           ],
         );
       },

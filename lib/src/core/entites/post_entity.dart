@@ -4,6 +4,7 @@ class PostEntity {
   final String id;
   final String text;
   final String writtenBy;
+  final String writerId;
   final String time;
   final List<String> likes;
   final int comments;
@@ -15,6 +16,7 @@ class PostEntity {
     required this.id,
     required this.text,
     required this.time,
+    required this.writerId,
     required this.likes,
     required this.comments,
   });

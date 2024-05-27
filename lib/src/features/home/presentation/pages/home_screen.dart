@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
 import 'package:social_app/src/features/home/presentation/pages/cubit/layout_cubit_cubit.dart';
-import 'package:social_app/src/features/home/presentation/widgets/post_widget.dart';
+import 'package:social_app/src/features/posts/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
 class LayoutScreen extends StatelessWidget {
@@ -18,6 +18,7 @@ class LayoutScreen extends StatelessWidget {
       },
       builder: (context, state) {
         ProfileCubit profileCubit = context.read<ProfileCubit>();
+
         // profileCubit.getProfileInfo(
         //     userId: FirebaseAuth.instance.currentUser!.uid);
         return BlocProvider(
@@ -49,7 +50,7 @@ class LayoutScreen extends StatelessWidget {
                   type: BottomNavigationBarType.fixed,
                   elevation: 0.0,
                   // iconSize: 30.0,
-                  items: cubit.navigationBaritems,
+                  items: cubit.navigationBarItems,
                 ),
               );
             },
@@ -91,7 +92,9 @@ class HomeScreen extends StatelessWidget {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) => PostWidget(
-                          post: snapshot.data![index], onDeletePost: () {}),
+                          userId: FirebaseAuth.instance.currentUser!.uid,
+                          post: snapshot.data![index],
+                          onDeletePost: () {}),
                     );
                   }
                   return const CircularProgressIndicator();

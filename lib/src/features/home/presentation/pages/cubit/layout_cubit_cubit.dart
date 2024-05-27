@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
 import 'package:social_app/src/features/posts/presentation/pages/add_post_screen.dart';
@@ -29,8 +30,10 @@ class LayoutCubit extends Cubit<LayoutState> {
     following: 0,
     bio: '',
   );
+  String profileImageUrl = '';
   setUserInfoEntity(UserInfoEntity userInfoEntity) {
     _userInfoEntity = userInfoEntity;
+    profileImageUrl = userInfoEntity.profileImageURL;
     emit(LayoutCurrentUserInfoChangeState());
   }
 
@@ -41,30 +44,28 @@ class LayoutCubit extends Cubit<LayoutState> {
     emit(LayoutNavBarIndexChangeState());
   }
 
-  final List<BottomNavigationBarItem> _navigationBaritems = [
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home_outlined),
-      label: '',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.search),
-      label: '',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.add_circle_outline),
-      label: '',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.favorite_border_outlined),
-      label: '',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.person_outline),
-      label: '',
-    ),
-  ];
-
-  get navigationBaritems => _navigationBaritems;
+  List<BottomNavigationBarItem> get navigationBarItems => [
+        const BottomNavigationBarItem(
+          icon: Icon(Iconsax.home_14),
+          label: '',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Iconsax.search_normal),
+          label: '',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Iconsax.add_square),
+          label: '',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Iconsax.heart),
+          label: '',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Iconsax.user),
+          label: '',
+        ),
+      ];
 
   final List<Widget> _screens = const [
     HomeScreen(),

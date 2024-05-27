@@ -41,7 +41,7 @@ class HomeRpositoryImpl implements HomeRepository {
         Stream<List<CommentEntity>> comments =
             homeRemoteDataSource.getComments(postId: postId);
         return Right(comments);
-      }catch (e) {
+      } catch (e) {
         return Left(ServerFailure(error: e.toString()));
       }
     } else {
@@ -52,6 +52,8 @@ class HomeRpositoryImpl implements HomeRepository {
   @override
   Future<Either<Failure, Unit>> likeOrDisLikePost(
       {required String postId, required String userId}) async {
+    print("postId in repo: $postId");
+    print("userId in repo: $userId");
     if (await networkInfo.isConnected) {
       try {
         homeRemoteDataSource.likeOrDislikePost(postId: postId, userId: userId);

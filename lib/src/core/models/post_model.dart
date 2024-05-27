@@ -3,6 +3,7 @@ import 'package:social_app/src/core/entites/post_entity.dart';
 class PostModel extends PostEntity {
   PostModel(
       {required super.imageUrl,
+      required super.writerId,
       required super.id,
       required super.userProfileImage,
       required super.text,
@@ -13,8 +14,9 @@ class PostModel extends PostEntity {
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-      userProfileImage: '',
-      writtenBy: 'json[]',
+      writerId: json['writerId'],
+      userProfileImage: json['userProfileImage'],
+      writtenBy: json['writtenBy'],
       imageUrl: json['imageUrl'],
       id: json['id'],
       text: json['text'],
@@ -26,11 +28,12 @@ class PostModel extends PostEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      'writerId': writerId,
       'imageUrl': imageUrl,
       'id': id,
       'text': text,
       'time': time,
-      'likes': likes.toString(),
+      'likes': likes,
       'comments': comments,
       'writtenBy': writtenBy,
       'userProfileImage': userProfileImage
@@ -39,6 +42,7 @@ class PostModel extends PostEntity {
 
   factory PostModel.forEntity(PostEntity entity) {
     return PostModel(
+        writerId: entity.writerId,
         userProfileImage: entity.userProfileImage,
         writtenBy: entity.writtenBy,
         imageUrl: entity.imageUrl,
