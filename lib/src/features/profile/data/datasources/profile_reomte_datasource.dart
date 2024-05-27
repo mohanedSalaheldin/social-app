@@ -43,11 +43,15 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   }) {
     // List<PostModel> posts = [];
     CollectionReference<Map<String, dynamic>> collectionReference =
-        firestoreStore.collection('users').doc(userId).collection('posts');
+        firestoreStore.collection('posts');
     return collectionReference.snapshots().map((querySnapshot) {
       List<PostModel> posts = [];
       for (var doc in querySnapshot.docs) {
-        posts.add(PostModel.fromJson(doc.data()));
+        // print(doc.data());
+        if (doc.data()['writerId'] == userId) {
+          print(doc.data());
+          posts.add(PostModel.fromJson(doc.data()));
+        }
       }
       return posts;
     });

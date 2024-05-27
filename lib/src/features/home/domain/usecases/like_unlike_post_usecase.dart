@@ -7,6 +7,8 @@ class HomeLikeOrDisLikePostUseCase {
   HomeLikeOrDisLikePostUseCase({required this.repository});
   Future<Either<Failure, Unit>> call(
       {required String postId, required String userId}) {
-    return repository.likeOrDisLikePost(postId: postId, userId: postId);
+    print("postId on usease: $postId");
+    print("userId on usease: $userId");
+    return repository.likeOrDisLikePost(postId: postId, userId: userId);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class AuthTextFormField extends StatefulWidget {
+class DefaultTextFormField extends StatefulWidget {
   final String txt;
   final IconData iconData;
   final TextEditingController controller;
@@ -11,7 +11,7 @@ class AuthTextFormField extends StatefulWidget {
   final String? Function(String?) validator;
   final void Function()? onSuffexPressed;
 
-  const AuthTextFormField({
+  const DefaultTextFormField({
     super.key,
     required this.txt,
     required this.iconData,
@@ -23,10 +23,10 @@ class AuthTextFormField extends StatefulWidget {
   });
 
   @override
-  State<AuthTextFormField> createState() => _AuthTextFormFieldState();
+  State<DefaultTextFormField> createState() => _DefaultTextFormFieldState();
 }
 
-class _AuthTextFormFieldState extends State<AuthTextFormField> {
+class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
   bool isPasswordHidden = true;
   @override
   Widget build(BuildContext context) {
@@ -43,16 +43,13 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
             const Gap(10),
             Expanded(
               child: TextFormField(
-                
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       fontSize: 18,
                       color: Colors.white,
                     ),
                 validator: widget.validator,
-                
                 obscureText: isPasswordHidden && widget.isPassword!,
                 decoration: InputDecoration(
-                  
                   // contentPadding: const EdgeInsets.all(0),
                   border: const UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -66,7 +63,7 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
                       width: .5,
                     ),
                   ),
-                  
+
                   focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.white,

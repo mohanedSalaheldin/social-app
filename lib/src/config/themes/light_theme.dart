@@ -7,7 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 
 ThemeData getLightTheme() => ThemeData(
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: HexColor('#191b1c'),
+      scaffoldBackgroundColor: backgroundColor,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
@@ -42,10 +42,8 @@ ThemeData getLightTheme() => ThemeData(
       // *******( Start AppBarTheme )******
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        backgroundColor: HexColor('#191b1c'),
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
+        backgroundColor: backgroundColor,
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0.0,
         titleTextStyle: const TextStyle(
           fontSize: 20.0,
@@ -53,8 +51,11 @@ ThemeData getLightTheme() => ThemeData(
           fontWeight: FontWeight.w500,
           fontFamily: 'poppins',
         ),
+        actionsIconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: HexColor('#191b1c'),
+          statusBarColor: backgroundColor,
           statusBarIconBrightness: Brightness.light,
         ),
       ),
@@ -134,8 +135,8 @@ ThemeData getLightTheme() => ThemeData(
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         elevation: 0.0,
-        backgroundColor: HexColor('#191b1c'),
-        unselectedItemColor: Colors.grey,
+        backgroundColor: HexColor('#2e313b'),
+        unselectedItemColor: Colors.white,
         selectedItemColor: mainColor,
         showUnselectedLabels: false,
         selectedLabelStyle: const TextStyle(
