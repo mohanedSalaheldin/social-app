@@ -23,32 +23,14 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Stream<List<PostModel>> getPosts() {
     return _store
-        .collection('users')
-        .doc('Lw6kL5VqyTWIgMxuAN9dNnAGRZz1')
         .collection('posts')
         .withConverter(
           fromFirestore: (snapshot, options) =>
-              PostModel.fromJson(snapshot.data()!),
+              PostModel.fromJson(snapshot.data()!, snapshot.id),
           toFirestore: (value, options) => value.toJson(),
         )
         .snapshots()
         .map((event) => event.docs.map((e) => e.data()).toList());
-    //     .listen((event) {
-    //   for (var element in event.docs) {
-    //     print(element.data());
-    //   }
-    // });
-    // .snapshots().
-    // .map((snapShot) => snapShot.docs
-    //     .map((document) => PostModel.fromJson(document.data()))
-    //     .toList());
-    // return Stream.empty();
-// .withConverter<PostModel>(
-//           fromFirestore: (snapshot, options) =>
-//               PostModel.fromJson(snapshot.data()!),
-//           toFirestore: (value, options) => value.toJson(),
-//         )
-    // .map((event) => PostModel.fromJson(event.data()!));
   }
 
   @override
