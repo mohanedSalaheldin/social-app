@@ -4,6 +4,8 @@ import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
+import 'package:social_app/src/features/chat/presentation/cubet/chats_cubit.dart';
+import 'package:social_app/src/features/chat/presentation/pages/all_chats_page.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/pages/home_screen.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
@@ -36,14 +38,14 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(create: (_) => di.sl<SearchCubit>()),
           BlocProvider(create: (_) => di.sl<HomeCubit>()),
+          BlocProvider(create: (_) => di.sl<ChatsCubit>()),
         ],
         child: MaterialApp(
           title: 'Social ',
           debugShowCheckedModeBanner: false,
           theme: getLightTheme(),
-          home: const HomeScreen(),
+          home: const AllChatsPage(),
         )
-
 
         //     StreamBuilder(
         //   stream: AuthRemoteDataSourceImpl().auto(),

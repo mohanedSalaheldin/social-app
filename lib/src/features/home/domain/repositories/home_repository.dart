@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/core/models/post_model.dart';
-import 'package:social_app/src/features/home/data/models/comment_model.dart';
 import 'package:social_app/src/features/home/domain/entities/comment_entity.dart';
 
 abstract class HomeRepository {
