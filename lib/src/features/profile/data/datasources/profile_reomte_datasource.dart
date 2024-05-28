@@ -47,11 +47,10 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
     return collectionReference.snapshots().map((querySnapshot) {
       List<PostModel> posts = [];
       for (var doc in querySnapshot.docs) {
-
         // print(doc.data());
         if (doc.data()['writerId'] == userId) {
           print(doc.data());
-          posts.add(PostModel.fromJson(doc.data()));
+          posts.add(PostModel.fromJson(doc.data(), ''));
         }
       }
       return posts;

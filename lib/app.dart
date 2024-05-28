@@ -6,6 +6,7 @@ import 'package:social_app/src/config/routes/routes_name.dart';
 import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
+import 'package:social_app/src/features/chat/presentation/cubet/chats_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 
