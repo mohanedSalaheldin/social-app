@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
-import 'package:social_app/src/core/errors/execptions.dart';
 import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/core/models/user_info_model.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
@@ -26,8 +24,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         await profileRemoteDatasource.deletePost(
             postId: postId, userId: userId);
         return const Right(unit);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -42,8 +40,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         Stream<List<PostModel>> posts =
             profileRemoteDatasource.getPosts(userId: userId);
         return Right(posts);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -58,8 +56,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
         UserInfoModel userInfo =
             await profileRemoteDatasource.getProfileInfo(userId: userId);
         return Right(userInfo);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        print(e.toString());
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());
@@ -75,6 +74,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       try {
         UserInfoModel userInfo = UserInfoModel(
             userId: model.userId,
+            fcmToken: model.fcmToken,
             userName: model.userName,
             email: model.email,
             profileImageURL: model.profileImageURL,
@@ -85,10 +85,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
         await profileRemoteDatasource.updateProfile(
             userId: userId, model: userInfo, oldImageUrl: oldImageUrl);
         return const Right(unit);
-      } on ServerExecption {
-        return Left(ServerFailure());
-      } on Exception {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());

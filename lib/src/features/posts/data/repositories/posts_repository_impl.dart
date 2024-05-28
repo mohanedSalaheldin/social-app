@@ -22,8 +22,8 @@ class PostsRepositoryImpl implements PostsRepository {
         await postsRemoteDataSource.addPost(
             userID: userID, postModel: postModel);
         return const Right(unit);
-      } on ServerExecption {
-        return Left(ServerFailure());
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
       }
     } else {
       return Left(OfflineFailure());

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/search/presentation/cubit/search_cubit.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -26,6 +27,12 @@ class _SearchScreenState extends State<SearchScreen> {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         List<UserInfoEntity> users = SearchCubit.get(context).searchResultUsers;
+        print(users.length);
+        var outlineInputBorder = const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(30)));
         return Scaffold(
           // floatingActionButton: FloatingActionButton(
           //   onPressed: () {
@@ -46,6 +53,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 14.0),
                             controller: searchController,
                             validator: (value) {
                               if (value!.isEmpty || value == '') {
@@ -53,20 +62,15 @@ class _SearchScreenState extends State<SearchScreen> {
                               }
                               return null;
                             },
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30))),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30))),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30))),
+                              enabledBorder: outlineInputBorder,
+                              border: outlineInputBorder,
+                              focusedBorder: outlineInputBorder,
                               hintText: 'Search',
-                              prefixIcon: Icon(Icons.search),
+                              prefixIcon:
+                                  const Icon(Icons.search, color: Colors.white),
                             ),
                             onFieldSubmitted: (value) {
                               if (formKey.currentState!.validate()) {
@@ -116,19 +120,20 @@ class SearchResultWidget extends StatelessWidget {
         const Gap(10.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               user.userName,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20.0,
+                fontSize: 18.0,
               ),
             ),
             Text(
               user.bio,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15.0,
-                color: Colors.grey[700],
+                color: Colors.white70,
               ),
             ),
           ],
@@ -138,11 +143,17 @@ class SearchResultWidget extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.person_add_outlined),
+              icon: const Icon(
+                Icons.person_add_outlined,
+                color: Colors.blue,
+              ),
             ),
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.info_outline_rounded),
+              icon: const Icon(
+                Icons.info_outline_rounded,
+                color: Colors.blue,
+              ),
             ),
           ],
         )

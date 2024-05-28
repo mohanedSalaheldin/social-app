@@ -3,6 +3,7 @@ import 'package:social_app/src/core/entites/post_entity.dart';
 class PostModel extends PostEntity {
   PostModel(
       {required super.imageUrl,
+      required super.writerId,
       required super.id,
       required super.userProfileImage,
       required super.text,
@@ -13,29 +14,35 @@ class PostModel extends PostEntity {
 
   factory PostModel.fromJson(Map<String, dynamic> json, String id) {
     return PostModel(
-        userProfileImage: json['userProfileImage'],
-        writtenBy: json['writtenBy'],
-        imageUrl: json['imageUrl'],
-        id: id,
-        text: json['text'],
-        time: json['time'],
-        likes: json['likes'],
-        comments: json['comments']);
+      writerId: json['writerId'],
+      userProfileImage: json['userProfileImage'],
+      writtenBy: json['writtenBy'],
+      imageUrl: json['imageUrl'],
+      id: json['id'],
+      text: json['text'],
+      time: json['time'],
+      likes: List<String>.from(json['likes']),
+      comments: json['comments'],
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'writerId': writerId,
       'imageUrl': imageUrl,
       'id': id,
       'text': text,
       'time': time,
       'likes': likes,
       'comments': comments,
+      'writtenBy': writtenBy,
+      'userProfileImage': userProfileImage
     };
   }
 
   factory PostModel.forEntity(PostEntity entity) {
     return PostModel(
+        writerId: entity.writerId,
         userProfileImage: entity.userProfileImage,
         writtenBy: entity.writtenBy,
         imageUrl: entity.imageUrl,

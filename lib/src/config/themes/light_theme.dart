@@ -1,11 +1,13 @@
+import 'package:social_app/src/core/utls/constants/constants.dart';
+
 import 'theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 ThemeData getLightTheme() => ThemeData(
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: Colors.white,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: backgroundColor,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
@@ -38,18 +40,22 @@ ThemeData getLightTheme() => ThemeData(
       // // *******( End TabBarTheme )******
 
       // *******( Start AppBarTheme )******
-      appBarTheme: const AppBarTheme(
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        backgroundColor: backgroundColor,
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0.0,
-        titleTextStyle: TextStyle(
-          fontSize: 28,
-          color: Colors.black,
-          fontWeight: FontWeight.w800,
+        titleTextStyle: const TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'poppins',
+        ),
+        actionsIconTheme: const IconThemeData(
+          color: Colors.white,
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.black,
+          statusBarColor: backgroundColor,
           statusBarIconBrightness: Brightness.light,
         ),
       ),
@@ -57,6 +63,11 @@ ThemeData getLightTheme() => ThemeData(
 
       // *******( Start inputDecorationTheme )******
       inputDecorationTheme: const InputDecorationTheme(
+        errorStyle: TextStyle(
+          // color: Colors.red,
+          fontSize: 16.0,
+          // fontWeight: FontWeigh,
+        ),
         contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         prefixIconColor: Colors.black,
         labelStyle: TextStyle(
@@ -82,22 +93,22 @@ ThemeData getLightTheme() => ThemeData(
       primarySwatch: mainAppColorLight,
 
       // *******( Start TextTheme )*******
-      // textTheme: const TextTheme(
-      //   bodyLarge: TextStyle(
-      //     fontSize: 47,
-      //     fontWeight: FontWeight.bold,
-      //     color: Colors.black,
-      //   ),
-      //   bodySmall: TextStyle(
-      //     fontSize: 20,
-      //     color: Colors.black,
-      //   ),
-      //   displaySmall: TextStyle(
-      //     fontSize: 20,
-      //     fontWeight: FontWeight.bold,
-      //     color: Colors.white,
-      //   ),
-      // ),
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(
+          fontSize: 47,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),
+        displaySmall: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
       // *******( End TextTheme )*******
 
       // *******( Start filledButtonTheme )*******
@@ -122,15 +133,17 @@ ThemeData getLightTheme() => ThemeData(
 
       // *******( Start bottomNavigationBarTheme )*******
 
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Colors.black,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        elevation: 0.0,
+        backgroundColor: HexColor('#2e313b'),
+        unselectedItemColor: Colors.white,
+        selectedItemColor: mainColor,
         showUnselectedLabels: false,
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),

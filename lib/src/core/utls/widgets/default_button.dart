@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 
 class DefaultButton extends StatelessWidget {
   const DefaultButton({
@@ -8,12 +8,12 @@ class DefaultButton extends StatelessWidget {
     required this.txt,
     required this.onPressed,
     this.backgoungColor,
-    this.textColor = Colors.white,
-    this.width = 170,
+    this.textColor = Colors.black,
+    this.width,
   });
 
   final Color? textColor;
-  final double width;
+  final double? width;
   final String txt;
   final Color? backgoungColor;
   final void Function() onPressed;
@@ -26,7 +26,6 @@ class DefaultButton extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.antiAlias,
         height: 60,
-        width: double.infinity,
         decoration: BoxDecoration(
           color: backgoungColor,
           borderRadius: BorderRadius.circular(80),
@@ -34,8 +33,13 @@ class DefaultButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
+            padding:
+                const MaterialStatePropertyAll(EdgeInsetsDirectional.symmetric(
+              horizontal: 40.0,
+              vertical: 5,
+            )),
             backgroundColor: MaterialStatePropertyAll(
-              backgoungColor ?? HexColor('#7737ff'),
+              backgoungColor ?? mainColor,
             ),
           ),
           // height: 60,
@@ -44,7 +48,7 @@ class DefaultButton extends StatelessWidget {
             txt,
             style: TextStyle(
               height: 0.0,
-              fontSize: 20,
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: textColor,
             ),

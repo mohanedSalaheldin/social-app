@@ -26,12 +26,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.getPostsUseCase,
   }) : super(ProfileInitial());
   static ProfileCubit get(context) => BlocProvider.of(context);
-  List<PostEntity> _posts = [];
+  Stream<List<PostEntity>> _posts = const Stream.empty();
 
-  List<PostEntity> get posts => _posts;
+  Stream<List<PostEntity>> get posts => _posts;
   UserInfoEntity _userInfo = UserInfoEntity(
     userName: '',
     email: '',
+    fcmToken: '',
     profileImageURL: '',
     userId: '',
     address: '',
@@ -78,26 +79,18 @@ class ProfileCubit extends Cubit<ProfileState> {
   void getPosts({
     required String userId,
   }) async {
-    emit(ProfileGetPostsLoadingState());
+    // emit(ProfileGetPostsLoadingState());
     Either<Failure, Stream<List<PostEntity>>> result =
-        await getPostsUseCase.call(
-      userId: userId,
-    );
+        await getPostsUseCase.call(userId: userId);
     result.fold(
       (failure) {
         print('_-------------------(in cubit)-----------------------------');
-        emit(ProfileGetPostsErrorState());
+        // emit(ProfileGetPostsErrorState());
         print('_-------------------(in cubit)-----------------------------');
       },
       (posts) {
-        posts.listen(
-          (posts) {
-            _posts = posts;
-            emit(ProfileGetPostsSuccessState());
-          },
-        );
-
-        
+        _posts = posts;
+        emit(ProfileGetPostsSuccessState());
       },
     );
   }

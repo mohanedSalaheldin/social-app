@@ -66,6 +66,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   @override
   Future<Unit> likeOrDislikePost(
       {required String postId, required String userId}) {
+    print("postId: $postId");
+    print("userId: $userId");
     DocumentReference<Map<String, dynamic>> doc =
         _store.collection('posts').doc(postId);
     doc.get().then((value) {
