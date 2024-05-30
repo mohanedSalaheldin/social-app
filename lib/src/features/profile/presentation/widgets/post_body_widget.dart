@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -38,6 +37,7 @@ class ProfileWidget extends StatelessWidget {
           user = ProfileCubit.get(context).userInfo;
           ProfileCubit.get(context).getPosts(userId: user.userId);
           Stream<List<PostEntity>> posts = ProfileCubit.get(context).posts;
+
           return ListView(
             children: [
               Row(
@@ -112,24 +112,38 @@ class ProfileWidget extends StatelessWidget {
               StreamBuilder(
                 stream: posts,
                 builder: (context, snapshot) {
-                  return ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return PostWidget(
-                        userId: user.userId,
-                        post: snapshot.data![index],
-                        onDeletePost: () {
-                          ProfileCubit.get(context).deletePost(
-                            userId: user.userId.toString(),
-                            postId: snapshot.data![index].id.toString(),
-                          );
-                        },
-                      );
-                    },
-                    separatorBuilder: (context, index) => const Gap(20),
-                    itemCount: snapshot.data!.length,
-                  );
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: const [
+                        Center(child: CircularProgressIndicator()),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No posts yet'));
+                  } else {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return PostWidget(
+                          userEntity: user,
+                          post: snapshot.data![index],
+                          onDeletePost: () {
+                            ProfileCubit.get(context).deletePost(
+                              userId: user.userId.toString(),
+                              postId: snapshot.data![index].id.toString(),
+                            );
+                          },
+                        );
+                      },
+                      separatorBuilder: (context, index) => const Gap(20),
+                      itemCount: snapshot.data!.length,
+                    );
+                  }
                 },
               )
             ],

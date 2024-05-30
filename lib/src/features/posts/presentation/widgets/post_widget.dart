@@ -1,11 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
+import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
+import 'package:social_app/src/core/utls/methods/methods.dart';
 import 'package:social_app/src/core/utls/methods/screen_sizes.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/widgets/animated_like_button.dart';
 import 'package:social_app/src/features/posts/presentation/widgets/comment_sheet_widget.dart';
 
@@ -13,11 +16,11 @@ class PostWidget extends StatefulWidget {
   const PostWidget({
     super.key,
     required this.post,
-    required this.userId,
+    required this.userEntity,
     required this.onDeletePost,
   });
   final PostEntity post;
-  final String userId;
+  final UserInfoEntity userEntity;
   final Function onDeletePost;
 
   @override
@@ -59,15 +62,15 @@ class _PostWidgetState extends State<PostWidget>
   Widget build(BuildContext context) {
     // String uId = FirebaseAuth.instance.currentUser!.uid;
 
-    print('_------------- AUTH ----------------');
-    print(FirebaseAuth.instance.currentUser!.uid);
-    print(widget.userId);
-    print('_-------------- MODEL ---------------');
-    String dateTimeString = widget.post.time.toString();
-    DateTime dateTime = DateTime.parse(dateTimeString);
+    // print('_------------- AUTH ----------------');
+    // print(FirebaseAuth.instance.currentUser!.uid);
+    // print(widget.userId);
+    // print('_-------------- MODEL ---------------');
+
     bool isLikedPost = true;
-    isLikedPost = widget.post.likes.contains(widget.userId);
-    String formattedDate = DateFormat.yMd().add_jm().format(dateTime);
+    isLikedPost = widget.post.likes.contains(widget.userEntity.userId);
+    String formattedDate = formateDate(date: widget.post.time.toString());
+
     return Container(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -101,38 +104,40 @@ class _PostWidgetState extends State<PostWidget>
                 ],
               ),
               const Spacer(),
-              PopupMenuButton<int>(
-                color: backgroundColor,
-                icon: const Icon(Icons.more_vert, color: Colors.white),
-                onSelected: (item) {
-                  if (item == 0) {}
-                  if (item == 1) {
-                    widget.onDeletePost();
-                  }
-                },
-                position: PopupMenuPosition.under,
-                itemBuilder: (context) => const [
-                  PopupMenuItem<int>(
-                    value: 0,
-                    child: Text(
-                      'Update',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  PopupMenuItem<int>(
-                    value: 1,
-                    child: Text(
-                      'Delete',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              widget.userEntity.userId == widget.post.writerId
+                  ? PopupMenuButton<int>(
+                      color: backgroundColor,
+                      icon: const Icon(Icons.more_vert, color: Colors.white),
+                      onSelected: (item) {
+                        if (item == 0) {}
+                        if (item == 1) {
+                          widget.onDeletePost();
+                        }
+                      },
+                      position: PopupMenuPosition.under,
+                      itemBuilder: (context) => const [
+                        PopupMenuItem<int>(
+                          value: 0,
+                          child: Text(
+                            'Update',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        PopupMenuItem<int>(
+                          value: 1,
+                          child: Text(
+                            'Delete',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
           const Gap(10.0),
@@ -155,7 +160,7 @@ class _PostWidgetState extends State<PostWidget>
               Row(
                 children: [
                   AnimatedLikeButtonWidget(
-                    userId: widget.userId,
+                    userId: widget.userEntity.userId,
                     isLikedPost: isLikedPost,
                     postId: widget.post.id,
                   ),
@@ -165,7 +170,13 @@ class _PostWidgetState extends State<PostWidget>
                       showBottomSheet(
                           context: context,
                           builder: (context) {
-                            return const CommentBottomSheetWidget();
+                            context.read<PostsCubit>().getComments(
+                                  postId: widget.post.id.toString(),
+                                );
+                            return CommentBottomSheetWidget(
+                              postID: widget.post.id,
+                              userEntity: widget.userEntity,
+                            );
                           });
                     },
                     icon: const Icon(

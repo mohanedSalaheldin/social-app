@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
 import 'package:social_app/src/features/home/presentation/pages/cubit/layout_cubit_cubit.dart';
@@ -92,7 +93,7 @@ class HomeScreen extends StatelessWidget {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) => PostWidget(
-                          userId: FirebaseAuth.instance.currentUser!.uid,
+                          userEntity: LayoutCubit.get(context).userInfo,
                           post: snapshot.data![index],
                           onDeletePost: () {}),
                     );

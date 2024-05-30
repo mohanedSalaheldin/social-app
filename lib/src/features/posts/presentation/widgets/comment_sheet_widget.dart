@@ -1,75 +1,126 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:social_app/src/core/entites/user_info_entity.dart';
+import 'package:social_app/src/core/utls/methods/methods.dart';
 import 'package:social_app/src/core/utls/methods/screen_sizes.dart';
+import 'package:social_app/src/features/posts/domain/entities/comment_entity.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 
 class CommentBottomSheetWidget extends StatelessWidget {
-  const CommentBottomSheetWidget({
+  CommentBottomSheetWidget({
     super.key,
+    required this.postID,
+    required this.userEntity,
   });
-
+  final String postID;
+  final UserInfoEntity userEntity;
+  final outlineInputBorder = const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.white,
+      ),
+      borderRadius: BorderRadius.all(Radius.circular(30)));
+  final commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: ScreenSizes.height(context) * .75,
-      width: double.infinity,
-      padding: const EdgeInsets.all(20.0),
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 231, 236, 237),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
-        ),
-      ),
-      child: Column(
-        children: [
-          SizedBox(
-            width: ScreenSizes.width(context) * .1,
-            child: Divider(
-              color: Colors.grey[400],
-              thickness: 3.0,
+    return BlocBuilder<PostsCubit, PostsState>(
+      builder: (context, state) {
+        return Container(
+          height: ScreenSizes.height(context) * .75,
+          width: double.infinity,
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: HexColor('#21232a'),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
             ),
           ),
-          Expanded(
-            child: ListView.separated(
-              itemBuilder: (context, index) => const CommentEntryWidget(),
-              separatorBuilder: (context, index) => const Gap(10.0),
-              itemCount: 10,
-            ),
-          ),
-          // const Spacer(),
-          const Gap(10.0),
-          Row(
+          child: Column(
             children: [
-              Expanded(
-                child: TextFormField(
-                  minLines: 1,
-                  maxLines: 3,
-                  // expands: true,
-                  decoration: const InputDecoration(
-                    // hintMaxLines: 3,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    hintText: 'What\'s on your mind?',
-                  ),
-                  onFieldSubmitted: (value) {},
+              SizedBox(
+                width: ScreenSizes.width(context) * .1,
+                child: Divider(
+                  color: Colors.grey[400],
+                  thickness: 3.0,
                 ),
               ),
+              Expanded(
+                child: StreamBuilder<List<CommentEntity>>(
+                    stream: PostsCubit.get(context).commentList,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
+                      }
+                      return ListView.separated(
+                        itemBuilder: (context, index) => CommentEntryWidget(
+                          commentEntity: snapshot.data![index],
+                        ),
+                        separatorBuilder: (context, index) => const Gap(10.0),
+                        itemCount: snapshot.data!.length,
+                      );
+                    }),
+              ),
+              // const Spacer(),
               const Gap(10.0),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.send),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: commentController,
+                      minLines: 1,
+                      maxLines: 2,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 14.0),
+                      // expands: true,
+                      decoration: InputDecoration(
+                        // hintMaxLines: 3,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        enabledBorder: outlineInputBorder,
+                        border: outlineInputBorder,
+                        focusedBorder: outlineInputBorder,
+                        hintText: 'What\'s on your mind?',
+                      ),
+                      onFieldSubmitted: (value) {},
+                    ),
+                  ),
+                  const Gap(10.0),
+                  IconButton(
+                    onPressed: () {
+                      if (commentController.text.trim() != '') {
+                        PostsCubit.get(context).addComment(
+                          comment: CommentEntity(
+                            postId: postID,
+                            id: 'id',
+                            writerName: userEntity.userName.toString(),
+                            writerProfileImage:
+                                userEntity.profileImageURL.toString(),
+                            text: commentController.text,
+                            time: DateTime.now().toString(),
+                          ),
+                        );
+                        FocusScope.of(context).unfocus();
+                        commentController.clear();
+                      }
+                    },
+                    icon: const Icon(
+                      Iconsax.send_1,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -77,47 +128,50 @@ class CommentBottomSheetWidget extends StatelessWidget {
 class CommentEntryWidget extends StatelessWidget {
   const CommentEntryWidget({
     super.key,
+    required this.commentEntity,
   });
+  final CommentEntity commentEntity;
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = formateDate(date: commentEntity.time);
+
     return Row(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 20.0,
-          backgroundImage: NetworkImage(
-              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'), // NetworkImage
+          backgroundImage: NetworkImage(commentEntity.writerProfileImage),
         ),
         const Gap(10.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
                 Text(
-                  'username',
-                  style: TextStyle(
+                  commentEntity.writerName,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
                 ),
-                Gap(5.0),
+                const Gap(5.0),
                 Text(
-                  '5h',
-                  style: TextStyle(
+                  formattedDate,
+                  style: const TextStyle(
                     fontSize: 15.0,
-                    color: Colors.black,
+                    color: Colors.grey,
                   ),
                 ),
               ],
             ),
             SizedBox(
               width: ScreenSizes.width(context) * .7,
-              child: const Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                style: TextStyle(
+              child: Text(
+                commentEntity.text,
+                style: const TextStyle(
                   fontSize: 15.0,
-                  color: Colors.black,
+                  color: Colors.white,
                   overflow: TextOverflow.ellipsis,
                 ),
                 maxLines: 2,

@@ -2,16 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/widgets/default_form_field.dart';
 import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
-import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/home/presentation/pages/cubit/layout_cubit_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:social_app/injection_container.dart' as di;
 
 class ProfileInfoEditScreen extends StatefulWidget {
   const ProfileInfoEditScreen({super.key});

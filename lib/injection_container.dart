@@ -3,11 +3,11 @@ import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:social_app/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:social_app/src/features/home/domain/repositories/home_repository.dart';
-import 'package:social_app/src/features/home/domain/usecases/comment_post_usecase.dart';
-import 'package:social_app/src/features/home/domain/usecases/get_all_comment_usecase.dart';
+import 'package:social_app/src/features/posts/domain/usecases/comment_post_usecase.dart';
+import 'package:social_app/src/features/posts/domain/usecases/get_all_comment_usecase.dart';
 import 'package:social_app/src/features/home/domain/usecases/get_posts_usecase.dart';
-import 'package:social_app/src/features/home/domain/usecases/like_unlike_post_usecase.dart';
-import 'package:social_app/src/features/home/domain/usecases/remove_comment_usecase.dart';
+import 'package:social_app/src/features/posts/domain/usecases/like_unlike_post_usecase.dart';
+import 'package:social_app/src/features/posts/domain/usecases/remove_comment_usecase.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/posts/data/datasources/posts_remote_datasource.dart';
 import 'package:social_app/src/features/posts/data/repositories/posts_repository_impl.dart';
@@ -49,18 +49,22 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => PostsCubit(
+      addCommentUseCase: sl(),
+      removeCommentUseCase: sl(),
+      getAllCommentUseCase: sl(),
+      postsLikeOrDisLikePostUseCase: sl(),
       postsAddPostUsecase: sl(),
     ),
   );
 
   sl.registerFactory(
     () => HomeCubit(
-      removeCommentUseCase: sl(),
-      addCommentUseCase: sl(),
+      // removeCommentUseCase: sl(),
+      // addCommentUseCase: sl(),
       getPostsUseCase: sl(),
-      likeOrDisLikePostUseCase: sl(),
+      // likeOrDisLikePostUseCase: sl(),
       // likePostsUseCase: sl(),
-      getAllCommentUseCase: sl(),
+      // getAllCommentUseCase: sl(),
     ),
   );
 
@@ -103,14 +107,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
   // -------------------------------(home)----------------------------------
   sl.registerLazySingleton(() => GetPostsUseCase(repository: sl()));
-  sl.registerLazySingleton(
-      () => HomeLikeOrDisLikePostUseCase(repository: sl()));
-  sl.registerLazySingleton(() => HomeAddCommentUseCase(repository: sl()));
-  sl.registerLazySingleton(() => HomeGetAllCommentUseCase(repository: sl()));
-  sl.registerLazySingleton(() => HomeRemoveCommentUseCase(repository: sl()));
 
   // -------------------------------(Posts)--------------------------------
   sl.registerLazySingleton(() => PostsAddPostUsecase(repository: sl()));
+  sl.registerLazySingleton(
+      () => PostsLikeOrDisLikePostUseCase(repository: sl()));
+  sl.registerLazySingleton(() => PostsAddCommentUseCase(repository: sl()));
+  sl.registerLazySingleton(() => PostsGetAllCommentUseCase(repository: sl()));
+  sl.registerLazySingleton(() => PostsRemoveCommentUseCase(repository: sl()));
 
 /* --------------------Core-------------------- */
   // -------------------------------(Profile)--------------------------------
