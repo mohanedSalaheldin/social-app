@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
+    // String? userId = FirebaseAuth.instance.currentUser!.uid;
     return MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -25,13 +25,7 @@ class MyApp extends StatelessWidget {
               AuthInitial(),
             ),
           ),
-          BlocProvider(
-            create: (_) => di.sl<ProfileCubit>()
-              ..getProfileInfo(
-                userId: userId,
-              )
-              ..getPosts(userId: userId),
-          ),
+          BlocProvider(create: (_) => di.sl<ProfileCubit>()),
           BlocProvider(create: (_) => di.sl<SearchCubit>()),
           BlocProvider(create: (_) => di.sl<PostsCubit>()),
           BlocProvider(create: (_) => di.sl<HomeCubit>()),

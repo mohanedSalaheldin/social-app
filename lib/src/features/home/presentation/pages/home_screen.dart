@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
@@ -13,6 +14,9 @@ class LayoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // String? userId = FirebaseAuth.instance.currentUser!.uid;
+    // context.read<HomeCubit>().getPosts();
+    // context.read<HomeCubit>()
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -69,6 +73,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProfileCubit.get(context)
+        .getProfileInfo(userId: FirebaseAuth.instance.currentUser!.uid);
+    UserInfoEntity user = ProfileCubit.get(context).userInfo;
     return Scaffold(
       appBar: AppBar(
           // title: const Text('Home'),
@@ -86,14 +93,28 @@ class HomeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: StreamBuilder(
+              
                 stream: BlocProvider.of<HomeCubit>(context).getPosts(),
                 builder: (context, snapshot) {
-                  print(snapshot.error);
+                  // print(snapshot.error);
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: const [
+                        Center(child: CircularProgressIndicator()),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No posts yet'));
+                  }
                   if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) => PostWidget(
-                          userEntity: LayoutCubit.get(context).userInfo,
+                          userEntity: user,
                           post: snapshot.data![index],
                           onDeletePost: () {}),
                     );

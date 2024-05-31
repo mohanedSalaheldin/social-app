@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -13,6 +14,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String uId = FirebaseAuth.instance.currentUser!.uid;
+    context.read<ProfileCubit>().getProfileInfo(userId: uId);
+    context.read<ProfileCubit>().getPosts(userId: uId);
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -37,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context) {
     return AppBar(
       actions: [
         PopupMenuButton<int>(

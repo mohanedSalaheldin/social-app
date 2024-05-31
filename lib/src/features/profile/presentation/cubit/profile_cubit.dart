@@ -79,14 +79,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   void getPosts({
     required String userId,
   }) async {
-    // emit(ProfileGetPostsLoadingState());
     Either<Failure, Stream<List<PostEntity>>> result =
         await getPostsUseCase.call(userId: userId);
     result.fold(
       (failure) {
-        print('_-------------------(in cubit)-----------------------------');
-        // emit(ProfileGetPostsErrorState());
-        print('_-------------------(in cubit)-----------------------------');
+      
       },
       (posts) {
         _posts = posts;
