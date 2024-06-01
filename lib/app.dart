@@ -5,6 +5,8 @@ import 'package:social_app/src/config/routes/routes.dart';
 import 'package:social_app/src/config/routes/routes_name.dart';
 import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:social_app/src/features/auth/presentation/pages/login_screen.dart';
+import 'package:social_app/src/features/chat/presentation/cubet/chats_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.sl<SearchCubit>()),
           BlocProvider(create: (_) => di.sl<PostsCubit>()),
           BlocProvider(create: (_) => di.sl<HomeCubit>()),
+          BlocProvider(create: (_) => di.sl<ChatsCubit>()),
         ],
         child: MaterialApp(
           title: 'Social ',

@@ -1,5 +1,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
+import 'package:social_app/src/features/chat/data/datasoursec/chats_remote_datasource.dart';
+import 'package:social_app/src/features/chat/data/repositories/chat_repository_impl.dart';
+import 'package:social_app/src/features/chat/domain/repositories/chats_repositories.dart';
+import 'package:social_app/src/features/chat/domain/usecases/create_entry_usecase.dart';
+import 'package:social_app/src/features/chat/domain/usecases/get_entries_usecase.dart';
+import 'package:social_app/src/features/chat/domain/usecases/get_messages_usecase.dart';
+import 'package:social_app/src/features/chat/domain/usecases/send_message_usecase.dart';
+import 'package:social_app/src/features/chat/presentation/cubet/chats_cubit.dart';
 import 'package:social_app/src/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:social_app/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:social_app/src/features/home/domain/repositories/home_repository.dart';
@@ -68,6 +76,14 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerFactory(
+    () => ChatsCubit(
+      getChatEntriesUseCase: sl(),
+      getMessagesUseCase: sl(),
+      sendMsgUseCase: sl(),
+    ),
+  );
+
   // Repository
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(
@@ -78,6 +94,12 @@ Future<void> init() async {
   sl.registerLazySingleton<SearchRepository>(
     () => SearchRepositoryImpl(
       searchRemoteDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+  sl.registerLazySingleton<ChatRepository>(
+    () => ChatsRepositoryImpl(
+      chatRemoteDatasource: sl(),
       networkInfo: sl(),
     ),
   );
@@ -98,6 +120,11 @@ Future<void> init() async {
   );
 
   // UseCases
+  // -------------------------------(chats)----------------------------------
+  sl.registerLazySingleton(() => CreateEntryUseCase(chatRepository: sl()));
+  sl.registerLazySingleton(() => GetChatEntriesUseCase(chatRepository: sl()));
+  sl.registerLazySingleton(() => GetMessagesUseCase(chatRepository: sl()));
+  sl.registerLazySingleton(() => SendMsgUseCase(chatRepository: sl()));
   // -------------------------------(Profile)--------------------------------
   sl.registerLazySingleton(() => UpdateProfileUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProfileInfoUseCase(repository: sl()));
@@ -126,7 +153,9 @@ Future<void> init() async {
   // -------------------------------(home)-----------------------------------
   sl.registerLazySingleton<HomeRemoteDataSource>(
       () => HomeRemoteDataSourceImpl());
-
+// ---------------------------------(Chats)----------------------------------
+  sl.registerLazySingleton<ChatRemoteDatasource>(
+      () => ChatRemoteDatasourceImpl());
   // -------------------------------(Posts)--------------------------------
   sl.registerLazySingleton<PostsRemoteDatasSource>(
       () => PostsRemoteDatasSourceImpl());
