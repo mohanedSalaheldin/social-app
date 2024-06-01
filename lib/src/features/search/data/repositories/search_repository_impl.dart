@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
-import 'package:social_app/src/core/errors/execptions.dart';
 import 'package:social_app/src/core/models/user_info_model.dart';
 import 'package:social_app/src/core/utls/networks/network_info.dart';
 import 'package:social_app/src/features/search/data/datasources/search_remote_datasource.dart';

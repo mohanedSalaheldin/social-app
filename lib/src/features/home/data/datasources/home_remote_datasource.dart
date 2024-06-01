@@ -3,17 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/models/post_model.dart';
-import 'package:social_app/src/features/home/data/models/comment_model.dart';
-import 'package:social_app/src/features/home/domain/entities/comment_entity.dart';
+import 'package:social_app/src/features/posts/data/models/comment_model.dart';
 
 abstract class HomeRemoteDataSource {
   Stream<List<PostModel>> getPosts();
-  Future<Unit> likeOrDislikePost(
-      {required String postId, required String userId});
-  Future<Unit> addComment({required CommentEntity comment});
-  Future<Unit> removeComment(
-      {required String postId, required String commentID});
-  Stream<List<CommetModel>> getComments({required String postId});
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -26,74 +19,10 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         .collection('posts')
         .withConverter(
           fromFirestore: (snapshot, options) =>
-              PostModel.fromJson(snapshot.data()!, snapshot.id),
+              PostModel.fromJson(snapshot.data()!),
           toFirestore: (value, options) => value.toJson(),
         )
         .snapshots()
         .map((event) => event.docs.map((e) => e.data()).toList());
-  }
-
-  @override
-  Future<Unit> addComment({required CommentEntity comment}) {
-    CommetModel model = CommetModel(
-      comment: comment.comment,
-      writerName: comment.writerName,
-      writerImageUrl: comment.writerImageUrl,
-      time: DateTime.now(),
-      postId: comment.postId,
-      replayTo: comment.replayTo,
-    );
-    _store.collection('posts').doc(comment.postId).collection('comments').add(
-          model.toJson(),
-        );
-    return Future.value(unit);
-  }
-
-  @override
-  Stream<List<CommetModel>> getComments({required String postId}) {
-    return _store
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .snapshots()
-        .map(
-          (event) => event.docs
-              .map((doc) => CommetModel.fromJson(doc.data()))
-              .toList(),
-        );
-  }
-
-  @override
-  Future<Unit> likeOrDislikePost(
-      {required String postId, required String userId}) {
-    print("postId: $postId");
-    print("userId: $userId");
-    DocumentReference<Map<String, dynamic>> doc =
-        _store.collection('posts').doc(postId);
-    doc.get().then((value) {
-      if (value.data()!['likes'].contains(userId)) {
-        doc.update({
-          'likes': FieldValue.arrayRemove([userId])
-        });
-      } else {
-        doc.update({
-          'likes': FieldValue.arrayUnion([userId])
-        });
-      }
-    });
-
-    return Future.value(unit);
-  }
-
-  @override
-  Future<Unit> removeComment(
-      {required String postId, required String commentID}) {
-    _store
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .doc(commentID)
-        .delete();
-    return Future.value(unit);
   }
 }

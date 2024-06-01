@@ -1,17 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
-import 'package:social_app/src/core/entites/user_info_entity.dart';
-import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
-import 'package:social_app/src/features/posts/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/profile_edit_screen.dart';
-import 'package:social_app/injection_container.dart' as di;
 import 'package:social_app/src/features/profile/presentation/widgets/post_body_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -19,6 +14,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String uId = FirebaseAuth.instance.currentUser!.uid;
+    context.read<ProfileCubit>().getProfileInfo(userId: uId);
+    context.read<ProfileCubit>().getPosts(userId: uId);
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -43,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context) {
     return AppBar(
       actions: [
         PopupMenuButton<int>(

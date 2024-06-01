@@ -1,11 +1,7 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:social_app/src/core/entites/post_entity.dart';
-import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/execptions.dart';
 import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/core/models/user_info_model.dart';

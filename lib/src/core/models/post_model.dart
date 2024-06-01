@@ -12,7 +12,7 @@ class PostModel extends PostEntity {
       required super.comments,
       required super.writtenBy});
 
-  factory PostModel.fromJson(Map<String, dynamic> json, String id) {
+  factory PostModel.fromJson(Map<String, dynamic> json,) {
     return PostModel(
       writerId: json['writerId'],
       userProfileImage: json['userProfileImage'],

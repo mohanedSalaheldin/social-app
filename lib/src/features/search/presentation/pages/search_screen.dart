@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
-import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/search/presentation/cubit/search_cubit.dart';
 
 class SearchScreen extends StatefulWidget {

@@ -21,7 +21,15 @@ class ProfileUpdateInfoLoadingState extends ProfileState {}
 
 class ProfileUpdateInfoErrorState extends ProfileState {}
 
-class ProfileGetPostsSuccessState extends ProfileState {}
+class ProfileGetPostsSuccessState extends ProfileState {
+
+  // final List<PostEntity> posts;
+
+  // const ProfileGetPostsSuccessState(this.posts);
+
+  // @override
+  // List<Object> get props => [posts];
+}
 
 class ProfileGetPostsLoadingState extends ProfileState {}
 

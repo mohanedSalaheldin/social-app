@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 
 class AnimatedLikeButtonWidget extends StatefulWidget {
   const AnimatedLikeButtonWidget({
@@ -18,40 +18,50 @@ class AnimatedLikeButtonWidget extends StatefulWidget {
   final String userId;
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AnimatedLikeButtonWidgetState createState() =>
+  State<AnimatedLikeButtonWidget> createState() =>
       _AnimatedLikeButtonWidgetState();
 }
 
 class _AnimatedLikeButtonWidgetState extends State<AnimatedLikeButtonWidget> {
   bool isLiked = true;
 
+  // bool isFa = true;
   @override
   Widget build(BuildContext context) {
     isLiked = widget.isLikedPost;
-    return BlocBuilder<HomeCubit, HomeState>(
-      builder: (context, state) {
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return ScaleTransition(scale: animation, child: child);
-          },
-          child: IconButton(
-            key: ValueKey<bool>(isLiked),
-            icon: Icon(
-              isLiked ? Iconsax.heart5 : Iconsax.heart,
-              color: isLiked ? Colors.red : Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                isLiked = !isLiked;
-                HomeCubit.get(context).likeOrDislikePost(
-                    postId: widget.postId, userId: widget.userId);
-              });
-            },
-          ),
-        );
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return ScaleTransition(scale: animation, child: child);
       },
+      child: IconButton(
+        key: ValueKey<bool>(isLiked),
+        icon: Icon(
+          isLiked ? Iconsax.heart5 : Iconsax.heart,
+          color: isLiked ? Colors.red : Colors.white,
+        ),
+        onPressed: () {
+          setState(() {
+            isLiked = !isLiked;
+            context.read<PostsCubit>().likeOrDislikePost(
+                postId: widget.postId, userId: widget.userId);
+          });
+        },
+      ),
     );
+  }
+}
+
+class HeartBButton extends StatefulWidget {
+  const HeartBButton({super.key});
+
+  @override
+  State<HeartBButton> createState() => _HeartBButtonState();
+}
+
+class _HeartBButtonState extends State<HeartBButton> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
