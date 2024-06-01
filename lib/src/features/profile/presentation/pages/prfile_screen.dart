@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/profile_edit_screen.dart';
 import 'package:social_app/src/features/profile/presentation/widgets/post_body_widget.dart';
@@ -24,11 +25,10 @@ class ProfileScreen extends StatelessWidget {
             state is ProfileGetPostsLoadingState ||
             state is ProfileUpdateInfoLoadingState ||
             state is ProfileInfoLoadingState) {
-          return Center(
-            child: Container(
-              color: Colors.amberAccent,
-              child: const CircularProgressIndicator(
-                color: Colors.red,
+          return Scaffold(
+            body: Center(
+              child:  CircularProgressIndicator(
+                color: mainColor,
               ),
             ),
           );

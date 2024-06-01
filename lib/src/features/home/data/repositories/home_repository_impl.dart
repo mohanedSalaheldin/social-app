@@ -14,8 +14,16 @@ class HomeRpositoryImpl implements HomeRepository {
       {required this.homeRemoteDataSource, required this.networkInfo});
 
   @override
-  Stream<List<PostModel>> getPosts() {
-    return homeRemoteDataSource.getPosts();
+  Future<Either<Failure, Stream<List<PostModel>>>> getPosts({required String userId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        Stream<List<PostModel>> posts = homeRemoteDataSource.getPosts(userId: userId);
+        return Right(posts);
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
   }
-
 }

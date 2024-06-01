@@ -13,16 +13,17 @@ class UserInfoModel extends UserInfoEntity {
       required super.bio});
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) {
+    print(json);
     return UserInfoModel(
-        userId: json['userId'],
+        userId: json['userId'] ,
         fcmToken: json['fcmToken'] ?? '',
-        userName: json['userName'],
-        email: json['email'],
-        profileImageURL: json['profileImageURL'],
+        userName: json['userName'] ,
+        email: json['email'] ?? '',
+        profileImageURL: json['profileImageURL'] ,
         address: json['address'],
         followers: json['followers'],
         following: json['following'],
-        bio: json['bio']);
+        bio: json['bio'] );
   }
 
   Map<String, dynamic> toJson() {

@@ -106,7 +106,7 @@ Future<void> init() async {
   // -------------------------------(Search)--------------------------------
   sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
   // -------------------------------(home)----------------------------------
-  sl.registerLazySingleton(() => GetPostsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => HomeGetPostsUseCase(repository: sl()));
 
   // -------------------------------(Posts)--------------------------------
   sl.registerLazySingleton(() => PostsAddPostUsecase(repository: sl()));

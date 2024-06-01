@@ -16,7 +16,7 @@ class LayoutCubit extends Cubit<LayoutState> {
 
   static LayoutCubit get(context) => BlocProvider.of(context);
 
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   get currentIndex => _currentIndex;
 
   UserInfoEntity _userInfoEntity = UserInfoEntity(
@@ -50,7 +50,7 @@ class LayoutCubit extends Cubit<LayoutState> {
           label: '',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Iconsax.search_normal),
+          icon: Icon(Iconsax.discover_1),
           label: '',
         ),
         const BottomNavigationBarItem(

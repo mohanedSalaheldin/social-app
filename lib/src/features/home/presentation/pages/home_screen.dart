@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
@@ -23,6 +26,8 @@ class LayoutScreen extends StatelessWidget {
       },
       builder: (context, state) {
         ProfileCubit profileCubit = context.read<ProfileCubit>();
+        ProfileCubit.get(context)
+            .getProfileInfo(userId: FirebaseAuth.instance.currentUser!.uid);
 
         // profileCubit.getProfileInfo(
         //     userId: FirebaseAuth.instance.currentUser!.uid);
@@ -73,57 +78,66 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProfileCubit.get(context)
-        .getProfileInfo(userId: FirebaseAuth.instance.currentUser!.uid);
-    UserInfoEntity user = ProfileCubit.get(context).userInfo;
-    return Scaffold(
-      appBar: AppBar(
-          // title: const Text('Home'),
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.camera_alt_outlined),
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        ProfileCubit.get(context)
+            .getProfileInfo(userId: FirebaseAuth.instance.currentUser!.uid);
+        UserInfoEntity user = ProfileCubit.get(context).userInfo;
+        context.read<HomeCubit>().getPosts(userId: user.userId);
+        // user = ProfileCubit.get(context).userInfo;
+        HomeCubit.get(context).getPosts(userId: user.userId);
+        Stream<List<PostEntity>> posts = HomeCubit.get(context).posts;
+
+        return Scaffold(
+          appBar: AppBar(
+              // title: const Text('Home'),
+              leading: IconButton(
+                  onPressed: () {}, icon: const Icon(Iconsax.camera4)),
+              actions: [
+                IconButton(onPressed: () {}, icon: const Icon(Iconsax.direct)),
+              ]),
+          body: Column(
+            children: [
+              Expanded(
+                child: StreamBuilder<List<PostEntity>>(
+                    stream: posts,
+                    builder: (context, snapshot) {
+                      // print(snapshot.error);
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          snapshot.data!.isEmpty) {
+                        return Scaffold(
+                          body: SafeArea(
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: mainColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No posts yet'));
+                      }
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) => PostWidget(
+                              userEntity: user,
+                              post: snapshot.data![index],
+                              onDeletePost: () {}),
+                        );
+                      }
+                      return const CircularProgressIndicator();
+                    }),
+              ),
+            ],
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.email_outlined),
-            ),
-          ]),
-      body: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder(
-              
-                stream: BlocProvider.of<HomeCubit>(context).getPosts(),
-                builder: (context, snapshot) {
-                  // print(snapshot.error);
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      children: const [
-                        Center(child: CircularProgressIndicator()),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No posts yet'));
-                  }
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) => PostWidget(
-                          userEntity: user,
-                          post: snapshot.data![index],
-                          onDeletePost: () {}),
-                    );
-                  }
-                  return const CircularProgressIndicator();
-                }),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

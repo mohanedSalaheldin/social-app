@@ -6,7 +6,7 @@ import 'package:social_app/src/core/models/post_model.dart';
 import 'package:social_app/src/features/posts/data/models/comment_model.dart';
 
 abstract class HomeRemoteDataSource {
-  Stream<List<PostModel>> getPosts();
+  Stream<List<PostModel>> getPosts({required String userId});
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -14,7 +14,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final FirebaseStorage _bucket = FirebaseStorage.instance;
 
   @override
-  Stream<List<PostModel>> getPosts() {
+  Stream<List<PostModel>> getPosts({required String userId}) {
     return _store
         .collection('posts')
         .withConverter(

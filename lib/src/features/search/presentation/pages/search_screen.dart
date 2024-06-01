@@ -129,7 +129,7 @@ class SearchResultWidget extends StatelessWidget {
               ),
             ),
             Text(
-              user.bio,
+              user.address,
               style: const TextStyle(
                 fontSize: 15.0,
                 color: Colors.white70,

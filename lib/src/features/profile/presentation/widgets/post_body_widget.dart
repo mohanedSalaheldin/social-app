@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/features/posts/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
@@ -25,7 +26,7 @@ class ProfileWidget extends StatelessWidget {
             state is ProfileInfoLoadingState) {
           return Center(
               child: Container(
-            color: Colors.amberAccent,
+            color: Colors.red,
             child: const CircularProgressIndicator(color: Colors.red),
           ));
         } else if (state is ProfileDeletePostErrorState ||
@@ -112,19 +113,30 @@ class ProfileWidget extends StatelessWidget {
               StreamBuilder(
                 stream: posts,
                 builder: (context, snapshot) {
+                  // if (snapshot.connectionState == ConnectionState.waiting ||
+                  //     snapshot.data!.isEmpty ||
+                  //     snapshot.hasError) {
+                  //   return const SafeArea(
+                  //     child: Center(
+                  //       child: CircularProgressIndicator(
+                  //         color: Colors.transparent,
+                  //       ),
+                  //     ),
+                  //   );
+                  // } else
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}',
+                        style: const TextStyle(color: Colors.red));
+                  }
+
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      children: const [
-                        Center(child: CircularProgressIndicator()),
-                      ],
+                    return const Center(
+                      child:
+                          CircularProgressIndicator(color: Colors.cyanAccent),
                     );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No posts yet'));
-                  } else {
+                  }
+
+                  if (snapshot.hasData) {
                     return ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -144,6 +156,8 @@ class ProfileWidget extends StatelessWidget {
                       itemCount: snapshot.data!.length,
                     );
                   }
+
+                  return const CircularProgressIndicator();
                 },
               )
             ],

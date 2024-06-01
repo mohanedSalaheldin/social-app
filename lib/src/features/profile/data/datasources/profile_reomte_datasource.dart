@@ -58,10 +58,6 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   Future<UserInfoModel> getProfileInfo({required String userId}) async {
     DocumentSnapshot documentSnapshot =
         await firestoreStore.collection('users').doc(userId).get();
-    print(
-        '-----------------------(in datasource)-----------------------------');
-    print(documentSnapshot.data());
-    print('----------------------------------------------------');
     UserInfoModel userInfoModel =
         UserInfoModel.fromJson(documentSnapshot.data() as Map<String, dynamic>);
     return Future.value(userInfoModel);
