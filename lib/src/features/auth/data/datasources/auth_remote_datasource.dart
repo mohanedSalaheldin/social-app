@@ -91,7 +91,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'address': ' ',
         'followers': 0,
         'following': 0,
-        'fcmToken': '',
+        'fcmToken': token,
         'bio': '',
       },
     ).then((value) {

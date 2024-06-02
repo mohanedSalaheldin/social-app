@@ -46,7 +46,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
         // print(doc.data());
         if (doc.data()['writerId'] == userId) {
           print(doc.data());
-          posts.add(PostModel.fromJson(doc.data(), ''));
+          posts.add(PostModel.fromJson(doc.data()));
         }
       }
       return posts;

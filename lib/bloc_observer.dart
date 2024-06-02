@@ -10,6 +10,7 @@ class SimpleBlocObserver extends BlocObserver {
     super.onCreate(bloc);
     debugPrint('onCreate -- bloc: ${bloc.runtimeType}');
   }
+  
 
   @override
   void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {

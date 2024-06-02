@@ -12,30 +12,31 @@ dependencies:
   cloud_firestore: ^4.15.8
   connectivity_plus: ^5.0.2
   cupertino_icons: ^1.0.2
+  dart_jsonwebtoken: ^2.14.0
   dartz: ^0.10.1
+  device_preview: ^1.1.0
   equatable: ^2.0.5
   file_picker: ^6.2.0
+  firebase_admin: ^0.2.0
+  firebase_app_check: ^0.2.2+7
   firebase_auth: ^4.17.8
   firebase_core: ^2.24.2
-  firebase_messaging: 
-  firebase_storage: 
-  device_preview: ^1.1.0
+  firebase_messaging: null
+  firebase_storage: null
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.4
+  flutter_dotenv: ^5.1.0
   gap: ^3.0.1
   get_it: ^7.6.7
   google_sign_in: ^6.2.1
   hexcolor: ^3.0.1
+  http: ^0.13.0
+  iconsax: ^0.0.8
   image_picker: ^1.0.8
   intl: ^0.18.1
-  # smooth_page_indicator: ^1.1.0
+  pointycastle: ^3.9.1
   quickalert: ^1.1.0
-  lottie: ^3.1.2
-  rive: ^0.13.4
-  iconsax: ^0.0.8
-  # giffy_dialog: ^2.1.0
-  
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -67,7 +68,6 @@ flutter:
     - assets/images/
     - assets/lottie/
   # fonts:
-
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
