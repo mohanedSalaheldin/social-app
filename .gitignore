@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-mo-social-app-91eadc5c6506.json
+lib\src\features\notification\data\datasources\serviceAccountKey.json
 
 
 # IntelliJ related
