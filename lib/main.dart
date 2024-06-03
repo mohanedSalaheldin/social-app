@@ -7,7 +7,6 @@ import 'package:social_app/app.dart';
 import 'package:social_app/bloc_observer.dart';
 import 'package:social_app/firebase_options.dart';
 import 'package:social_app/injection_container.dart' as di;
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   // await dotenv.load(fileName: ".env");
@@ -18,15 +17,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseAppCheck.instance
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+   await FirebaseAppCheck.instance
       // Your personal reCaptcha public key goes here:
       .activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
     webProvider: ReCaptchaV3Provider('6LfdF-8pAAAAAAs-E6I3ihmab4ytCSvkU7TM61QJ'),
   );
-  
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/config/routes/navigate_methods.dart';
+import 'package:social_app/src/config/routes/routes_name.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
@@ -27,15 +28,24 @@ class ProfileScreen extends StatelessWidget {
             state is ProfileInfoLoadingState) {
           return Scaffold(
             body: Center(
-              child:  CircularProgressIndicator(
+              child: CircularProgressIndicator(
                 color: mainColor,
               ),
             ),
           );
         }
-        return const Scaffold(
+        return Scaffold(
           // appBar: _buildAppBar(context),
-          body: ProfileWidget(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut().then((value) {
+                Navigator.pushReplacementNamed(context, RoutesName.login);
+              });
+            },
+            // backgroundColor: mainColor,
+            child: const Icon(Iconsax.logout),
+          ),
+          body: const ProfileWidget(),
         );
       },
     );
