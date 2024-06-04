@@ -8,7 +8,7 @@ import 'package:social_app/src/features/home/presentation/pages/home_screen.dart
 import 'package:social_app/src/features/notification/presentation/pages/notification_screen.dart';
 import 'package:social_app/src/features/posts/presentation/pages/add_post_screen.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
-import 'package:social_app/src/features/search/presentation/pages/search_screen.dart';
+import 'package:social_app/src/features/connection/presentation/pages/search_screen.dart';
 
 part 'layout_cubit_state.dart';
 
@@ -27,8 +27,8 @@ class LayoutCubit extends Cubit<LayoutState> {
     email: '',
     profileImageURL: '',
     address: '',
-    followers: 0,
-    following: 0,
+    followers: [],
+    following: [],
     bio: '',
   );
   String profileImageUrl = '';
@@ -70,7 +70,7 @@ class LayoutCubit extends Cubit<LayoutState> {
 
   final List<Widget> _screens = const [
     HomeScreen(),
-    SearchScreen(),
+    ConnectionScreen(),
     AddPostScreen(),
     NotificationScreen(),
     ProfileScreen()

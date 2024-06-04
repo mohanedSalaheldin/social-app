@@ -10,7 +10,7 @@ import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart'
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/injection_container.dart' as di;
-import 'package:social_app/src/features/search/presentation/cubit/search_cubit.dart';
+import 'package:social_app/src/features/connection/presentation/cubit/search_cubit.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (_) => AuthCubit(AuthInitial())),
           BlocProvider(create: (_) => di.sl<ProfileCubit>()),
-          BlocProvider(create: (_) => di.sl<SearchCubit>()),
+          BlocProvider(create: (_) => di.sl<ConnectionCubit>()),
           BlocProvider(create: (_) => di.sl<PostsCubit>()),
           BlocProvider(create: (_) => di.sl<HomeCubit>()),
           BlocProvider(create: (_) => di.sl<ChatsCubit>()),

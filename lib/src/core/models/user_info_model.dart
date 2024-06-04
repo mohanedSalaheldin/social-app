@@ -21,8 +21,8 @@ class UserInfoModel extends UserInfoEntity {
         email: json['email'] ?? '',
         profileImageURL: json['profileImageURL'] ,
         address: json['address'],
-        followers: json['followers'],
-        following: json['following'],
+        followers:  List<String>.from(json['followers']),
+        following:List<String>.from(json['following']) ,
         bio: json['bio'] );
   }
 

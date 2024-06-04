@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
         UserInfoEntity user = ProfileCubit.get(context).userInfo;
         context.read<HomeCubit>().getPosts(userId: user.userId);
         // user = ProfileCubit.get(context).userInfo;
-        HomeCubit.get(context).getPosts(userId: user.userId);
+        // HomeCubit.get(context).getPosts(userId: user.userId);
         Stream<List<PostEntity>> posts = HomeCubit.get(context).posts;
 
         return Scaffold(
@@ -118,12 +118,9 @@ class HomeScreen extends StatelessWidget {
                           snapshot.data!.isEmpty) {
                         return Scaffold(
                           body: SafeArea(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: mainColor,
-                              ),
-                            ),
-                          ),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                      color: mainColor))),
                         );
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');

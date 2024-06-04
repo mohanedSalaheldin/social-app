@@ -19,13 +19,13 @@ class _ChatEntryState extends State<ChatEntry> {
         foregroundImage:
             NetworkImage(widget.snapshot.data![widget.index].toImageUrl),
         radius: 25,
-        child: Text('JS'),
+        child: const Text('JS'),
       ),
       title: Text(widget.snapshot.data![widget.index].toName),
       subtitle: Text(widget.snapshot.data![widget.index].lastMsg),
       trailing: Text(
         widget.snapshot.data![widget.index].lastTime.toString(),
-        style: TextStyle(color: Colors.grey),
+        style: const TextStyle(color: Colors.grey),
       ),
       onTap: () {
         Navigator.push(

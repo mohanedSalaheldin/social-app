@@ -1,21 +1,16 @@
 import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
-import 'package:social_app/src/core/models/user_info_model.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/methods/screen_sizes.dart';
 import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
-import 'package:social_app/src/core/utls/widgets/default_button.dart';
 import 'package:social_app/src/features/home/presentation/pages/cubit/layout_cubit_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
+
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});

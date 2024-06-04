@@ -36,13 +36,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     profileImageURL: '',
     userId: '',
     address: '',
-    followers: 0,
-    following: 0,
+    followers: [],
+    following: [],
     bio: '',
   );
 
   UserInfoEntity get userInfo => _userInfo;
-
   void getProfileInfo({required String userId}) async {
     emit(ProfileInfoLoadingState());
     Either<Failure, UserInfoEntity> result =
@@ -58,6 +57,19 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
+  Future<void> loadUserInfoAndPosts({required String userId}) async {
+    emit(ProfileInfoLoadingState());
+
+    final postsResult = await getPostsUseCase.call(userId: userId);
+postsResult.fold(
+          (failure) => emit(ProfileInfoErrorState()),
+          (postsStream) {
+            _posts = postsStream;
+            emit(ProfileInfoSucessState());
+          },
+        );
+  }
+
   void updateProfileInfo(
       {required String userId,
       required UserInfoEntity model,
@@ -70,21 +82,19 @@ class ProfileCubit extends Cubit<ProfileState> {
         emit(ProfileUpdateInfoErrorState());
       },
       (_) {
-        getProfileInfo(userId: userId);
+        loadUserInfoAndPosts(userId: userId);
         // emit(ProfileUpdateInfoSuccessState());
       },
     );
   }
 
-  void getPosts({
+  Future<void> getPosts({
     required String userId,
   }) async {
     Either<Failure, Stream<List<PostEntity>>> result =
         await getPostsUseCase.call(userId: userId);
     result.fold(
-      (failure) {
-      
-      },
+      (failure) {},
       (posts) {
         _posts = posts;
         emit(ProfileGetPostsSuccessState());

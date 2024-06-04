@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/chat/data/models/chat_entry_model.dart';
@@ -28,7 +27,7 @@ class _AllChatsPageState extends State<AllChatsPage> {
                     ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,

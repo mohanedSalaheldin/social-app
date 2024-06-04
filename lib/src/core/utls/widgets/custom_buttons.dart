@@ -53,9 +53,11 @@ class MyCustomizedElevatedButtonSmall extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.text,
+    this.backgroundColor,
   });
   final Function() onPressed;
   final String text;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +65,7 @@ class MyCustomizedElevatedButtonSmall extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(
-          mainColor,
+          backgroundColor ?? mainColor,
         ),
         padding: const MaterialStatePropertyAll(
           EdgeInsets.symmetric(

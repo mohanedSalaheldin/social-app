@@ -8,6 +8,8 @@ import 'package:social_app/src/features/chat/domain/usecases/get_entries_usecase
 import 'package:social_app/src/features/chat/domain/usecases/get_messages_usecase.dart';
 import 'package:social_app/src/features/chat/domain/usecases/send_message_usecase.dart';
 import 'package:social_app/src/features/chat/presentation/cubet/chats_cubit.dart';
+import 'package:social_app/src/features/connection/domain/usecases/follow_unfollow_user_usecase.dart';
+import 'package:social_app/src/features/connection/domain/usecases/get_all_users_usecase.dart';
 import 'package:social_app/src/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:social_app/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:social_app/src/features/home/domain/repositories/home_repository.dart';
@@ -30,11 +32,11 @@ import 'package:social_app/src/features/profile/domain/usecases/get_posts_usecas
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
 import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:social_app/src/features/search/data/datasources/search_remote_datasource.dart';
-import 'package:social_app/src/features/search/data/repositories/search_repository_impl.dart';
-import 'package:social_app/src/features/search/domain/repositories/search_repository.dart';
-import 'package:social_app/src/features/search/domain/usecases/search_for_user_usecase.dart';
-import 'package:social_app/src/features/search/presentation/cubit/search_cubit.dart';
+import 'package:social_app/src/features/connection/data/datasources/search_remote_datasource.dart';
+import 'package:social_app/src/features/connection/data/repositories/search_repository_impl.dart';
+import 'package:social_app/src/features/connection/domain/repositories/search_repository.dart';
+import 'package:social_app/src/features/connection/domain/usecases/search_for_user_usecase.dart';
+import 'package:social_app/src/features/connection/presentation/cubit/search_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -51,8 +53,10 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
-    () => SearchCubit(
+    () => ConnectionCubit(
       searchForUserUseCase: sl(),
+      getAllUsersUsecase: sl(),
+      followUnfollowUserUseCase: sl(),
     ),
   );
   sl.registerFactory(
@@ -91,12 +95,16 @@ Future<void> init() async {
       networkInfo: sl(),
     ),
   );
-  sl.registerLazySingleton<SearchRepository>(
-    () => SearchRepositoryImpl(
-      searchRemoteDataSource: sl(),
+  // -------------------------------(connections)-----------------------------------
+
+  sl.registerLazySingleton<ConnectionRepository>(
+    () => ConnectionRepositoryImpl(
+      connectionRemoteDataSource: sl(),
       networkInfo: sl(),
     ),
   );
+  // -------------------------------(chat)-----------------------------------
+
   sl.registerLazySingleton<ChatRepository>(
     () => ChatsRepositoryImpl(
       chatRemoteDatasource: sl(),
@@ -130,8 +138,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProfileInfoUseCase(repository: sl()));
   sl.registerLazySingleton(() => DeleteProfilePostUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProfilePostsUseCase(repository: sl()));
-  // -------------------------------(Search)--------------------------------
+  // -------------------------------(connections)--------------------------------
   sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetAllUsersUsecase(repository: sl()));
+  sl.registerLazySingleton(() => FollowUnfollowUserUseCase(repository: sl()));
+
   // -------------------------------(home)----------------------------------
   sl.registerLazySingleton(() => HomeGetPostsUseCase(repository: sl()));
 
@@ -148,8 +159,8 @@ Future<void> init() async {
   sl.registerLazySingleton<ProfileRemoteDatasource>(
       () => ProfileRemoteDatasourceImpl());
   // -------------------------------(Search)--------------------------------
-  sl.registerLazySingleton<SearchRemoteDataSource>(
-      () => SearchRemoteDataSourceImpl());
+  sl.registerLazySingleton<ConnectionRemoteDataSource>(
+      () => ConnectionRemoteDataSourceImpl());
   // -------------------------------(home)-----------------------------------
   sl.registerLazySingleton<HomeRemoteDataSource>(
       () => HomeRemoteDataSourceImpl());

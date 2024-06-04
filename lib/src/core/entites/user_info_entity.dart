@@ -5,8 +5,8 @@ class UserInfoEntity {
   final String email;
   final String profileImageURL;
   final String address;
-  final int followers;
-  final int following;
+  final List<String> followers;
+  final List<String> following;
   final String bio;
 
   UserInfoEntity(

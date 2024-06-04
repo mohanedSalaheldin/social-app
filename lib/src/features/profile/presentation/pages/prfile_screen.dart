@@ -6,36 +6,46 @@ import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/config/routes/routes_name.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
+import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/profile_edit_screen.dart';
-import 'package:social_app/src/features/profile/presentation/widgets/post_body_widget.dart';
+import 'package:social_app/src/features/profile/presentation/widgets/profile_body_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({
+    super.key,
+    this.user,
+  });
+  final UserInfoEntity? user;
 
   @override
   Widget build(BuildContext context) {
-    String uId = FirebaseAuth.instance.currentUser!.uid;
-    context.read<ProfileCubit>().getProfileInfo(userId: uId);
-    context.read<ProfileCubit>().getPosts(userId: uId);
+    UserInfoEntity userInfoEntity = context.read<ProfileCubit>().userInfo;
+    if (user != null) {
+      userInfoEntity = user!;
+    }
+
+    // // context.read<ProfileCubit>().getProfileInfo(userId: uId);
+    // // context.read<ProfileCubit>().getPosts(userId: uId);
+    // // user = context.read<ProfileCubit>().userInfo;
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {},
       builder: (context, state) {
-        if (state is ProfileDeletePostLoadingState ||
-            state is ProfileGetPostsLoadingState ||
-            state is ProfileUpdateInfoLoadingState ||
-            state is ProfileInfoLoadingState) {
-          return Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(
-                color: mainColor,
-              ),
-            ),
-          );
-        }
+        // if (state is ProfileDeletePostLoadingState ||
+        //     state is ProfileGetPostsLoadingState ||
+        //     state is ProfileUpdateInfoLoadingState ||
+        //     state is ProfileInfoLoadingState) {
+        //   return Scaffold(
+        //     body: Center(
+        //       child: CircularProgressIndicator(
+        //         color: mainColor,
+        //       ),
+        //     ),
+        //   );
+        // }
         return Scaffold(
-          // appBar: _buildAppBar(context),
+          appBar: _buildAppBar(context),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               FirebaseAuth.instance.signOut().then((value) {
@@ -45,13 +55,15 @@ class ProfileScreen extends StatelessWidget {
             // backgroundColor: mainColor,
             child: const Icon(Iconsax.logout),
           ),
-          body: const ProfileWidget(),
+          body: ProfileWidget(
+            user: userInfoEntity,
+          ),
         );
       },
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       actions: [
         PopupMenuButton<int>(

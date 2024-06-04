@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
-import 'package:social_app/src/features/search/domain/repositories/search_repository.dart';
+import 'package:social_app/src/features/connection/domain/repositories/search_repository.dart';
 
 class SearchForUserUseCase {
-  final SearchRepository repository;
+  final ConnectionRepository repository;
 
   SearchForUserUseCase({required this.repository});
 
@@ -13,3 +13,5 @@ class SearchForUserUseCase {
     return await repository.searchForUser(keyword: keyword);
   }
 }
+
+

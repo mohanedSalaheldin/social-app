@@ -9,35 +9,40 @@ import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/features/posts/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
-class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({
-    super.key,
-  });
+class ProfileWidget extends StatefulWidget {
+  final UserInfoEntity user;
+
+  const ProfileWidget({super.key, required this.user});
+
+  @override
+  _ProfileWidgetState createState() => _ProfileWidgetState();
+}
+
+class _ProfileWidgetState extends State<ProfileWidget> {
+  @override
+  void initState() {
+    super.initState();
+    context
+        .read<ProfileCubit>()
+        .loadUserInfoAndPosts(userId: widget.user.userId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    late UserInfoEntity user;
+    // UserInfoEntity user = widget.user!;
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is ProfileDeletePostLoadingState ||
-            state is ProfileGetPostsLoadingState ||
-            state is ProfileUpdateInfoLoadingState ||
-            state is ProfileInfoLoadingState) {
-          return Center(
-              child: Container(
-            color: Colors.red,
-            child: const CircularProgressIndicator(color: Colors.red),
-          ));
-        } else if (state is ProfileDeletePostErrorState ||
-            state is ProfileGetPostsErrorState ||
-            state is ProfileUpdateInfoErrorState ||
-            state is ProfileInfoErrorState) {
-          return const Center(child: Text('Error'));
-        } else {
-          user = ProfileCubit.get(context).userInfo;
-          ProfileCubit.get(context).getPosts(userId: user.userId);
-          Stream<List<PostEntity>> posts = ProfileCubit.get(context).posts;
+        if (state is ProfileInfoLoadingState) {
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.red),
+          );
+        } else if (state is ProfileInfoErrorState) {
+          return const Center(child: Text('Error loading profile'));
+        } else if (state is ProfileInfoSucessState) {
+          ProfileCubit profileCubit = ProfileCubit.get(context);
+          final user = widget.user;
+          final postsStream = profileCubit.posts;
 
           return ListView(
             children: [
@@ -46,7 +51,7 @@ class ProfileWidget extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Text(user.followers.toString(),
+                      Text(user.followers.length.toString(),
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       const Text('followers'),
@@ -60,7 +65,7 @@ class ProfileWidget extends StatelessWidget {
                   ),
                   Column(children: [
                     Text(
-                      user.following.toString(),
+                      user.following.length.toString(),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -110,20 +115,9 @@ class ProfileWidget extends StatelessWidget {
                 ],
               ),
               const Gap(20),
-              StreamBuilder(
-                stream: posts,
+              StreamBuilder<List<PostEntity>>(
+                stream: postsStream,
                 builder: (context, snapshot) {
-                  // if (snapshot.connectionState == ConnectionState.waiting ||
-                  //     snapshot.data!.isEmpty ||
-                  //     snapshot.hasError) {
-                  //   return const SafeArea(
-                  //     child: Center(
-                  //       child: CircularProgressIndicator(
-                  //         color: Colors.transparent,
-                  //       ),
-                  //     ),
-                  //   );
-                  // } else
                   if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}',
                         style: const TextStyle(color: Colors.red));
@@ -159,10 +153,12 @@ class ProfileWidget extends StatelessWidget {
 
                   return const CircularProgressIndicator();
                 },
-              )
+              ),
             ],
           );
         }
+
+        return const Center(child: Text('Unexpected state'));
       },
     );
   }
