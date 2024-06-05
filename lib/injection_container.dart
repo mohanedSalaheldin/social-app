@@ -13,6 +13,11 @@ import 'package:social_app/src/features/connection/domain/usecases/get_all_users
 import 'package:social_app/src/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:social_app/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:social_app/src/features/home/domain/repositories/home_repository.dart';
+import 'package:social_app/src/features/notification/data/datasources/notification_datasource.dart';
+import 'package:social_app/src/features/notification/data/repositories/notification_repository_impl.dart';
+import 'package:social_app/src/features/notification/domain/repositories/notification_repository.dart';
+import 'package:social_app/src/features/notification/domain/usecases/notification_send_usecase.dart';
+import 'package:social_app/src/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:social_app/src/features/posts/domain/usecases/comment_post_usecase.dart';
 import 'package:social_app/src/features/posts/domain/usecases/get_all_comment_usecase.dart';
 import 'package:social_app/src/features/home/domain/usecases/get_posts_usecase.dart';
@@ -44,88 +49,53 @@ Future<void> init() async {
 /* --------------------Features-------------------- */
 // Quates
   // Bloc
-  sl.registerFactory(
-    () => ProfileCubit(
+  sl.registerFactory(() => ProfileCubit(
       deletePostUseCase: sl(),
       getPostsUseCase: sl(),
       getProfileInfoUseCase: sl(),
-      updateProfileUseCase: sl(),
-    ),
-  );
-  sl.registerFactory(
-    () => ConnectionCubit(
+      updateProfileUseCase: sl()));
+  sl.registerFactory(() => ConnectionCubit(
       searchForUserUseCase: sl(),
       getAllUsersUsecase: sl(),
-      followUnfollowUserUseCase: sl(),
-    ),
-  );
-  sl.registerFactory(
-    () => PostsCubit(
+      followUnfollowUserUseCase: sl()));
+  sl.registerFactory(() => PostsCubit(
       addCommentUseCase: sl(),
       removeCommentUseCase: sl(),
       getAllCommentUseCase: sl(),
       postsLikeOrDisLikePostUseCase: sl(),
-      postsAddPostUsecase: sl(),
-    ),
-  );
+      postsAddPostUsecase: sl()));
 
-  sl.registerFactory(
-    () => HomeCubit(
-      // removeCommentUseCase: sl(),
-      // addCommentUseCase: sl(),
-      getPostsUseCase: sl(),
-      // likeOrDisLikePostUseCase: sl(),
-      // likePostsUseCase: sl(),
-      // getAllCommentUseCase: sl(),
-    ),
-  );
+  sl.registerFactory(() => HomeCubit(getPostsUseCase: sl()));
 
-  sl.registerFactory(
-    () => ChatsCubit(
+  sl.registerFactory(() => ChatsCubit(
       getChatEntriesUseCase: sl(),
       getMessagesUseCase: sl(),
-      sendMsgUseCase: sl(),
-    ),
-  );
+      sendMsgUseCase: sl()));
+  sl.registerFactory(() => NotificationCubit(notificationSendUsecase: sl()));
 
   // Repository
-  sl.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(
-      profileRemoteDatasource: sl(),
-      networkInfo: sl(),
-    ),
-  );
+  sl.registerLazySingleton<ProfileRepository>(() =>
+      ProfileRepositoryImpl(profileRemoteDatasource: sl(), networkInfo: sl()));
   // -------------------------------(connections)-----------------------------------
 
-  sl.registerLazySingleton<ConnectionRepository>(
-    () => ConnectionRepositoryImpl(
-      connectionRemoteDataSource: sl(),
-      networkInfo: sl(),
-    ),
-  );
+  sl.registerLazySingleton<ConnectionRepository>(() => ConnectionRepositoryImpl(
+      connectionRemoteDataSource: sl(), networkInfo: sl()));
   // -------------------------------(chat)-----------------------------------
 
   sl.registerLazySingleton<ChatRepository>(
-    () => ChatsRepositoryImpl(
-      chatRemoteDatasource: sl(),
-      networkInfo: sl(),
-    ),
-  );
+      () => ChatsRepositoryImpl(chatRemoteDatasource: sl(), networkInfo: sl()));
   // -------------------------------(home)-----------------------------------
   sl.registerLazySingleton<HomeRepository>(
-    () => HomeRpositoryImpl(
-      homeRemoteDataSource: sl(),
-      networkInfo: sl(),
-    ),
-  );
+      () => HomeRpositoryImpl(homeRemoteDataSource: sl(), networkInfo: sl()));
   // -------------------------------(Posts)-----------------------------------
 
-  sl.registerLazySingleton<PostsRepository>(
-    () => PostsRepositoryImpl(
-      postsRemoteDataSource: sl(),
-      networkInfo: sl(),
-    ),
-  );
+  sl.registerLazySingleton<PostsRepository>(() =>
+      PostsRepositoryImpl(postsRemoteDataSource: sl(), networkInfo: sl()));
+  // -------------------------------(notification)-----------------------------------
+
+  sl.registerLazySingleton<NotificationRepository>(() =>
+      NotificationRepositoryImpl(
+          notificationDataSource: sl(), networkInfo: sl()));
 
   // UseCases
   // -------------------------------(chats)----------------------------------
@@ -145,6 +115,8 @@ Future<void> init() async {
 
   // -------------------------------(home)----------------------------------
   sl.registerLazySingleton(() => HomeGetPostsUseCase(repository: sl()));
+  // -------------------------------(notification)----------------------------------
+  sl.registerLazySingleton(() => NotificationSendUsecase(repository: sl()));
 
   // -------------------------------(Posts)--------------------------------
   sl.registerLazySingleton(() => PostsAddPostUsecase(repository: sl()));
@@ -170,6 +142,9 @@ Future<void> init() async {
   // -------------------------------(Posts)--------------------------------
   sl.registerLazySingleton<PostsRemoteDatasSource>(
       () => PostsRemoteDatasSourceImpl());
+  // -------------------------------(notification)--------------------------------
+  sl.registerLazySingleton<NotificationRemoteDataSource>(
+      () => NotificationRemoteDataSourceImpl());
 /* --------------------External-------------------- */
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 }

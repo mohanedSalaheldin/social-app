@@ -92,14 +92,14 @@ class HomeScreen extends StatelessWidget {
         Stream<List<PostEntity>> posts = HomeCubit.get(context).posts;
 
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              print(context.read<ProfileCubit>().userInfo.userName);
-              print(context.read<ProfileCubit>().userInfo.fcmToken);
-              // context.read<ProfileCubit>().userInfo.userName;
-            },
-            child: const Icon(Icons.add),
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     print(context.read<ProfileCubit>().userInfo.userName);
+          //     print(context.read<ProfileCubit>().userInfo.fcmToken);
+          //     // context.read<ProfileCubit>().userInfo.userName;
+          //   },
+          //   child: const Icon(Icons.add),
+          // ),
           appBar: AppBar(
               // title: const Text('Home'),
               leading: IconButton(

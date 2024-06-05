@@ -20,7 +20,6 @@ void main() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
    await FirebaseAppCheck.instance
-      // Your personal reCaptcha public key goes here:
       .activate(
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,

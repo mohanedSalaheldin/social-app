@@ -7,6 +7,7 @@ import 'package:social_app/src/config/themes/light_theme.dart';
 import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:social_app/src/features/chat/presentation/cubet/chats_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
+import 'package:social_app/src/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:social_app/injection_container.dart' as di;
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.sl<PostsCubit>()),
           BlocProvider(create: (_) => di.sl<HomeCubit>()),
           BlocProvider(create: (_) => di.sl<ChatsCubit>()),
+          BlocProvider(create: (_) => di.sl<NotificationCubit>()),
         ],
         child: MaterialApp(
           title: 'Social ',

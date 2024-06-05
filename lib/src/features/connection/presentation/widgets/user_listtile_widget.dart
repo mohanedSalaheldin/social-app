@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
 import 'package:social_app/src/features/connection/presentation/cubit/search_cubit.dart';
+import 'package:social_app/src/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:social_app/src/features/profile/presentation/pages/prfile_screen.dart';
 
 class UserListTileWidget extends StatefulWidget {
@@ -73,15 +75,17 @@ class _UserListTileWidgetState extends State<UserListTileWidget> {
               : MyCustomizedElevatedButtonSmall(
                   backgroundColor: isFollowed ? Colors.grey : null,
                   onPressed: () {
-                    String currentUserId =
-                        FirebaseAuth.instance.currentUser!.uid;
+                    if (!isFollowed) {
+                      context
+                          .read<NotificationCubit>()
+                          .sendNewFollowerNotification(
+                            receiverToken: widget.otherUser.fcmToken,
+                            senderName: widget.currentUser.userName,
+                          );
+                    }
                     ConnectionCubit.get(context).followUnfollowUser(
                         otherUserId: widget.otherUser.userId,
                         currentUserId: widget.currentUser.userId);
-                    setState(() {
-                      isFollowed = !isFollowed;
-                    });
-                    // ConnectionCubit.get(context).getAllUsers();
                   },
                   text: isFollowed ? 'Unfollow' : 'Follow',
                 ),

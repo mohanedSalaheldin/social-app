@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/methods/methods.dart';
 import 'package:social_app/src/core/utls/methods/screen_sizes.dart';
+import 'package:social_app/src/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:social_app/src/features/posts/domain/entities/comment_entity.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
 
@@ -14,8 +15,10 @@ class CommentBottomSheetWidget extends StatelessWidget {
     super.key,
     required this.postID,
     required this.userEntity,
+    required this.posterFCMToken,
   });
   final String postID;
+  final String posterFCMToken;
   final UserInfoEntity userEntity;
   final outlineInputBorder = const OutlineInputBorder(
       borderSide: BorderSide(
@@ -95,6 +98,12 @@ class CommentBottomSheetWidget extends StatelessWidget {
                   IconButton(
                     onPressed: () {
                       if (commentController.text.trim() != '') {
+                        context
+                            .read<NotificationCubit>()
+                            .sendCommentNotification(
+                              receiverToken: posterFCMToken,
+                              senderName: userEntity.userName.toString(),
+                            );
                         PostsCubit.get(context).addComment(
                           comment: CommentEntity(
                             postId: postID,

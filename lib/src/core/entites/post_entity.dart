@@ -5,6 +5,7 @@ class PostEntity {
   final String text;
   final String writtenBy;
   final String writerId;
+  final String writerFCMToken;
   final String time;
   final List<String> likes;
   final int comments;
@@ -17,6 +18,7 @@ class PostEntity {
     required this.text,
     required this.time,
     required this.writerId,
+    required this.writerFCMToken,
     required this.likes,
     required this.comments,
   });

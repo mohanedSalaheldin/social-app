@@ -1,17 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class NotificationService {
   final String serverUrl =
       'https://fcm.googleapis.com/v1/projects/mo-social-app/messages:send';
 
   Future<String> _getAccessToken() async {
-    // final serviceAccountPath = dotenv.env['GOOGLE_APPLICATION_CREDENTIALS'];
-    // final serviceAccount = File(serviceAccountPath!).readAsStringSync();
-    // final jsonCredentials = jsonDecode(serviceAccount);
 
     const clientEmail =
         "fcm-push-notifications-service@mo-social-app.iam.gserviceaccount.com";

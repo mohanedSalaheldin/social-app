@@ -5,7 +5,7 @@ import 'package:social_app/src/features/notification/data/datasources/notificati
 import 'package:social_app/src/features/notification/domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
-  final NotificationDataSource notificationDataSource;
+  final NotificationRemoteDataSource notificationDataSource;
   final NetworkInfo networkInfo;
 
   NotificationRepositoryImpl(

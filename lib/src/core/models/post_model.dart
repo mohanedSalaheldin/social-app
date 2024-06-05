@@ -7,6 +7,7 @@ class PostModel extends PostEntity {
       required super.id,
       required super.userProfileImage,
       required super.text,
+      required super.writerFCMToken,
       required super.time,
       required super.likes,
       required super.comments,
@@ -14,6 +15,7 @@ class PostModel extends PostEntity {
 
   factory PostModel.fromJson(Map<String, dynamic> json,) {
     return PostModel(
+      writerFCMToken: json['writerFCMToken'],
       writerId: json['writerId'],
       userProfileImage: json['userProfileImage'],
       writtenBy: json['writtenBy'],
@@ -29,6 +31,7 @@ class PostModel extends PostEntity {
   Map<String, dynamic> toJson() {
     return {
       'writerId': writerId,
+      'writerFCMToken': writerFCMToken,
       'imageUrl': imageUrl,
       'id': id,
       'text': text,
@@ -37,6 +40,7 @@ class PostModel extends PostEntity {
       'comments': comments,
       'writtenBy': writtenBy,
       'userProfileImage': userProfileImage
+
     };
   }
 
@@ -48,6 +52,7 @@ class PostModel extends PostEntity {
         imageUrl: entity.imageUrl,
         id: entity.id,
         text: entity.text,
+        writerFCMToken: entity.writerFCMToken,
         time: entity.time,
         likes: entity.likes,
         comments: entity.comments);

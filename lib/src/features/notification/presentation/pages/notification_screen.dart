@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/src/features/connection/data/datasources/search_remote_datasource.dart';
 import 'package:social_app/src/features/notification/data/datasources/notification_datasource.dart';
-import 'package:social_app/src/features/notification/data/datasources/services.dart';
+import 'package:social_app/src/features/notification/data/datasources/notification_services.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});

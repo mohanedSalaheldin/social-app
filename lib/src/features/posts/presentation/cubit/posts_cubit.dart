@@ -34,6 +34,7 @@ class PostsCubit extends Cubit<PostsState> {
       required String imagePath,
       required String postCaption}) {
     PostEntity postEntity = PostEntity(
+      writerFCMToken: userInfo.fcmToken,
       writerId: userInfo.userId,
       writtenBy: userInfo.userName,
       imageUrl: imagePath == '' ? null : imagePath,

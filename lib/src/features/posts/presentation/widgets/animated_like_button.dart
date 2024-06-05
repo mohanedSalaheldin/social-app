@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
+import 'package:social_app/src/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
+import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
 class AnimatedLikeButtonWidget extends StatefulWidget {
   const AnimatedLikeButtonWidget({
@@ -11,11 +13,13 @@ class AnimatedLikeButtonWidget extends StatefulWidget {
     required this.isLikedPost,
     required this.postId,
     required this.userId,
+    required this.posterFCMToken,
   });
 
   final bool isLikedPost;
   final String postId;
   final String userId;
+  final String posterFCMToken;
 
   @override
   State<AnimatedLikeButtonWidget> createState() =>
@@ -29,6 +33,7 @@ class _AnimatedLikeButtonWidgetState extends State<AnimatedLikeButtonWidget> {
   @override
   Widget build(BuildContext context) {
     isLiked = widget.isLikedPost;
+    String currentUserName = context.read<ProfileCubit>().userInfo.userName;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -41,6 +46,11 @@ class _AnimatedLikeButtonWidgetState extends State<AnimatedLikeButtonWidget> {
           color: isLiked ? Colors.red : Colors.white,
         ),
         onPressed: () {
+          if (!isLiked) {
+            context.read<NotificationCubit>().sendLikeNotification(
+                receiverToken: widget.posterFCMToken,
+                senderName: currentUserName);
+          }
           setState(() {
             isLiked = !isLiked;
             context.read<PostsCubit>().likeOrDislikePost(
