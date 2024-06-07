@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
@@ -9,6 +10,8 @@ import 'package:social_app/src/features/auth/presentation/cubit/auth_cubit.dart'
 import 'package:social_app/src/features/home/presentation/cubit/home_cubit.dart';
 import 'package:social_app/src/features/home/presentation/cubit/home_state.dart';
 import 'package:social_app/src/features/home/presentation/pages/cubit/layout_cubit_cubit.dart';
+import 'package:social_app/src/features/posts/presentation/cubit/posts_cubit.dart';
+import 'package:social_app/src/features/posts/presentation/pages/post_details_screen.dart';
 import 'package:social_app/src/features/posts/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 

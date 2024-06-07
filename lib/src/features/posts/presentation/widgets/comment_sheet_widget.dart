@@ -16,10 +16,12 @@ class CommentBottomSheetWidget extends StatelessWidget {
     required this.postID,
     required this.userEntity,
     required this.posterFCMToken,
+     
   });
   final String postID;
   final String posterFCMToken;
   final UserInfoEntity userEntity;
+  
   final outlineInputBorder = const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.white,
@@ -50,6 +52,9 @@ class CommentBottomSheetWidget extends StatelessWidget {
                   thickness: 3.0,
                 ),
               ),
+              const Gap(10.0),
+              buildCommentTextFormField(context),
+              const Gap(10.0),
               Expanded(
                 child: StreamBuilder<List<CommentEntity>>(
                     stream: PostsCubit.get(context).commentList,
@@ -71,65 +76,63 @@ class CommentBottomSheetWidget extends StatelessWidget {
                     }),
               ),
               // const Spacer(),
-              const Gap(10.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: commentController,
-                      minLines: 1,
-                      maxLines: 2,
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 14.0),
-                      // expands: true,
-                      decoration: InputDecoration(
-                        // hintMaxLines: 3,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        enabledBorder: outlineInputBorder,
-                        border: outlineInputBorder,
-                        focusedBorder: outlineInputBorder,
-                        hintText: 'What\'s on your mind?',
-                      ),
-                      onFieldSubmitted: (value) {},
-                    ),
-                  ),
-                  const Gap(10.0),
-                  IconButton(
-                    onPressed: () {
-                      if (commentController.text.trim() != '') {
-                        context
-                            .read<NotificationCubit>()
-                            .sendCommentNotification(
-                              receiverToken: posterFCMToken,
-                              senderName: userEntity.userName.toString(),
-                            );
-                        PostsCubit.get(context).addComment(
-                          comment: CommentEntity(
-                            postId: postID,
-                            id: 'id',
-                            writerName: userEntity.userName.toString(),
-                            writerProfileImage:
-                                userEntity.profileImageURL.toString(),
-                            text: commentController.text,
-                            time: DateTime.now().toString(),
-                          ),
-                        );
-                        FocusScope.of(context).unfocus();
-                        commentController.clear();
-                      }
-                    },
-                    icon: const Icon(
-                      Iconsax.send_1,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Row buildCommentTextFormField(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: commentController,
+            minLines: 1,
+            maxLines: 2,
+            style: const TextStyle(color: Colors.white, fontSize: 14.0),
+            // expands: true,
+            decoration: InputDecoration(
+              // hintMaxLines: 3,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              enabledBorder: outlineInputBorder,
+              border: outlineInputBorder,
+              focusedBorder: outlineInputBorder,
+              hintText: 'What\'s on your mind?',
+            ),
+            onFieldSubmitted: (value) {},
+          ),
+        ),
+        const Gap(10.0),
+        IconButton(
+          onPressed: () {
+            if (commentController.text.trim() != '') {
+              context.read<NotificationCubit>().sendCommentNotification(
+                    receiverToken: posterFCMToken,
+                    senderName: userEntity.userName.toString(),
+                  );
+              PostsCubit.get(context).addComment(
+                comment: CommentEntity(
+                  postId: postID,
+                  id: 'id',
+                  writerName: userEntity.userName.toString(),
+                  writerProfileImage: userEntity.profileImageURL.toString(),
+                  text: commentController.text,
+                  time: DateTime.now().toString(),
+                ),
+              );
+              FocusScope.of(context).unfocus();
+              commentController.clear();
+            }
+          },
+          icon: const Icon(
+            Iconsax.send_1,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

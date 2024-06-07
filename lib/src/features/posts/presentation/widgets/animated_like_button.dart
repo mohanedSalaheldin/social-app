@@ -28,11 +28,17 @@ class AnimatedLikeButtonWidget extends StatefulWidget {
 
 class _AnimatedLikeButtonWidgetState extends State<AnimatedLikeButtonWidget> {
   bool isLiked = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isLiked = widget.isLikedPost;
+  }
 
   // bool isFa = true;
   @override
   Widget build(BuildContext context) {
-    isLiked = widget.isLikedPost;
+    // isLiked = widget.isLikedPost;
     String currentUserName = context.read<ProfileCubit>().userInfo.userName;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),

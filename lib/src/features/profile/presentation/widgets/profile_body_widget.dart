@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:social_app/src/config/routes/navigate_methods.dart';
 import 'package:social_app/src/core/entites/post_entity.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/core/utls/widgets/custom_buttons.dart';
+import 'package:social_app/src/features/posts/presentation/pages/post_details_screen.dart';
 import 'package:social_app/src/features/posts/presentation/widgets/post_widget.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
