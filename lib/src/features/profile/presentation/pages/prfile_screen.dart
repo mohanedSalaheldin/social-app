@@ -44,8 +44,11 @@ class ProfileScreen extends StatelessWidget {
         //     ),
         //   );
         // }
+        String currentUserID = FirebaseAuth.instance.currentUser?.uid ?? '';
+        bool isProfileMine = _checkIfProfileIsMine(
+            profileId: userInfoEntity.userId, currentUserID: currentUserID);
         return Scaffold(
-          appBar: _buildAppBar(context),
+          appBar: _buildAppBar(context, isProfileMine),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               FirebaseAuth.instance.signOut().then((value) {
@@ -57,59 +60,69 @@ class ProfileScreen extends StatelessWidget {
           ),
           body: ProfileWidget(
             user: userInfoEntity,
+            isProfileMine: isProfileMine,
           ),
         );
       },
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(BuildContext context, bool isProfileMine) {
     return AppBar(
       actions: [
-        PopupMenuButton<int>(
-          onSelected: (value) {
-            if (value == 1) {
-              navigateToScreen(context, const ProfileInfoEditScreen());
-            } else if (value == 2) {}
-          },
-          icon: const Icon(Icons.menu),
-          itemBuilder: (context) => [
-            // popupmenu item 1
-            const PopupMenuItem(
-              value: 1,
-              // row has two child icon and text.
-              child: Row(
-                children: [
-                  Icon(Iconsax.edit),
-                  SizedBox(
-                    // sized box with width 10
-                    width: 10,
+        isProfileMine
+            ? PopupMenuButton<int>(
+                onSelected: (value) {
+                  if (value == 1) {
+                    navigateToScreen(context, const ProfileInfoEditScreen());
+                  } else if (value == 2) {}
+                },
+                icon: const Icon(Icons.menu),
+                itemBuilder: (context) => [
+                  // popupmenu item 1
+                  const PopupMenuItem(
+                    value: 1,
+                    // row has two child icon and text.
+                    child: Row(
+                      children: [
+                        Icon(Iconsax.edit),
+                        SizedBox(
+                          // sized box with width 10
+                          width: 10,
+                        ),
+                        Text("Edit Profile")
+                      ],
+                    ),
                   ),
-                  Text("Edit Profile")
-                ],
-              ),
-            ),
-            // popupmenu item 2
-            const PopupMenuItem(
-              value: 2,
-              // row has two child icon and text
-              child: Row(
-                children: [
-                  Icon(Iconsax.logout),
-                  SizedBox(
-                    // sized box with width 10
-                    width: 10,
+                  // popupmenu item 2
+                  const PopupMenuItem(
+                    value: 2,
+                    // row has two child icon and text
+                    child: Row(
+                      children: [
+                        Icon(Iconsax.logout),
+                        SizedBox(
+                          // sized box with width 10
+                          width: 10,
+                        ),
+                        Text("Logout")
+                      ],
+                    ),
                   ),
-                  Text("Logout")
                 ],
-              ),
-            ),
-          ],
-          // offset: const Offset(, 30),
-          color: HexColor('#1f2128'),
-          elevation: 2,
-        ),
+                // offset: const Offset(, 30),
+                color: HexColor('#1f2128'),
+                elevation: 2,
+              )
+            : const SizedBox(),
       ],
     );
+  }
+
+  bool _checkIfProfileIsMine({
+    required String profileId,
+    required String currentUserID,
+  }) {
+    return profileId == currentUserID;
   }
 }

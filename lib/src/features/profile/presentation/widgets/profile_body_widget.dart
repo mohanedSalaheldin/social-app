@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -13,8 +14,10 @@ import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit
 
 class ProfileWidget extends StatefulWidget {
   final UserInfoEntity user;
+  final bool isProfileMine;
 
-  const ProfileWidget({super.key, required this.user});
+  const ProfileWidget(
+      {super.key, required this.user, required this.isProfileMine});
 
   @override
   _ProfileWidgetState createState() => _ProfileWidgetState();
@@ -101,21 +104,23 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ],
               ),
               const Gap(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MyCustomizedElevatedButton(
-                    text: 'Follow',
-                    onPressed: () {},
-                  ),
-                  const Gap(10),
-                  MyCustomizedElevatedButton(
-                    text: 'Message',
-                    isFilled: false,
-                    onPressed: () {},
-                  ),
-                ],
-              ),
+              widget.isProfileMine
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MyCustomizedElevatedButton(
+                          text: 'Follow',
+                          onPressed: () {},
+                        ),
+                        const Gap(10),
+                        MyCustomizedElevatedButton(
+                          text: 'Message',
+                          isFilled: false,
+                          onPressed: () {},
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
               const Gap(20),
               StreamBuilder<List<PostEntity>>(
                 stream: postsStream,

@@ -28,15 +28,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
         ConnectionCubit.get(context).getAllUsers();
         Stream<List<UserInfoEntity>> users =
             ConnectionCubit.get(context).allUsers;
-
         return Scaffold(
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-          //     SearchCubit.get(context).searchForUser(keyword: 'Ayman');
-          //   },
-          //   child: const Icon(Icons.add),
-          // ),
-          // appBar: AppBar(),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
