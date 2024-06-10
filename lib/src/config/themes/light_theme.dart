@@ -15,7 +15,9 @@ ThemeData getLightTheme() => ThemeData(
       iconTheme: const IconThemeData(
         color: Colors.black,
       ),
-
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: mainColor,
+      ),
       // *******( Start TabBarTheme )******
       // tabBarTheme: TabBarTheme(
       //   labelColor: Colors.black,

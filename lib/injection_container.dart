@@ -16,6 +16,7 @@ import 'package:social_app/src/features/home/domain/repositories/home_repository
 import 'package:social_app/src/features/notification/data/datasources/notification_datasource.dart';
 import 'package:social_app/src/features/notification/data/repositories/notification_repository_impl.dart';
 import 'package:social_app/src/features/notification/domain/repositories/notification_repository.dart';
+import 'package:social_app/src/features/notification/domain/usecases/get_all_notification.dart';
 import 'package:social_app/src/features/notification/domain/usecases/notification_send_usecase.dart';
 import 'package:social_app/src/features/notification/presentation/cubit/notification_cubit.dart';
 import 'package:social_app/src/features/posts/domain/usecases/comment_post_usecase.dart';
@@ -34,6 +35,7 @@ import 'package:social_app/src/features/profile/data/repositories/profile_reposi
 import 'package:social_app/src/features/profile/domain/repositories/prfile_repository.dart';
 import 'package:social_app/src/features/profile/domain/usecases/delete_post_usecase.dart';
 import 'package:social_app/src/features/profile/domain/usecases/get_posts_usecase.dart';
+import 'package:social_app/src/features/profile/domain/usecases/get_profile_details_usecase.dart';
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
 import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
@@ -51,6 +53,7 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(() => ProfileCubit(
       deletePostUseCase: sl(),
+      getProfileDetailsUseCase: sl(),
       getPostsUseCase: sl(),
       getProfileInfoUseCase: sl(),
       updateProfileUseCase: sl()));
@@ -71,7 +74,8 @@ Future<void> init() async {
       getChatEntriesUseCase: sl(),
       getMessagesUseCase: sl(),
       sendMsgUseCase: sl()));
-  sl.registerFactory(() => NotificationCubit(notificationSendUsecase: sl()));
+  sl.registerFactory(() => NotificationCubit(
+      notificationSendUsecase: sl(), getAllNotificationsUsecase: sl()));
 
   // Repository
   sl.registerLazySingleton<ProfileRepository>(() =>
@@ -108,6 +112,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProfileInfoUseCase(repository: sl()));
   sl.registerLazySingleton(() => DeleteProfilePostUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetProfilePostsUseCase(repository: sl()));
+  sl.registerLazySingleton(() => GetProfileDetailsUseCase(repository: sl()));
   // -------------------------------(connections)--------------------------------
   sl.registerLazySingleton(() => SearchForUserUseCase(repository: sl()));
   sl.registerLazySingleton(() => GetAllUsersUsecase(repository: sl()));
@@ -117,6 +122,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => HomeGetPostsUseCase(repository: sl()));
   // -------------------------------(notification)----------------------------------
   sl.registerLazySingleton(() => NotificationSendUsecase(repository: sl()));
+  sl.registerLazySingleton(() => GetAllNotificationsUsecase(repository: sl()));
 
   // -------------------------------(Posts)--------------------------------
   sl.registerLazySingleton(() => PostsAddPostUsecase(repository: sl()));

@@ -13,11 +13,11 @@ import 'package:social_app/src/features/posts/presentation/widgets/post_widget.d
 import 'package:social_app/src/features/profile/presentation/cubit/profile_cubit.dart';
 
 class ProfileWidget extends StatefulWidget {
-  final UserInfoEntity user;
+  final String userID;
   final bool isProfileMine;
 
   const ProfileWidget(
-      {super.key, required this.user, required this.isProfileMine});
+      {super.key, required this.isProfileMine, required this.userID});
 
   @override
   _ProfileWidgetState createState() => _ProfileWidgetState();
@@ -27,9 +27,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<ProfileCubit>()
-        .loadUserInfoAndPosts(userId: widget.user.userId);
+    context.read<ProfileCubit>().loadUserInfoAndPosts(userId: widget.userID);
   }
 
   @override
@@ -46,122 +44,131 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           return const Center(child: Text('Error loading profile'));
         } else if (state is ProfileInfoSucessState) {
           ProfileCubit profileCubit = ProfileCubit.get(context);
-          final user = widget.user;
-          final postsStream = profileCubit.posts;
 
-          return ListView(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // final user = widget.user;
+          final postsStream = profileCubit.posts;
+          profileCubit.getProfileDetails(userId: widget.userID);
+          Stream<UserInfoEntity> userStream = profileCubit.profileDetails;
+          return StreamBuilder<UserInfoEntity>(
+            stream: userStream,
+            builder: (context, snapshot) {
+              
+             UserInfoEntity user = snapshot.data!;
+              return ListView(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text(user.followers.length.toString(),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          const Text('followers'),
+                        ],
+                      ),
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.black,
+                        backgroundImage:
+                            NetworkImage(user.profileImageURL.toString()),
+                      ),
+                      Column(children: [
+                        Text(
+                          user.following.length.toString(),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Text('following'),
+                      ])
+                    ],
+                  ),
+                  const Gap(20),
                   Column(
                     children: [
-                      Text(user.followers.length.toString(),
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                      const Text('followers'),
+                      Text(
+                        user.userName.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(user.bio.toString()),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Iconsax.location_tick,
+                            color: Colors.white,
+                          ),
+                          Text(user.address.toString()),
+                        ],
+                      ),
                     ],
                   ),
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.black,
-                    backgroundImage:
-                        NetworkImage(user.profileImageURL.toString()),
-                  ),
-                  Column(children: [
-                    Text(
-                      user.following.length.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text('following'),
-                  ])
-                ],
-              ),
-              const Gap(20),
-              Column(
-                children: [
-                  Text(
-                    user.userName.toString(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(user.bio.toString()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Iconsax.location_tick,
-                        color: Colors.white,
-                      ),
-                      Text(user.address.toString()),
-                    ],
-                  ),
-                ],
-              ),
-              const Gap(20),
-              widget.isProfileMine
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MyCustomizedElevatedButton(
-                          text: 'Follow',
-                          onPressed: () {},
-                        ),
-                        const Gap(10),
-                        MyCustomizedElevatedButton(
-                          text: 'Message',
-                          isFilled: false,
-                          onPressed: () {},
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
-              const Gap(20),
-              StreamBuilder<List<PostEntity>>(
-                stream: postsStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}',
-                        style: const TextStyle(color: Colors.red));
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child:
-                          CircularProgressIndicator(color: Colors.cyanAccent),
-                    );
-                  }
-
-                  if (snapshot.hasData) {
-                    return ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return PostWidget(
-                          userEntity: user,
-                          post: snapshot.data![index],
-                          onDeletePost: () {
-                            ProfileCubit.get(context).deletePost(
-                              userId: user.userId.toString(),
-                              postId: snapshot.data![index].id.toString(),
+                  const Gap(20),
+                  widget.isProfileMine
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyCustomizedElevatedButton(
+                              text: 'Follow',
+                              onPressed: () {},
+                            ),
+                            const Gap(10),
+                            MyCustomizedElevatedButton(
+                              text: 'Message',
+                              isFilled: false,
+                              onPressed: () {},
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
+                  const Gap(20),
+                  StreamBuilder<List<PostEntity>>(
+                    stream: postsStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}',
+                            style: const TextStyle(color: Colors.red));
+                      }
+              
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child:
+                              CircularProgressIndicator(color: Colors.cyanAccent),
+                        );
+                      }
+              
+                      if (snapshot.hasData) {
+                        return ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return PostWidget(
+                              userEntity: user,
+                              post: snapshot.data![index],
+                              onDeletePost: () {
+                                ProfileCubit.get(context).deletePost(
+                                  userId: user.userId.toString(),
+                                  postId: snapshot.data![index].id.toString(),
+                                );
+                              },
                             );
                           },
+                          separatorBuilder: (context, index) => const Gap(20),
+                          itemCount: snapshot.data!.length,
                         );
-                      },
-                      separatorBuilder: (context, index) => const Gap(20),
-                      itemCount: snapshot.data!.length,
-                    );
-                  }
-
-                  return const CircularProgressIndicator();
-                },
-              ),
-            ],
+                      }
+              
+                      return const CircularProgressIndicator();
+                    },
+                  ),
+                ],
+              );
+            }
           );
         }
 

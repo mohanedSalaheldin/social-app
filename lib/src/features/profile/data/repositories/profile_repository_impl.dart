@@ -92,4 +92,20 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(OfflineFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Stream<UserInfoEntity>>> getProfileDetails(
+      {required String userId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        Stream<UserInfoEntity> stream =
+            await profileRemoteDatasource.getProfileDetails(userId: userId);
+        return Right(stream);
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
 }

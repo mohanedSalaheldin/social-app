@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:social_app/src/core/entites/user_info_entity.dart';
+import 'package:social_app/src/core/utls/constants/constants.dart';
 import 'package:social_app/src/features/connection/presentation/cubit/search_cubit.dart';
 import 'package:social_app/src/features/connection/presentation/widgets/search_form_field_widget.dart';
 import 'package:social_app/src/features/connection/presentation/widgets/user_listtile_widget.dart';
@@ -47,7 +48,7 @@ class _ConnectionSearchScreenState extends State<ConnectionSearchScreen> {
             }
             return SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(defaultPadding),
                 child: Column(
                   children: [
                     Row(
@@ -70,7 +71,7 @@ class _ConnectionSearchScreenState extends State<ConnectionSearchScreen> {
                         isSearched: true,
                         currentUser: users[index],
                       ),
-                      separatorBuilder: (context, index) => const Gap(5),
+                      separatorBuilder: (context, index) => const Gap(0),
                       itemCount: users.length,
                     )),
                   ],

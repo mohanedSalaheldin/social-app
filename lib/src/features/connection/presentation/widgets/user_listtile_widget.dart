@@ -31,64 +31,69 @@ class _UserListTileWidgetState extends State<UserListTileWidget> {
     isFollowed = widget.currentUser.following.contains(widget.otherUser.userId);
     print(isFollowed);
     return Card(
-      color: const Color.fromARGB(0, 79, 114, 201),
-      child: InkWell(
-        onTap: () {
-          navigateToScreen(
-              context,
-              ProfileScreen(
-                user: widget.otherUser,
-              ));
-        },
-        borderRadius: BorderRadius.circular(10.0),
-        splashColor: Colors.transparent,
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 30.0,
-            backgroundImage: NetworkImage(
-              widget.otherUser.profileImageURL,
-            ),
-          ),
-          title: Text(
-            widget.otherUser.userName,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-            ),
-          ),
-          subtitle: Text(
-            widget.otherUser.address,
-            style: const TextStyle(
-              fontSize: 15.0,
-              color: Colors.white70,
-            ),
-          ),
-          trailing: widget.isSearched
-              ? MyCustomizedElevatedButtonSmall(
-                  backgroundColor: isFollowed ? Colors.grey : null,
-                  onPressed: () {
-                    navigateToScreen(
-                        context, ProfileScreen(user: widget.otherUser));
-                  },
-                  text: 'View Profile',
-                )
-              : MyCustomizedElevatedButtonSmall(
-                  backgroundColor: isFollowed ? Colors.grey : null,
-                  onPressed: () {
-                    if (!isFollowed) {
-                      context
-                          .read<NotificationCubit>()
-                          .sendNewFollowerNotification(
-                            receiverToken: widget.otherUser.fcmToken,
-                            senderName: widget.currentUser.userName,
-                          );
-                    }
-                    ConnectionCubit.get(context).followUnfollowUser(
-                        otherUserId: widget.otherUser.userId,
-                        currentUserId: widget.currentUser.userId);
-                  },
-                  text: isFollowed ? 'Unfollow' : 'Follow',
+      // color: const Color.fromARGB(0, 79, 114, 201),
+      child: SizedBox(
+        height: 80.0,
+        child: InkWell(
+          onTap: () {
+            navigateToScreen(
+                context,
+                ProfileScreen(
+                  userID: widget.otherUser.userId,
+                ));
+          },
+          borderRadius: BorderRadius.circular(10.0),
+          splashColor: Colors.transparent,
+          child: Center(
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30.0,
+                backgroundImage: NetworkImage(
+                  widget.otherUser.profileImageURL,
                 ),
+              ),
+              title: Text(
+                widget.otherUser.userName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                ),
+              ),
+              subtitle: Text(
+                widget.otherUser.address,
+                style: const TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.white70,
+                ),
+              ),
+              trailing: widget.isSearched
+                  ? MyCustomizedElevatedButtonSmall(
+                      backgroundColor: isFollowed ? Colors.grey : null,
+                      onPressed: () {
+                        navigateToScreen(
+                            context, ProfileScreen(userID: widget.otherUser.userId));
+                      },
+                      text: 'View Profile',
+                    )
+                  : MyCustomizedElevatedButtonSmall(
+                      backgroundColor: isFollowed ? Colors.grey : null,
+                      onPressed: () {
+                        if (!isFollowed) {
+                          context
+                              .read<NotificationCubit>()
+                              .sendNewFollowerNotification(
+                                receiverToken: widget.otherUser.fcmToken,
+                                senderName: widget.currentUser.userName,
+                              );
+                        }
+                        ConnectionCubit.get(context).followUnfollowUser(
+                            otherUserId: widget.otherUser.userId,
+                            currentUserId: widget.currentUser.userId);
+                      },
+                      text: isFollowed ? 'Unfollow' : 'Follow',
+                    ),
+            ),
+          ),
         ),
       ),
     );

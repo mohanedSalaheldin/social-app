@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:social_app/src/config/routes/navigate_methods.dart';
@@ -15,22 +16,20 @@ import 'package:social_app/src/features/profile/presentation/widgets/profile_bod
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     super.key,
-    this.user,
+    this.userID,
   });
-  final UserInfoEntity? user;
+  final String? userID;
 
   @override
   Widget build(BuildContext context) {
     UserInfoEntity userInfoEntity = context.read<ProfileCubit>().userInfo;
-    if (user != null) {
-      userInfoEntity = user!;
-    }
+   
 
     // // context.read<ProfileCubit>().getProfileInfo(userId: uId);
     // // context.read<ProfileCubit>().getPosts(userId: uId);
     // // user = context.read<ProfileCubit>().userInfo;
-    return BlocConsumer<ProfileCubit, ProfileState>(
-      listener: (context, state) {},
+    return BlocBuilder<ProfileCubit, ProfileState>(
+     
       builder: (context, state) {
         // if (state is ProfileDeletePostLoadingState ||
         //     state is ProfileGetPostsLoadingState ||
@@ -59,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
             child: const Icon(Iconsax.logout),
           ),
           body: ProfileWidget(
-            user: userInfoEntity,
+            userID: userInfoEntity.userId,
             isProfileMine: isProfileMine,
           ),
         );
@@ -79,38 +78,27 @@ class ProfileScreen extends StatelessWidget {
                 },
                 icon: const Icon(Icons.menu),
                 itemBuilder: (context) => [
-                  // popupmenu item 1
                   const PopupMenuItem(
                     value: 1,
-                    // row has two child icon and text.
                     child: Row(
                       children: [
                         Icon(Iconsax.edit),
-                        SizedBox(
-                          // sized box with width 10
-                          width: 10,
-                        ),
+                        Gap(10),
                         Text("Edit Profile")
                       ],
                     ),
                   ),
-                  // popupmenu item 2
                   const PopupMenuItem(
                     value: 2,
-                    // row has two child icon and text
                     child: Row(
                       children: [
                         Icon(Iconsax.logout),
-                        SizedBox(
-                          // sized box with width 10
-                          width: 10,
-                        ),
+                         Gap(10),
                         Text("Logout")
                       ],
                     ),
                   ),
                 ],
-                // offset: const Offset(, 30),
                 color: HexColor('#1f2128'),
                 elevation: 2,
               )

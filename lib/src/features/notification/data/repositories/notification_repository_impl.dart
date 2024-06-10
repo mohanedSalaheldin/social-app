@@ -29,4 +29,21 @@ class NotificationRepositoryImpl implements NotificationRepository {
       return Left(OfflineFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Stream<List<String>>>> getAllNotifications(
+      {required String userId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        Stream<List<String>> stream =
+            await notificationDataSource.getAllNotifications(userId: userId);
+
+        return Right(stream);
+      } catch (e) {
+        return Left(ServerFailure(error: e.toString()));
+      }
+    } else {
+      return Left(OfflineFailure());
+    }
+  }
 }

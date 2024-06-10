@@ -31,7 +31,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
         return Scaffold(
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(defaultPadding),
               child: Column(
                 children: [
                   InkWell(
@@ -71,7 +71,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                                     FirebaseAuth.instance.currentUser!.uid;
                               }).first,
                             ),
-                            separatorBuilder: (context, index) => const Gap(5),
+                            separatorBuilder: (context, index) => const Gap(0),
                             itemCount: snapshot.data!.length,
                           );
                         }),

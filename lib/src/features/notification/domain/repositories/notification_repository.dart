@@ -7,4 +7,5 @@ abstract class NotificationRepository {
       {required String receiverToken,
       required String title,
       required String body});
+  Future<Either<Failure, Stream<List<String>>>> getAllNotifications({required String userId});
 }

@@ -8,6 +8,7 @@ import 'package:social_app/src/core/entites/user_info_entity.dart';
 import 'package:social_app/src/core/errors/error.dart';
 import 'package:social_app/src/features/profile/domain/usecases/delete_post_usecase.dart';
 import 'package:social_app/src/features/profile/domain/usecases/get_posts_usecase.dart';
+import 'package:social_app/src/features/profile/domain/usecases/get_profile_details_usecase.dart';
 import 'package:social_app/src/features/profile/domain/usecases/get_profile_info.dart';
 import 'package:social_app/src/features/profile/domain/usecases/update_profile_usecase.dart';
 
@@ -18,9 +19,11 @@ class ProfileCubit extends Cubit<ProfileState> {
   final UpdateProfileUseCase updateProfileUseCase;
   final DeleteProfilePostUseCase deletePostUseCase;
   final GetProfilePostsUseCase getPostsUseCase;
+  final GetProfileDetailsUseCase getProfileDetailsUseCase;
 
   ProfileCubit({
     required this.getProfileInfoUseCase,
+    required this.getProfileDetailsUseCase,
     required this.updateProfileUseCase,
     required this.deletePostUseCase,
     required this.getPostsUseCase,
@@ -57,17 +60,36 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
+  Stream<UserInfoEntity> _profileDetails = const Stream.empty();
+
+  Stream<UserInfoEntity> get profileDetails => _profileDetails;
+
+  Future<void> getProfileDetails({required String userId}) async {
+    // emit(ProfileInfoLoadingState());
+    Either<Failure, Stream<UserInfoEntity>> result =
+        await getProfileDetailsUseCase.call(userId: userId);
+    result.fold(
+      (failure) {
+        emit(ProfileGetProfileDetailsErrorState());
+      },
+      (profileDetailsStream) {
+        _profileDetails = profileDetailsStream;
+        emit(ProfileGetProfileDetailsSuccessState());
+      },
+    );
+  }
+
   Future<void> loadUserInfoAndPosts({required String userId}) async {
     emit(ProfileInfoLoadingState());
 
     final postsResult = await getPostsUseCase.call(userId: userId);
-postsResult.fold(
-          (failure) => emit(ProfileInfoErrorState()),
-          (postsStream) {
-            _posts = postsStream;
-            emit(ProfileInfoSucessState());
-          },
-        );
+    postsResult.fold(
+      (failure) => emit(ProfileInfoErrorState()),
+      (postsStream) {
+        _posts = postsStream;
+        emit(ProfileInfoSucessState());
+      },
+    );
   }
 
   void updateProfileInfo(

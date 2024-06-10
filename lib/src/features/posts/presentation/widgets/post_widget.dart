@@ -65,7 +65,7 @@ class _PostWidgetState extends State<PostWidget>
     String formattedDate = formateDate(date: widget.post.time.toString());
 
     return Container(
-      padding: const EdgeInsets.all(10.0),
+      padding:  EdgeInsets.all(defaultPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

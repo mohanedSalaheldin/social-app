@@ -10,6 +10,7 @@ abstract class ProfileRemoteDatasource {
   Future<Unit> deletePost({required String postId, required String userId});
   Stream<List<PostModel>> getPosts({required String userId});
   Future<UserInfoModel> getProfileInfo({required String userId});
+  Future<Stream<UserInfoModel>> getProfileDetails({required String userId});
   Future<Unit> updateProfile(
       {required String userId,
       required UserInfoModel model,
@@ -92,5 +93,17 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
     } on FirebaseException {
       throw (ServerExecption());
     }
+  }
+
+  @override
+  Future<Stream<UserInfoModel>> getProfileDetails(
+      {required String userId}) async {
+   return firestoreStore.collection('users').doc(userId).snapshots().map((snapshot) {
+      if (snapshot.exists) {
+        return UserInfoModel.fromJson(snapshot.data() as Map<String, dynamic>);
+      } else {
+        throw Exception("User not found");
+      }
+    });
   }
 }
